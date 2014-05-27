@@ -8,7 +8,7 @@ import tinkerer.paths
 # **************************************************************
 
 # Change this to the name of your blog
-project = 'Manuel Blog'
+project = 'Manuel on Software - Reloaded'
 
 # Change this to the tagline of your blog
 tagline = ''
@@ -26,7 +26,8 @@ copyright = '2014, ' + author
 language = 'en'
 
 # Change this to your blog root URL (required for RSS feed)
-website = 'http://mvaled.github.io/blog/html/'
+website = 'http://mvaled.github.io/'
+
 
 # **************************************************************
 # More tweaks you can do
@@ -39,7 +40,7 @@ disqus_shortname = None
 # html_favicon = 'tinkerer.ico'
 
 # Pick another Tinkerer theme or use your own
-html_theme = "flat"
+html_theme = "mva"
 
 # Theme-specific options, see docs
 html_theme_options = {}
@@ -78,7 +79,7 @@ exclude_patterns = ["drafts/*", "_templates/*"]
 
 # Add templates to be rendered in sidebar here
 html_sidebars = {
-    "**": ["recent.html", "searchbox.html"]
+    #   "**": ["recent.html", "searchbox.html"]
 }
 
 # **************************************************************
