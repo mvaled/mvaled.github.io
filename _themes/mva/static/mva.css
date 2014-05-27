@@ -2,7 +2,7 @@
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins,
+a, abbr, acronym, address, big, code, del, dfn, em, font, ins,
 kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd,
 ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot,
 thead, tr, th, td, th {
@@ -17,7 +17,7 @@ thead, tr, th, td, th {
     vertical-align: baseline;
 }
 
-body{
+body {
     color: #444;
     font-family: Merriweather, Georgia, "Times New Roman", serif;
     font-size: 18px;
@@ -94,8 +94,8 @@ article h1 {
     text-align: center;
 }
 
-article h1, article p, article ol, article ul, article dl {
-    margin-bottom: 29.7px;
+article h1, article p, article ol, article ul, article dl, article table {
+    margin-bottom: 1em;
 }
 
 article .postmeta {
@@ -170,7 +170,24 @@ nav {
     }
 }
 
-
 .separator {
     margin-bottom: 3em;
 }
+
+table.footnote td {
+    padding-right: 0.85em;
+}
+
+p.rubric {
+    font-size: 125%;
+    text-align: center;
+    font-weight: inherit;
+}
+
+.left {float: left;
+}
+.right {float: right;}
+
+.related {margin-top: 1.5em;}
+.related li {list-style-type: none}
+.related li {max-width: 45%; margin: 0; padding: 0}
