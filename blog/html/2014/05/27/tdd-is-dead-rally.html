@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
-        <title>Progress moving to github.io &mdash; Manuel on Software - Reloaded</title>
+        <title>TDD is dead rally &mdash; Manuel on Software - Reloaded</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -27,7 +27,7 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="Welcome" href="../13/welcome.html" /><link rel="prev" title="TDD is dead rally" href="../27/tdd-is-dead-rally.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="next" title="Progress moving to github.io" href="../26/progress-in-the-move.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.4.2',
@@ -65,33 +65,61 @@
           <a href="../../../index.html">Home</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="progress-moving-to-github-io">
-<h1>Progress moving to github.io</h1>
-<p>As you may see, I have made some progress.  Basically, I have partially ported
-my past look and feel, so that if looks like the old blog.  I still a work in
-progress and the &#8220;responsive&#8221; stuff is not entirely done.</p>
-<p>Nevertheless, I think this is good to go and will start blogging here from now
-on.</p>
-<p>Enjoy!</p>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="tdd-is-dead-rally">
+<h1>TDD is dead rally</h1>
+<p>These days there&#8217;s a kind of a rally about &#8220;TDD being dead&#8221;.</p>
+<p>Most TDD fan supporters are true that you must have a way to proof your code
+works.  Many computer <a class="reference external" href="http://en.wikipedia.org/wiki/Tony_Hoare">scientists</a> have done several attempts into
+the &#8220;proofs of correctness&#8221; for a program.  But tests are not always proofs,
+some are <a class="footnote-reference" href="#some-are" id="id1">[1]</a>.</p>
+<p>I think the main argument is about when TDD is too much.  Several <a class="reference external" href="https://www.destroyallsoftware.com">Destroy all
+software</a> screencasts show a TDD flow that I simply find it&#8217;s too
+much.  But they are, indeed, screencasts; and they are probably intended to
+illustrate a point and not to be followed without deviations.</p>
+<p>Nevertheless, I don&#8217;t like the &#8220;TDD is dead&#8221; mantra either.  It gives space to
+a flame war I&#8217;m not willing to get into.  I use tests and that&#8217;s it.  Tests,
+at different, levels may express several concerns I need to keep stable:</p>
+<ol class="loweralpha">
+<li><p class="first">A public API, for instance, should not change just like that.  At least not
+after you have made the commitment to keep it stable.</p>
+<p>You may even need to test for deprecation warnings being issued when you
+need to change an API.</p>
+</li>
+<li><p class="first">Collaborative in-progress debugging.  This tests allow to express standing
+issues.  Some regression tests fall into this category.</p>
+</li>
+</ol>
+<p>How do you do tests?</p>
+<p class="rubric">Notes</p>
+<table class="docutils footnote" frame="void" id="some-are" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If I recall correctly, the book by <cite>R.L Graham</cite>, <cite>D.E. Knuth</cite>
+and <cite>O. Patashnik</cite> called &#8220;Concrete Mathematics&#8221; shows some
+proofs that allow &#8220;proof-by-instances&#8221;.</td></tr>
+</tbody>
+</table>
 </div>
 
     <div class="postmeta">
-        <div class="author">
-            <span>Posted by Manuel Vázquez Acosta</span>
-        </div>
+        
         <div class="categories">
             <span>
                 Filed under:
-                <a href="../../../categories/blogroll.html">Blogroll</a></span>
+                <a href="../../../categories/programming.html">Programming</a></span>
         </div>
-        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/design.html">design</a>, <a href="../../../tags/tests.html">tests</a></span>
+        </div>
         </div>
     <div class="timestamp postmeta">
-            <span>May 26, 2014</span>
+            <span>May 27, 2014</span>
         </div>
     <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../27/tdd-is-dead-rally.html">TDD is dead rally</a></li>
-            <li class="right"><a href="../13/welcome.html">Welcome</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../26/progress-in-the-move.html">Progress moving to github.io</a> &raquo; </li>
         </ul></article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>

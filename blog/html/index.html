@@ -65,7 +65,56 @@
           <a href="#">Home</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><h1><a href="2014/05/26/progress-in-the-move.html">Progress moving to github.io</a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><h1><a href="2014/05/27/tdd-is-dead-rally.html">TDD is dead rally</a></h1>
+<p>These days there’s a kind of a rally about “TDD being dead”.</p>
+<p>Most TDD fan supporters are true that you must have a way to proof your code
+works.  Many computer <a class="reference external" href="http://en.wikipedia.org/wiki/Tony_Hoare">scientists</a> have done several attempts into
+the “proofs of correctness” for a program.  But tests are not always proofs,
+some are <a class="footnote-reference" href="#some-are" id="id1">[1]</a>.</p>
+<p>I think the main argument is about when TDD is too much.  Several <a class="reference external" href="https://www.destroyallsoftware.com">Destroy all
+software</a> screencasts show a TDD flow that I simply find it’s too
+much.  But they are, indeed, screencasts; and they are probably intended to
+illustrate a point and not to be followed without deviations.</p>
+<p>Nevertheless, I don’t like the “TDD is dead” mantra either.  It gives space to
+a flame war I’m not willing to get into.  I use tests and that’s it.  Tests,
+at different, levels may express several concerns I need to keep stable:</p>
+<ol class="loweralpha">
+<li><p class="first">A public API, for instance, should not change just like that.  At least not
+after you have made the commitment to keep it stable.</p>
+<p>You may even need to test for deprecation warnings being issued when you
+need to change an API.</p>
+</li>
+<li><p class="first">Collaborative in-progress debugging.  This tests allow to express standing
+issues.  Some regression tests fall into this category.</p>
+</li>
+</ol>
+<p>How do you do tests?</p>
+<p class="rubric">Notes</p>
+<table class="docutils footnote" frame="void" id="some-are" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If I recall correctly, the book by <cite>R.L Graham</cite>, <cite>D.E. Knuth</cite>
+and <cite>O. Patashnik</cite> called “Concrete Mathematics” shows some
+proofs that allow “proof-by-instances”.</td></tr>
+</tbody>
+</table>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/programming.html">Programming</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/design.html">design</a>, <a href="tags/tests.html">tests</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>May 27, 2014</span>
+        </div><div class="separator post_separator"></div><h1><a href="2014/05/26/progress-in-the-move.html">Progress moving to github.io</a></h1>
 <p>As you may see, I have made some progress.  Basically, I have partially ported
 my past look and feel, so that if looks like the old blog.  I still a work in
 progress and the “responsive” stuff is not entirely done.</p>
