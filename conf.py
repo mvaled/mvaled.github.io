@@ -26,7 +26,7 @@ copyright = '2014, ' + author
 language = 'en'
 
 # Change this to your blog root URL (required for RSS feed)
-website = 'http://mvaled.github.io/'
+website = 'http://mvaled.github.io/blog/html/'
 
 
 # **************************************************************
