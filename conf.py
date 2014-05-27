@@ -63,7 +63,9 @@ slug_word_separator = '-'
 # **************************************************************
 
 # Add other Sphinx extensions here
-extensions = ['tinkerer.ext.blog', 'tinkerer.ext.disqus']
+extensions = ['tinkerer.ext.blog',
+              'tinkerer.ext.disqus',
+              'sphinx.ext.intersphinx']
 
 # Add other template paths here
 templates_path = ['_templates']
@@ -81,6 +83,15 @@ exclude_patterns = ["drafts/*", "_templates/*"]
 html_sidebars = {
     #   "**": ["recent.html", "searchbox.html"]
 }
+
+intersphinx_mapping = {
+    'py': ('http://docs.python.org/3.4/', None),
+    'sphinx': ('http://sphinx-doc.org/', None)
+}
+
+# Maintain the cache forever.
+intersphinx_cache_limit = -1
+
 
 # **************************************************************
 # Do not modify below lines as the values are required by
