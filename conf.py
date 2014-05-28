@@ -86,7 +86,8 @@ html_sidebars = {
 
 intersphinx_mapping = {
     'py': ('http://docs.python.org/3.4/', None),
-    'sphinx': ('http://sphinx-doc.org/', None)
+    'sphinx': ('http://sphinx-doc.org/', None),
+    'xotl-ql': ('http://xotl-ql.readthedocs.org/en/latest/', None),
 }
 
 # Maintain the cache forever.

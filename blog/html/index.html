@@ -89,15 +89,67 @@ issues.  Some regression tests fall into this category.</p>
 </li>
 </ol>
 <p>How do you do tests?</p>
-<p class="rubric">Notes</p>
+<div class="section" id="update-amplification-and-support-to-david-s-arguments">
+<h2>Update: Amplification and support to <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">David’s arguments</a></h2>
+<p>The previous words were written just after skimming over several tweets.  I
+had read <a class="reference external" href="http://david.heinemeierhansson.com/2014/test-induced-design-damage.html">David’s test-induced design damage</a> but I had missed the previous
+post <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">TDD is dead.  Long live testing</a>.  So this update is my one cent to
+the issue, but I will not discuss about “slow collaborators” but about my
+design experience with our <a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">Python Query Language</a>.</p>
+<p>The test-first mantra assumes too much about how you are going to decompose
+your problem.  Let’s start with a retrospective account of how this happened
+in <a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">xotl.ql</a>.</p>
+<p>I can detect four distinct stages:</p>
+<ol class="loweralpha">
+<li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
+code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
+test.</p>
+<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a> that stands for the expression
+was not totally consolidated.  The components of the query were not
+defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
+<p>In this case the “literate” spirit dominated the design process, not the
+testing.  Simply we didn’t have a full-stack: ie. the language and the
+<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.2)"><em class="xref std std-term">translators</em></a> so that a query could actually be
+executed.</p>
+</li>
+<li><p class="first">Consolidation of the design.  In this stage several devices were invented
+to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/inners.html#inner-workings" title="(in xotl.ql v0.2)"><em class="xref std std-ref">lack of clear
+boundaries</em></a> between several sub-expressions in a
+single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.2)"><em class="xref std std-term">query</em></a>.</p>
+<p>This was the hardest stage.  Testing was employed to keep track of several
+design decisions.  In this stage made appearance our “Particle Bubble” and
+this was complex enough to deserve a handful of tests.  Although several
+tests did influence the design, they hardly drove it.</p>
+</li>
+<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/xotl.ql.translation.py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.2)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
+actually were testing a very TDD friendly layer:  Given this state of the
+world, the following query should return these objects.</p>
+</li>
+<li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
+our entire design and do reverse engineering of python byte-code to extract
+build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a>.</p>
+<p>What is foreseeable is that again a kind of literate driven design is going
+to be king: The core structure of the language (the query AST) is what’s
+being designed so, what’s the point of asking if the result of calling a
+function with a given query expression is a particular AST if the AST is
+what’s needs to be validated not the function itself?  At this point this
+is non-sense.  At a later stage where the AST is stable enough those kind
+of tests would actually make sense: they will protect the query language
+against unintentional API-breaking changes.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
 <table class="docutils footnote" frame="void" id="some-are" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If I recall correctly, the book by <cite>R.L Graham</cite>, <cite>D.E. Knuth</cite>
-and <cite>O. Patashnik</cite> called “Concrete Mathematics” shows some
-proofs that allow “proof-by-instances”.</td></tr>
+and <cite>O. Patashnik</cite> called “Concrete Mathematics” shows some proofs that
+allow “proof-by-instances”.</td></tr>
 </tbody>
 </table>
+</div>
 
         <div class="postmeta">
         
