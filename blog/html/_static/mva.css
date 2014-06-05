@@ -101,6 +101,10 @@ article h1, article p, article ol, article ul, article dl, article table {
     margin-bottom: 1em;
 }
 
+article ol, article ul, article dl {
+    margin-left: 1em;
+}
+
 article .postmeta {
     font-size: 80%;
 }
