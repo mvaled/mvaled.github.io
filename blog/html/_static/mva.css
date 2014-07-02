@@ -1,6 +1,6 @@
 @import url(./fonts.css);
 
-html, body, div, span, applet, object, iframe, p, blockquote, pre,
+html, body, div, span, applet, object, iframe, p, blockquote,
 a, abbr, acronym, address, big, code, del, dfn, em, font, ins,
 kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd,
 ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot,
@@ -16,9 +16,14 @@ thead, tr, th, td, th {
     vertical-align: baseline;
 }
 
-h1, h2, h3, h4, h5, h6, h7, h8, h9 {
+h1, h2, h3 {
     font-weight: inherit;
 }
+
+h4, h5, h6, h7, h8, h9 {
+    font-weight: bolder;
+}
+
 
 body {
     color: #444;
@@ -170,13 +175,6 @@ nav {
     margin-top: 1.1em;
 }
 
-@media screen and (max-width: 800px) {
-    body {
-	font-size: 0.88889em;
-	line-height: 1.85625em;
-    }
-}
-
 .separator {
     margin-bottom: 3em;
 }
@@ -185,10 +183,31 @@ table.footnote td {
     padding-right: 0.85em;
 }
 
-p.rubric {
+.sidebar-title, p.rubric {
     font-size: 125%;
     text-align: center;
     font-weight: inherit;
+}
+
+.sidebar {
+    margin: 0 2em 2em;
+    width: 50%;
+    float: right;
+    border-radius: .25em;
+    background: #DDD;
+    overflow: hidden;
+}
+
+.sidebar > * {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.sidebar > .sidebar-title {
+    background: #333;
+    color: #fff;
+    padding: .15em 0;
+    margin: 0 0 1em 0;
 }
 
 .left {float: left;
@@ -198,3 +217,28 @@ p.rubric {
 .related {margin-top: 1.5em;}
 .related li {list-style-type: none}
 .related li {max-width: 45%; margin: 0; padding: 0}
+
+.figure, blockquote {
+    margin-left: 1em;
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+@media screen and (max-width: 800px) {
+    body {
+	font-size: 0.88889em;
+	line-height: 1.85625em;
+    }
+}
+
+
+/*  Code highlighting */
+
+.highlight {
+    overflow: auto;
+}
+
+.highlight pre {
+    word-wrap: inherit;
+    white-space: pre;
+}

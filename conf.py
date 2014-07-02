@@ -84,15 +84,18 @@ html_sidebars = {
     #   "**": ["recent.html", "searchbox.html"]
 }
 
+
 intersphinx_mapping = {
     'py': ('http://docs.python.org/3.4/', None),
     'sphinx': ('http://sphinx-doc.org/', None),
-    'xotl-ql': ('http://xotl-ql.readthedocs.org/en/latest/', None),
+    'xotlql': ('http://xotl-ql.readthedocs.org/en/latest/', None),
 }
 
-# Maintain the cache forever.
-intersphinx_cache_limit = -1
 
+# Maintain the cache forever.
+intersphinx_cache_limit = 365
+
+pygments_style = 'sphinx'
 
 # **************************************************************
 # Do not modify below lines as the values are required by
