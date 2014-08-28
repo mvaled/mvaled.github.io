@@ -236,9 +236,19 @@ table.footnote td {
 
 .highlight {
     overflow: auto;
+    margin-bottom: 1em;
 }
 
 .highlight pre {
     word-wrap: inherit;
     white-space: pre;
+}
+
+.highlight .hll {
+    width: 100%;
+    display: block;
+}
+
+span.pre {
+    font-family: monospace;
 }

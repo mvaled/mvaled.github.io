@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
-        <title>Filed under OpenERP &mdash; Manuel on Software - Reloaded</title>
+        <title>Business rules &mdash; Manuel on Software - Reloaded</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -68,40 +68,82 @@
           <a href="../pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="archive">
-        <h1>Filed under <span class="title_category">OpenERP</span></h1><div class="year">
-            <h1>2014</h1>
-            <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Aug 28</span>
-        </div>
-                    <h2><a href="../2014/08/28/reviewing-openerp-8-0.html">Reviewing Odoo 8.0</a></h2>
-                    <div class="postmeta">
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="business-rules">
+<h1>Business rules</h1>
+<p>How do you express a business rule in your code?  Would recognize it a
+separate thing that you may or may not use?  For instance, how would you
+encode the following rule:</p>
+<blockquote>
+<div>Whenever you send a customer an invoice for something you have shipped to
+him/her, you must create an entry in the &#8220;Sales&#8221; Journal with the following
+two items (schematic):</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre>Accounts          | Debits            |   Credits
+------------------+-------------------+-------------------
+Account           |                   |
+receivable        | $ XXXX            |
+------------------+-------------------+-------------------
+         Sales    |                   |  $ XXXX
+------------------+-------------------+-------------------
+</pre></div>
+</div>
+<p>The accountant that told you that was generous enough not to use the T-account
+representation, but she made several assumptions:</p>
+<ol class="loweralpha simple">
+<li>There is a single or definite &#8220;Sales&#8221; journal.</li>
+<li>There is a single or definite &#8220;Account receivable&#8221;.</li>
+<li>There is a single or definite &#8220;Sales&#8221; account.</li>
+</ol>
+<p>She will then tell you that</p>
+<blockquote>
+<div>Whenever you receive payment for an invoice you must create an entry in the
+&#8220;Bank&#8221; journal with the following two items (schematic):</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre>Accounts          | Debits            |   Credits
+------------------+-------------------+-------------------
+Account           |                   |
+receivable        |                   |  $ XXXX
+------------------+-------------------+-------------------
+         Bank     | $ XXXX            |
+------------------+-------------------+-------------------
+</pre></div>
+</div>
+<p>She will probably explain that this entry somehow &#8220;cancels&#8221; the previous one,
+so that now you know you should not must receive any further payment for those
+&#8220;$ XXXX&#8221;.  Of course, you will ask many questions:</p>
+<ul class="simple">
+<li>What about if you need the cash before the shipping.</li>
+<li>What about if you need an advance and then the rest.</li>
+</ul>
+<p>And many others.  But I want you to focus on those two rules, cause the rules
+derived from the other cases will do the same for the argument I&#8217;m about to
+raise.</p>
+<p>Compare those rules with the following:</p>
+<blockquote>
+<div>For a single (journal) entry to be valid, the sum of the debits of all its
+items must be equal to the sum the credits of all its items.</div></blockquote>
+<p>Is this the same kind of rule?  Obviously not.  The first ones state how you
+should generate an entry in the face of a business case.  The last one which
+entries are valid no matter what they should record.  In fact, the first two
+rules must ensure they generate entries that comply with this restriction.  So
+I won&#8217;t call this last one a rule anymore, it&#8217;s kind of an accounting law.
+Yes, probably the first two rules are enforced in some countries, but that
+varies from country to country; the accounting laws remain the same.</p>
+<p>So now we have a method for distinguishing an accounting law from a business
+rule.  How do we translate that from thought to code?</p>
+<div class="section" id="the-openerp-case">
+<h2>The OpenERP case</h2>
+<p>Let&#8217;s inspect how does OpenERP verifies the law.  Our focus of attention is
+the class <span class="docutils literal"><span class="pre">account_move</span></span> (which deals with accounting entries) in the file
+<span class="docutils literal"><span class="pre">addons/account/account.py</span></span>.  The method that verifies if one or several
+entries are correct is the <span class="docutils literal"><span class="pre">validate()</span></span> method.</p>
+</div>
+</div>
+
+    <div class="postmeta">
         
         <div class="categories">
             <span>
                 Filed under:
-                <a href="#">OpenERP</a>, <a href="odoo.html">Odoo</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="../tags/review.html">review</a></span>
-        </div>
-        </div>
-                </li></ul>
-                    <div class="separator summary_separator"></div>
-             <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Jul 02</span>
-        </div>
-                    <h2><a href="../2014/07/02/integration-v-automation.html">Integration v. Automation</a></h2>
-                    <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="#">OpenERP</a>, <a href="odoo.html">Odoo</a></span>
+                <a href="../categories/openerp.html">OpenERP</a>, <a href="../categories/odoo.html">Odoo</a></span>
         </div>
         <div class="tags">
             <span>
@@ -109,28 +151,8 @@
                 <a href="../tags/integration.html">integration</a></span>
         </div>
         </div>
-                </li></ul>
-                    <div class="separator summary_separator"></div>
-             <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Jun 05</span>
-        </div>
-                    <h2><a href="../2014/06/05/odoo.html">Odoo... I mean OpenERP</a></h2>
-                    <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="#">OpenERP</a>, <a href="blogroll.html">Blogroll</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="../tags/news.html">news</a></span>
-        </div>
-        </div>
-                </li></ul>
-        </div></div></article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+    
+    </article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
       &copy; Copyright 2014, Manuel Vázquez Acosta. </p>

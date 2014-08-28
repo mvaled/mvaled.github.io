@@ -5,8 +5,178 @@
         <link>http://mvaled.github.io/blog/html/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Wed, 02 Jul 2014 00:00:00 -0400</pubDate>
+        <pubDate>Thu, 28 Aug 2014 00:00:00 -0400</pubDate>
         
+        <item>
+            <link>http://mvaled.github.io/blog/html/2014/08/28/reviewing-openerp-8-0.html</link>
+            <guid>http://mvaled.github.io/blog/html/2014/08/28/reviewing-openerp-8-0.html</guid>
+            <title><![CDATA[Reviewing Odoo 8.0]]></title>
+            <description><![CDATA[<h1>Reviewing Odoo 8.0</h1>
+<p>This is the first of a series of blog posts related to the next OpenERP 8.0
+(or should I say Odoo 8.0).  This first post will be very “seeking for
+orientation” on major new features and changes.  Don’t expect anything to be
+deeply commented or analyzed.</p>
+<p>I will probably devote several posts for changes in some modules, but in this
+one I’ll just write about things that can be immediately seen when you first
+install it.</p>
+<div class="section" id="installing-odoo-8-0">
+<h2>Installing Odoo 8.0</h2>
+<p>I’m working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
+Of course I’m using the branch “8.0” for this review.</p>
+<p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python setup.py develop
+</pre></div>
+</div>
+<p>The first I noticed is that several new requirements are in place, and the
+<cite>pyPdf</cite> requirement had been forgotten.</p>
+<p>Second thing noticed is that unlike the “7.0” you don’t need to run the
+<span class="docutils literal"><span class="pre">openerp-server</span></span> script passing the <span class="docutils literal"><span class="pre">--addons-path=./addons</span></span>.  In 8.0 they
+include this path automatically.  So running <span class="docutils literal"><span class="pre">./openerp-server</span></span> is enough.</p>
+<p>Also the <span class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">sdist</span></span> command includes this path as well, so a
+properly built distribution from source seems more doable.  I haven’t tried
+this yet, but I will, cause that was for sure something missing in 7.0.  It’s
+quite suspicious that the tarball is too small (around 13MB) though.</p>
+</div>
+<div class="section" id="new-addons">
+<h2>New addons</h2>
+<div class="section" id="instant-messaging">
+<h3>Instant Messaging</h3>
+<p>Once I ran the server I installed a demo DB to see what’s new.  The first
+thing that captured my attention was an “Instant Messaging” module.  I gave it
+a try and it seemed to work out-of-box.</p>
+<p>It uses the quite old <a class="reference external" href="http://stackoverflow.com/questions/11077857/what-are-long-polling-websockets-server-sent-events-sse-and-comet">long polling</a> technique instead of the brand new
+<a class="reference external" href="http://en.wikipedia.org/wiki/HTML5">HTML5</a>  <a class="reference external" href="http://en.wikipedia.org/wiki/Server-sent_events">Server-Sent Events</a> (SSE) stuff.  Why?</p>
+<p>My first guess was that multi-process deployments would need to pass messages
+around between the HTTP processes.  That requires a kind of Inter-Processes
+Communication (IPC).  Popular choices for achieving this in web applications
+are <a class="reference external" href="http://redis.io">Redis</a> and <a class="reference external" href="http://www.rabbitmq.com">RabbitMQ</a>, but then you’d need to setup either for this to
+work.</p>
+<p>After thinking in this a bit more (actually the thinking about this occurred
+at the same time I was writing this post) I realized that the <em>current</em>
+multi-process deployments would still need this IPC to properly work.  So I
+ran <span class="docutils literal"><span class="pre">./openerp-server</span> <span class="pre">--workers=2</span></span> and tested it again.  The chat stopped to
+work and the following error was logged from time to time:</p>
+<div class="highlight-traceback"><div class="highlight"><pre>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
+Traceback (most recent call last):
+  File "/&lt;..&gt;/odoo/openerp/http.py", line 476, in _handle_exception
+    return super(JsonRequest, self)._handle_exception(exception)
+  File "/&lt;..&gt;/odoo/openerp/http.py", line 495, in dispatch
+    result = self._call_function(**self.params)
+  File "/&lt;..&gt;/odoo/openerp/http.py", line 311, in _call_function
+    return checked_call(self.db, *args, **kwargs)
+  File "/&lt;..&gt;/odoo/openerp/service/model.py", line 113, in wrapper
+    return f(dbname, *args, **kwargs)
+  File "/&lt;..&gt;/odoo/openerp/http.py", line 308, in checked_call
+    return self.endpoint(*a, **kw)
+  File "/&lt;..&gt;/odoo/openerp/http.py", line 685, in __call__
+    return self.method(*args, **kw)
+  File "/&lt;..&gt;/odoo/openerp/http.py", line 360, in response_wrap
+    response = f(*args, **kw)
+  File "/&lt;..&gt;/odoo/addons/bus/bus.py", line 188, in poll
+    raise Exception("bus.Bus unavailable")
+Exception: bus.Bus unavailable
+</pre></div>
+</div>
+<p>The code explains it all.  This is the method <span class="docutils literal"><span class="pre">ImDispatch.start()</span></span> in file
+<span class="docutils literal"><span class="pre">addons/bus/bus.py</span></span>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">evented</span><span class="p">:</span>
+        <span class="c"># gevent mode</span>
+        <span class="kn">import</span> <span class="nn">gevent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">gevent</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span>
+        <span class="n">gevent</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">openerp</span><span class="o">.</span><span class="n">multi_process</span><span class="p">:</span>
+<span class="hll">        <span class="c"># disabled in prefork mode</span>
+</span>        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># threaded mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"</span><span class="si">%s</span><span class="s">.Bus"</span> <span class="o">%</span> <span class="n">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span>
+</pre></div>
+</div>
+<p>The highlighted line says this won’t work in a multi-process deployment.  How
+do you get to use the <cite>evented</cite> mode, I don’t know.  Probably that’s the
+default now.</p>
+<p>So I need to review this feature more closely before going to production.
+It’s a nice addition though.</p>
+<p>I found they have now a <a class="reference external" href="https://github.com/odoo/odoo/blob/master/openerp/service/server.py#L321"><span class="docutils literal"><span class="pre">GeventServer</span></span></a> for long polling connections.  And the
+implementation of the Instant Messaging Bus (<a class="reference external" href="https://github.com/odoo/odoo/blob/master/openerp/addons/bus/bus.py">bus.py</a>) can be easily adapted
+for desktop-like notifications, updating your message inbox, and many other
+features that would benefit from this.</p>
+</div>
+<div class="section" id="messaging-has-gone-a-bit-different">
+<h3>Messaging has gone a bit different</h3>
+<p>At this point I tried to send a message from a user to another (to test if the
+inbox was updated real-time) and realized that the Messaging addons has lost
+the “compose a new message” that was previously accessible from the inbox, let
+me show you a picture (7.0 on the right, 8.0 on the left):</p>
+<div class="figure">
+<img alt="../../../_images/odoo-vs-openerp.png" src="http://mvaled.github.io/blog/html/_images/odoo-vs-openerp.png"/>
+<p class="caption">Odoo is missing the “Compose new message” button.</p>
+</div>
+<p>This commit has some explanation:</p>
+<div class="highlight-python"><div class="highlight"><pre>commit 0714b231646bb439b121a6aaa43df32fedcb5e6e
+Author: Thibault Delavallée &lt;tde@openerp.com&gt;
+Date:   Wed Aug 13 14:35:25 2014 +0200
+
+[FIX] mail: when having only mail installed, do not show any 'share with my
+followers' compose box. This comes only with hr, for the inbox. This was
+probably forgotten when updating the mailboxes hr-goal and hr-related
+gamification / chatter stuff.
+</pre></div>
+</div>
+<p>I then installed the “Employee directory” addon and the “Share with my
+followers” box appeared.</p>
+<p>More digging in the logs reveals the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>commit e6f8666b521fe8c2522d6e94c0c3def54a5f73ed
+Merge: d57a97d bf3d4a7
+Author: Amit Vora &lt;avo@tinyerp.com&gt;
+Date:   Thu Apr 17 11:41:33 2014 +0200
+
+[MERGE] [IMP] mail: Inbox usability improvements :
+- notficiation_email_send field, renamed into notify_email, has now 2 values: always or never, in
+order to ease the choice and simplify options.
+- inbox: removed 'compose a new messages or write to my followers', because those 2 options are
+already available. The first one is accessible using the top-right email icon, the second one
+is accessible with the 'write to my followers' text box alread present in the inbox.
+</pre></div>
+</div>
+<p>However I don’t see the mentioned “top-right email icon”.  In fact, that icon
+is present in 7.0, but not in 8.0.  More digging:</p>
+<div class="highlight-python"><div class="highlight"><pre>commit 5209fbc7ed9fcad966ab064654a8a8697142be42
+Author: Antony Lesuisse &lt;al@openerp.com&gt;
+Date:   Mon Jun 30 01:51:40 2014 +0200
+
+[REM] useless icon send a message
+
+The action is available from the wall.
+</pre></div>
+</div>
+<p>Got you!  So, Antony removed the icon cause he thought it was the wall, but
+Amit had removed it from the wall cause because of the icon.  These things
+happen...</p>
+<p>After reverting this commit, the icon is reestablished.  But, then I realized
+that the feature, however hidden, is actually there: If you click on the
+“Share with ...” and instead of writing your message there, click on the
+“expand” icon, then you get the same as pressing the (now missing) email icon.
+I think that the icon is required, though, since now the “Share...” box is not
+shown until HR is installed, and the email icon allows to send email to
+outsiders.  My current employer is willing to remove email in favor of this
+messaging module.  This may hold him back.</p>
+<p>I’m <a class="reference external" href="https://github.com/odoo/odoo/issues/2042">raising my hand to vote</a> for the rescue of (at least) the icon.
+Redundancy is not always bad when it comes to user interface.</p>
+<p>This enough for this post.  I’ll keep looking at Odoo and I’ll write about it.</p>
+</div>
+</div>
+]]></description>
+            <category><![CDATA[ OpenERP ]]></category>
+            <category><![CDATA[ Odoo ]]></category>
+             <pubDate>Thu, 28 Aug 2014 00:00:00 -0400</pubDate>
+        </item>
+    
         <item>
             <link>http://mvaled.github.io/blog/html/2014/07/02/integration-v-automation.html</link>
             <guid>http://mvaled.github.io/blog/html/2014/07/02/integration-v-automation.html</guid>
