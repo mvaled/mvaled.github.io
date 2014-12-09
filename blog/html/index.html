@@ -68,7 +68,45 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><h1><a href="2014/08/28/reviewing-openerp-8-0.html">Reviewing Odoo 8.0</a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><h1><a href="2014/12/09/apples-and-oranges.html">Apples and Oranges.  How books can mislead our thinking process.</a></h1>
+<p>I’ve just began to read the book “Twisted Network Programming”... <a class="reference external" href="http://www.twistedmatrix.com">Twisted</a> is
+a popular framework for networking programming.  However, I’d probably skim
+most of the Book.  I’m sorry... But as it happens, in the second page of the
+second chapter (the one that I began with) they show an illustration on
+“Comparing single-threaded, multithreaded, and event-driven program flow”.</p>
+<p>Hum... <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+some impact on how events are dealt with, but are they truly comparable or the
+sole responsibles for the program flow?</p>
+<p><a class="reference external" href="http://diesel.io">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org">Tornado</a>.  You may, of
+course, run programs written with them in multiple processes (or threads) to
+avoid contention when the volume of clients (events) is too high.</p>
+<p>Even with a single thread most of the time the system is waiting for the IO
+buffers to have data, so they can be classified as event-driven: They actually
+response to events.</p>
+<p>But what really bothers about this illustration is not that it compare two
+thing that could be (and should be made) complementary.  What bothers me is
+that the picture tries to fool me by showing that event-driven programs don’t
+have any “gaps” of idle time between tasks, while the threaded models do.  And
+that’s simply dishonest.</p>
+<p>Probably this is not what the authors meant, and I’m probably going prejudiced
+just because of this wrong picture. However, I go to a book like this not for
+pleasure but for information.  Finding a piece of data that is not trustworthy
+raises a flag and I start to read with a magnifying glass... And that’s not
+fun either.</p>
+<p>Don’t expect me to finish this book.</p>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/book-reviews.html">Book Reviews</a></span>
+        </div>
+        
+        </div>
+        <div class="timestamp postmeta">
+            <span>December 09, 2014</span>
+        </div><div class="separator post_separator"></div><h1><a href="2014/08/28/reviewing-openerp-8-0.html">Reviewing Odoo 8.0</a></h1>
 <p>This is the first of a series of blog posts related to the next OpenERP 8.0
 (or should I say Odoo 8.0).  This first post will be very “seeking for
 orientation” on major new features and changes.  Don’t expect anything to be
@@ -611,30 +649,30 @@ in <a class="reference external" href="https://github.com/merchise-autrement/xot
 <li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
 code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
 test.</p>
-<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a> that stands for the expression
+<p>The idea of having a <em class="xref std std-term">query object</em> that stands for the expression
 was not totally consolidated.  The components of the query were not
 defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
 <p>In this case the “literate” spirit dominated the design process, not the
 testing.  Simply we didn’t have a full-stack: ie. the language and the
-<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.2)"><em class="xref std std-term">translators</em></a> so that a query could actually be
+<em class="xref std std-term">translators</em> so that a query could actually be
 executed.</p>
 </li>
 <li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/inners.html#inner-workings" title="(in xotl.ql v0.2)"><em class="xref std std-ref">lack of clear
-boundaries</em></a> between several sub-expressions in a
-single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.2)"><em class="xref std std-term">query</em></a>.</p>
+to cope with implementation difficulties, i.e. the <em class="xref std std-ref">lack of clear
+boundaries</em> between several sub-expressions in a
+single <em class="xref std std-term">query</em>.</p>
 <p>This was the hardest stage.  Testing was employed to keep track of several
 design decisions.  In this stage made appearance our “Particle Bubble” and
 this was complex enough to deserve a handful of tests.  Although several
 tests did influence the design, they hardly drove it.</p>
 </li>
-<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/xotl.ql.translation.py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.2)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
+<li><p class="first">Then the core was done and we turned to <span class="xref py py-mod docutils literal"><span class="pre">translation</span></span>.  This stage was mainly TDD cause we
 actually were testing a very TDD friendly layer:  Given this state of the
 world, the following query should return these objects.</p>
 </li>
 <li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
 our entire design and do reverse engineering of python byte-code to extract
-build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a>.</p>
+build the <em class="xref std std-term">query object</em>.</p>
 <p>What is foreseeable is that again a kind of literate driven design is going
 to be king: The core structure of the language (the query AST) is what’s
 being designed so, what’s the point of asking if the result of calling a

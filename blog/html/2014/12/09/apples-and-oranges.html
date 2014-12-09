@@ -1,0 +1,128 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Blog mostly about software.">
+        <meta name="viewport" content="width=device-width">
+        <title>Apples and Oranges. How books can mislead our thinking process. &mdash; Manuel on Software - Reloaded</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/mva.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="next" title="Reviewing Odoo 8.0" href="../../08/28/reviewing-openerp-8-0.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.4.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <!-- link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.0-alpha' type='text/css' media='all' / -->
+    <!-- link rel='stylesheet' id='syntax-merriweather-css'  href='http://fonts.googleapis.com/css?family=Merriweather%3A400%2C300%2C300italic%2C400italic%2C700%2C700italic&#038;ver=4.0-alpha' type='text/css' media='all' / --></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
+          </header>
+      <!--    <h1 id="toggle-nav" class="menu-toggle">
+      <span class="screen-reader-text">Menu</span></h1>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/about-this.html">About this</a>
+        </li>
+        </ul>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="apples-and-oranges-how-books-can-mislead-our-thinking-process">
+<h1>Apples and Oranges.  How books can mislead our thinking process.</h1>
+<p>I&#8217;ve just began to read the book &#8220;Twisted Network Programming&#8221;... <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
+a popular framework for networking programming.  However, I&#8217;d probably skim
+most of the Book.  I&#8217;m sorry... But as it happens, in the second page of the
+second chapter (the one that I began with) they show an illustration on
+&#8220;Comparing single-threaded, multithreaded, and event-driven program flow&#8221;.</p>
+<p>Hum... <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+some impact on how events are dealt with, but are they truly comparable or the
+sole responsibles for the program flow?</p>
+<p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
+course, run programs written with them in multiple processes (or threads) to
+avoid contention when the volume of clients (events) is too high.</p>
+<p>Even with a single thread most of the time the system is waiting for the IO
+buffers to have data, so they can be classified as event-driven: They actually
+response to events.</p>
+<p>But what really bothers about this illustration is not that it compare two
+thing that could be (and should be made) complementary.  What bothers me is
+that the picture tries to fool me by showing that event-driven programs don&#8217;t
+have any &#8220;gaps&#8221; of idle time between tasks, while the threaded models do.  And
+that&#8217;s simply dishonest.</p>
+<p>Probably this is not what the authors meant, and I&#8217;m probably going prejudiced
+just because of this wrong picture. However, I go to a book like this not for
+pleasure but for information.  Finding a piece of data that is not trustworthy
+raises a flag and I start to read with a magnifying glass... And that&#8217;s not
+fun either.</p>
+<p>Don&#8217;t expect me to finish this book.</p>
+</div>
+
+    <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="../../../categories/book-reviews.html">Book Reviews</a></span>
+        </div>
+        
+        </div>
+    <div class="timestamp postmeta">
+            <span>December 09, 2014</span>
+        </div>
+    <ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../../08/28/reviewing-openerp-8-0.html">Reviewing Odoo 8.0</a> &raquo; </li>
+        </ul></article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
+      &copy; Copyright 2014, Manuel Vázquez Acosta. </p>
+      <p>Content licensed under the Creative Commons
+      attribution-noncommercial-sharealike License.
+      </p></footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

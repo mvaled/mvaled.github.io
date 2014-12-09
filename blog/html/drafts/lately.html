@@ -1,0 +1,133 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Blog mostly about software.">
+        <meta name="viewport" content="width=device-width">
+        <title>What I’ve been doing lately &mdash; Manuel on Software - Reloaded</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/mva.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <!-- Load modernizr and JQuery -->
+<script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="../_static/vendor/jquery-1.8.2.min.js"></script>
+<script src="../_static/plugins.js"></script>
+<script src="../_static/main.js"></script>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <!-- link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.0-alpha' type='text/css' media='all' / -->
+    <!-- link rel='stylesheet' id='syntax-merriweather-css'  href='http://fonts.googleapis.com/css?family=Merriweather%3A400%2C300%2C300italic%2C400italic%2C700%2C700italic&#038;ver=4.0-alpha' type='text/css' media='all' / --></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
+          </header>
+      <!--    <h1 id="toggle-nav" class="menu-toggle">
+      <span class="screen-reader-text">Menu</span></h1>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/about-this.html">About this</a>
+        </li>
+        </ul>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="what-i-ve-been-doing-lately">
+<h1>What I&#8217;ve been doing lately</h1>
+<p>Lately my work has been mainly driven the need to efficiently and smoothly
+deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
+the same time I&#8217;m responsible several development and deployments in the
+enterprise.</p>
+<p>The accounting-related tasks have made me to study the accounting module, but
+also accounting in general from fundamental principles to advanced topics.
+Currently I own a collection of 9 books about accounting.  I still have more
+studying to do, but now I&#8217;m versed enough to the point of being a (very
+junior) accounting consultant to the CEO.  This, of course, should yield
+future benefits since I&#8217;m planning to start a business.</p>
+<p>On the technical side, the last week I was doing a final verification of the
+module so that the (true) accountant of the enterprise finally migrates to
+OpenERP: Taking our QuickBooks files and, with Pentaho <a href="#id1"><span class="problematic" id="id2">Kettle_</span></a>, migrating the
+accounting information to OpenERP, and the comparing the legal reports.  This
+has finally yielded good results and we&#8217;re doing an opening entry to continue
+accounting in OpenERP (the enterprise has an accounting period the starts on
+Oct, 1st each year).</p>
+<p>At the same time a new server for OpenERP and a deployment based on <a href="#id3"><span class="problematic" id="id4">Buildout_</span></a>
+was another one of my tasks.  There&#8217;s still much to be done and I&#8217;m wondering
+if <a href="#id5"><span class="problematic" id="id6">Ansible_</span></a> would be a good choice to actually manage the deployment since it
+involve setting up <a href="#id7"><span class="problematic" id="id8">Postfix_</span></a> as the Mail Transfer Agent interfacing OpenERP for
+emails.  This means that besides the accounting books I have reviewed several
+mail related RFCs (<a href="#id9"><span class="problematic" id="id10">2822_</span></a>, <a href="#id11"><span class="problematic" id="id12">2821_</span></a> and <a href="#id13"><span class="problematic" id="id14">2476_</span></a> being those I&#8217;ve read the most) and
+the Postfix documentation.</p>
+<p>The messaging system of OpenERP was, then, another of my targets for
+reviewing.  The last thing I found is that OpenERP tries to submit emails
+using a From address it does not own without a proper Sender header and,
+worse, it sends a &#8220;MAIL FROM&#8221; command with that same address the MSA should
+reject being a foreign one.  This could lead to OpenERP&#8217;s MTAs being
+blacklisted by third parties if a simple address verification is performed.</p>
+<p>To fill the gaps, or more precisely: to take breaks from these topics I&#8217;m
+reading a couple of books and articles:</p>
+<ul class="simple">
+<li>High Performance Browser Networking by Ilya Grigorik.</li>
+<li><a class="reference external" href="http://book.mixu.net/distsys/ebook.html">Distributed Systems</a></li>
+<li>The <a href="#id15"><span class="problematic" id="id16">`report about Convergent and Commutative Replicated Data Types`_</span></a>.</li>
+<li>And fur fun, the last book of the Rama trilogy of Arthur Clark and Gentry
+Lee.  Which BTW I&#8217;ve only truly enjoyed the first book.</li>
+</ul>
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div>
+    
+    </article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
+      &copy; Copyright 2014, Manuel Vázquez Acosta. </p>
+      <p>Content licensed under the Creative Commons
+      attribution-noncommercial-sharealike License.
+      </p></footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

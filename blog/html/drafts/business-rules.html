@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
-        <title>Business rules &mdash; Manuel on Software - Reloaded</title>
+        <title>Business rules: A case about coding standards/issues &mdash; Manuel on Software - Reloaded</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -68,39 +68,37 @@
           <a href="../pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="business-rules">
-<h1>Business rules</h1>
-<p>How do you express a business rule in your code?  Would recognize it a
+    </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="business-rules-a-case-about-coding-standards-issues">
+<h1>Business rules: A case about coding standards/issues</h1>
+<p>How do you express a business rule in your code?  Would you recognize it a
 separate thing that you may or may not use?  For instance, how would you
 encode the following rule:</p>
 <blockquote>
-<div>Whenever you send a customer an invoice for something you have shipped to
+<div>Whenever you send a customer an invoice for something you have sold to
 him/her, you must create an entry in the &#8220;Sales&#8221; Journal with the following
 two items (schematic):</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre>Accounts          | Debits            |   Credits
 ------------------+-------------------+-------------------
-Account           |                   |
-receivable        | $ XXXX            |
+Receivable        | $ XXXX            |
 ------------------+-------------------+-------------------
          Sales    |                   |  $ XXXX
 ------------------+-------------------+-------------------
 </pre></div>
 </div>
-<p>The accountant that told you that was generous enough not to use the T-account
-representation, but she made several assumptions:</p>
+<p>The accountant that told you that, was generous enough not to use the
+<a class="reference external" href="http://en.wikipedia.org/wiki/Debits_and_credits#T-accounts">T-account</a> representation, but she made several assumptions:</p>
 <ol class="loweralpha simple">
 <li>There is a single or definite &#8220;Sales&#8221; journal.</li>
-<li>There is a single or definite &#8220;Account receivable&#8221;.</li>
+<li>There is a single or definite &#8220;Receivable&#8221; account.</li>
 <li>There is a single or definite &#8220;Sales&#8221; account.</li>
 </ol>
-<p>She will then tell you that</p>
+<p>Then she will tell you that:</p>
 <blockquote>
 <div>Whenever you receive payment for an invoice you must create an entry in the
 &#8220;Bank&#8221; journal with the following two items (schematic):</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre>Accounts          | Debits            |   Credits
 ------------------+-------------------+-------------------
-Account           |                   |
-receivable        |                   |  $ XXXX
+Receivable        |                   |  $ XXXX
 ------------------+-------------------+-------------------
          Bank     | $ XXXX            |
 ------------------+-------------------+-------------------
@@ -108,33 +106,338 @@ receivable        |                   |  $ XXXX
 </div>
 <p>She will probably explain that this entry somehow &#8220;cancels&#8221; the previous one,
 so that now you know you should not must receive any further payment for those
-&#8220;$ XXXX&#8221;.  Of course, you will ask many questions:</p>
-<ul class="simple">
-<li>What about if you need the cash before the shipping.</li>
-<li>What about if you need an advance and then the rest.</li>
-</ul>
-<p>And many others.  But I want you to focus on those two rules, cause the rules
-derived from the other cases will do the same for the argument I&#8217;m about to
-raise.</p>
+&#8220;$ XXXX&#8221; you were entitled to collect.</p>
 <p>Compare those rules with the following:</p>
 <blockquote>
 <div>For a single (journal) entry to be valid, the sum of the debits of all its
 items must be equal to the sum the credits of all its items.</div></blockquote>
 <p>Is this the same kind of rule?  Obviously not.  The first ones state how you
-should generate an entry in the face of a business case.  The last one which
-entries are valid no matter what they should record.  In fact, the first two
-rules must ensure they generate entries that comply with this restriction.  So
-I won&#8217;t call this last one a rule anymore, it&#8217;s kind of an accounting law.
-Yes, probably the first two rules are enforced in some countries, but that
-varies from country to country; the accounting laws remain the same.</p>
+should generate an entry in the face of a business case.  The last one
+indicates which entries are valid no matter what they should record.  In fact,
+the first two rules must ensure they generate entries that comply with the
+later.</p>
+<p>Therefore, I won&#8217;t call this last one a <em>rule</em> anymore, it&#8217;s kind of an
+accounting law <a class="footnote-reference" href="#double-entry" id="id2">[1]</a>.  Yes, probably the first two rules are
+enforced in some countries, but that varies from country to country; the
+accounting laws remain the same.</p>
 <p>So now we have a method for distinguishing an accounting law from a business
 rule.  How do we translate that from thought to code?</p>
 <div class="section" id="the-openerp-case">
 <h2>The OpenERP case</h2>
-<p>Let&#8217;s inspect how does OpenERP verifies the law.  Our focus of attention is
-the class <span class="docutils literal"><span class="pre">account_move</span></span> (which deals with accounting entries) in the file
-<span class="docutils literal"><span class="pre">addons/account/account.py</span></span>.  The method that verifies if one or several
-entries are correct is the <span class="docutils literal"><span class="pre">validate()</span></span> method.</p>
+<p>Let&#8217;s inspect how does OpenERP <a class="footnote-reference" href="#not-odoo" id="id3">[2]</a> verifies the accounting law.  Our
+focus of attention is the class <span class="docutils literal"><span class="pre">account_move</span></span> (which deals with accounting
+entries) in the file <span class="docutils literal"><span class="pre">addons/account/account.py</span></span>.  The method that verifies
+if one or several entries are correct is the <span class="docutils literal"><span class="pre">validate()</span></span> method.  The
+method is quite long, and, as many things in the OpenERP code base, does more
+than one thing.  It does the following for each journal entry provided
+<a class="footnote-reference" href="#many-objs" id="id4">[3]</a>:</p>
+<ul>
+<li><p class="first">First the sum all the debits and credits</p>
+</li>
+<li><p class="first">Check that all lines touch accounts of the same company.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <span class="docutils literal"><span class="pre">post()</span></span> method will see later checks that all accounts
+belong to the same Chart of Accounts.</p>
+</div>
+</li>
+<li><p class="first">Collect draft lines for further processing.</p>
+</li>
+<li><p class="first">If both the account of a line and the line itself explicitly state a
+currency, check that either:</p>
+<ol class="loweralpha simple">
+<li>they are the same or</li>
+<li>the account&#8217;s is the same as the company&#8217;s.</li>
+</ol>
+<p>In other words: if the line&#8217;s currency is not same as the account, then the
+account&#8217;s currency must be equal to the company&#8217;s currency.</p>
+</li>
+<li><p class="first">The result of the sum all debits minus the sum all credits should be zero
+(actually, less than 0.0001).  This is the accounting law I was looking for.</p>
+<p>So they collect this entry as a valid one.</p>
+</li>
+<li><p class="first">If there are any draft lines (collected in the 3rd step), they are marked as
+valid <em>bypassing any validation</em>.</p>
+<p>Only in this case as well (I don&#8217;t know why yet) for lines in a sales or
+purchase journal, <span class="docutils literal"><span class="pre">validate()</span></span> <em>seems</em> to try to apply taxes
+<a class="footnote-reference" href="#cuban-taxes" id="id5">[4]</a>.  But I don&#8217;t see how that code would actually be reached.
+In the <a class="reference internal" href="#appendix-the-validate-method-as-of-openerp-7-0-the-19th-sep-2014">appendix</a> this is lines 45-62.</p>
+<p>Anyway I think this should not be here.</p>
+</li>
+<li><p class="first">If the sum of debits minus credits is not (close to) zero, it checks if this
+is a &#8220;centralization&#8221; journal.  If it is they mark this entry as valid and
+also <em>update</em> the entries by centralizing them...  But I won&#8217;t discuss this.</p>
+<p>Again, it seems that <span class="docutils literal"><span class="pre">validate()</span></span> does at lot besides <em>validate</em>.</p>
+</li>
+<li><p class="first">If the journal is not a centralizing one and the lines do not obey the
+accounting law, it rejects it... Finally.  Also, it marks all non-draft
+lines as drafts.</p>
+</li>
+<li><p class="first">But this is not the end. For each entry that is valid after all, it also
+calls the <span class="docutils literal"><span class="pre">create_analytic_lines</span></span> for the all the lines of valid entries.</p>
+<p>Why?</p>
+</li>
+</ul>
+<p>The <span class="docutils literal"><span class="pre">validate()</span></span> method is called when you try to <em>post</em> one or more
+entries.  It&#8217;s not called automatically by the ORM when you create an entry.
+This is because the entries are allowed to be invalid until they are actually
+being recorded as accounting facts (posting them).  Only then they are
+required to comply with the accounting laws.</p>
+<p>The <span class="docutils literal"><span class="pre">post()</span></span> method creates a unique name for entries that don&#8217;t have it.
+But if the journal where they are being posted into has no sequence
+associated, it signals an error.</p>
+<p><span class="docutils literal"><span class="pre">post()</span></span> is called by the <span class="docutils literal"><span class="pre">button_validate()</span></span> method.  Which, first,
+validates that all the accounts in an entry belong to the same chart of
+accounts.</p>
+<p>So it seems that validations is both spread and tangled.  It&#8217;s hard to
+differentiate choices from requirements.  A probable concern is performance.
+Tangling is one of its effects as shown in the <a href="#id8"><span class="problematic" id="id9">`AOP original paper`_</span></a>.  But
+even so, this code shows tangling that is probably too artificial.</p>
+<p>For business rules like the ones shown at the beginning of this article, we
+have to inspect the <span class="docutils literal"><span class="pre">account_invoice.py</span></span> module of the same addon, and
+probably others that modify the <span class="docutils literal"><span class="pre">account.invoice</span></span> object.  But let&#8217;s focus
+on the basics.</p>
+<p>Creating journal entries from an invoice is done in the
+<span class="docutils literal"><span class="pre">action_move_create()</span></span> method.  Again, it&#8217;s an unwieldy pile of code of 160
+lines.  Being a mechanical process of creation I expected to see only data
+<em>translation</em> from an invoice to a journal entry with lines.  Nevertheless the
+code is filled with <strong>validation</strong> checks:</p>
+<ul class="simple">
+<li>There should be items in the invoice.</li>
+<li>If you (the user of OpenERP) belong to some groups then it&#8217;ll check the
+total sum of the invoice.</li>
+<li>Payment term calculations are required to match expected amount.</li>
+<li>Checks the type of the journal.</li>
+</ul>
+<p>And, yes, it will <em>also</em> create an entry with the desired schematic in the
+invoice&#8217;s journal.</p>
+</div>
+<div class="section" id="disclaimer">
+<h2>Disclaimer</h2>
+<p>Despite all its flaws, OpenERP remains a good solution for many enterprises.
+We&#8217;re using it low and high for everything.</p>
+<p>But the source is not friendly because choices are deeply tangled inside the
+code.  Methods are ridiculously long.  Which makes them really hard to read,
+understand and maintain.</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<table class="docutils footnote" frame="void" id="double-entry" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>See <a class="reference external" href="http://en.wikipedia.org/wiki/Double-entry_bookkeeping">Double-entry bookkeeping</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="not-odoo" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>While I&#8217;m writing these lines OpenERP is a moving target and
+the branch I&#8217;m currently concerned with is the <a class="reference external" href="https://github.com/odoo/odoo/tree/7.0">7.0 branch</a>.  Things are
+changing in the <a class="reference external" href="https://github.com/odoo/odoo/tree/8.0">8.0 branch</a> in ways I&#8217;m not entirely familiar with yet.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="many-objs" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>OpenERP&#8217;s models are designed to operate on collections of
+objects instead of a single object.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="cuban-taxes" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td>Here, at Cuba, we don&#8217;t have much experience with taxes.
+There are no taxes for the common people: No income tax, no IVA
+(VAT)... nothing.  Enterprises do pay some taxes but most people are
+unaware of this fact.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="appendix-the-validate-method-as-of-openerp-7-0-the-19th-sep-2014">
+<h2>Appendix - The <span class="docutils literal"><span class="pre">validate()</span></span> method as of OpenERP 7.0, the 19th Sep, 2014</h2>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">and</span> <span class="p">(</span><span class="s">&#39;__last_update&#39;</span> <span class="ow">in</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">del</span> <span class="n">context</span><span class="p">[</span><span class="s">&#39;__last_update&#39;</span><span class="p">]</span>
+
+    <span class="n">valid_moves</span> <span class="o">=</span> <span class="p">[]</span> <span class="c">#Maintains a list of moves which can be responsible to create analytic entries</span>
+    <span class="n">obj_analytic_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;account.analytic.line&#39;</span><span class="p">)</span>
+    <span class="n">obj_move_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;account.move.line&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">journal</span> <span class="o">=</span> <span class="n">move</span><span class="o">.</span><span class="n">journal_id</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">line_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">line_draft_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">company_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">move</span><span class="o">.</span><span class="n">line_id</span><span class="p">:</span>
+            <span class="n">amount</span> <span class="o">+=</span> <span class="n">line</span><span class="o">.</span><span class="n">debit</span> <span class="o">-</span> <span class="n">line</span><span class="o">.</span><span class="n">credit</span>
+            <span class="n">line_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;draft&#39;</span><span class="p">:</span>
+                <span class="n">line_draft_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">company_id</span><span class="p">:</span>
+                <span class="n">company_id</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">company_id</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">company_id</span> <span class="o">==</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">company_id</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">osv</span><span class="o">.</span><span class="n">except_osv</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Error!&#39;</span><span class="p">),</span> <span class="n">_</span><span class="p">(</span><span class="s">&quot;Cannot create moves for different companies.&quot;</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">currency_id</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">currency_id</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">currency_id</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">line</span><span class="o">.</span><span class="n">currency_id</span><span class="o">.</span><span class="n">id</span> <span class="ow">and</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">currency_id</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">company_id</span><span class="o">.</span><span class="n">currency_id</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">osv</span><span class="o">.</span><span class="n">except_osv</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Error!&#39;</span><span class="p">),</span> <span class="n">_</span><span class="p">(</span><span class="s">&quot;&quot;&quot;Cannot create move with currency different from ..&quot;&quot;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">4</span><span class="p">:</span>
+            <span class="c"># If the move is balanced</span>
+            <span class="c"># Add to the list of valid moves</span>
+            <span class="c"># (analytic lines will be created later for valid moves)</span>
+            <span class="n">valid_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
+
+            <span class="c"># Check whether the move lines are confirmed</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line_draft_ids</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c"># Update the move lines (set them as valid)</span>
+
+            <span class="n">obj_move_line</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">line_draft_ids</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;valid&#39;</span>
+            <span class="p">},</span> <span class="n">context</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+            <span class="n">account</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">account2</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">if</span> <span class="n">journal</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;purchase&#39;</span><span class="p">,</span><span class="s">&#39;sale&#39;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">move</span><span class="o">.</span><span class="n">line_id</span><span class="p">:</span>
+                    <span class="n">code</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">tax_code_id</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">account2</span><span class="p">:</span>
+                        <span class="n">code</span> <span class="o">=</span> <span class="n">account2</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">amount</span> <span class="o">=</span> <span class="n">account2</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">debit</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">credit</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">account</span><span class="p">:</span>
+                        <span class="n">code</span> <span class="o">=</span> <span class="n">account</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">amount</span> <span class="o">=</span> <span class="n">account</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">account_id</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">debit</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">credit</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">code</span> <span class="ow">or</span> <span class="n">amount</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">tax_code_id</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">tax_amount</span><span class="p">):</span>
+                        <span class="n">obj_move_line</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="p">{</span>
+                            <span class="s">&#39;tax_code_id&#39;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span>
+                            <span class="s">&#39;tax_amount&#39;</span><span class="p">:</span> <span class="n">amount</span>
+                        <span class="p">},</span> <span class="n">context</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">journal</span><span class="o">.</span><span class="n">centralisation</span><span class="p">:</span>
+            <span class="c"># If the move is not balanced, it must be centralised...</span>
+
+            <span class="c"># Add to the list of valid moves</span>
+            <span class="c"># (analytic lines will be created later for valid moves)</span>
+            <span class="n">valid_moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
+
+            <span class="c">#</span>
+            <span class="c"># Update the move lines (set them as valid)</span>
+            <span class="c">#</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_centralise</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="s">&#39;debit&#39;</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_centralise</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="s">&#39;credit&#39;</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+            <span class="n">obj_move_line</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">line_draft_ids</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;valid&#39;</span>
+            <span class="p">},</span> <span class="n">context</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># We can&#39;t validate it (it&#39;s unbalanced)</span>
+            <span class="c"># Setting the lines as draft</span>
+            <span class="n">not_draft_line_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">line_ids</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">line_draft_ids</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">not_draft_line_ids</span><span class="p">:</span>
+                <span class="n">obj_move_line</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">not_draft_line_ids</span><span class="p">,</span> <span class="p">{</span>
+                    <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;draft&#39;</span>
+                <span class="p">},</span> <span class="n">context</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c"># Create analytic lines for the valid moves</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">valid_moves</span><span class="p">:</span>
+        <span class="n">obj_move_line</span><span class="o">.</span><span class="n">create_analytic_lines</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">line_id</span><span class="p">],</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="n">valid_moves</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">valid_moves</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_moves</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">valid_moves</span> <span class="ow">or</span> <span class="bp">False</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
@@ -148,7 +451,7 @@ entries are correct is the <span class="docutils literal"><span class="pre">vali
         <div class="tags">
             <span>
                 Tags:
-                <a href="../tags/integration.html">integration</a></span>
+                <a href="../tags/integration.html">integration</a>, <a href="../tags/programming.html">programming</a></span>
         </div>
         </div>
     
