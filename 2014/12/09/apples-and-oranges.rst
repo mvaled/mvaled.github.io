@@ -3,7 +3,6 @@ Apples and Oranges.  How books can mislead our thinking process.
 
 .. categories:: Book Reviews
 
-
 I've just began to read the book "Twisted Network Programming"... Twisted_ is
 a popular framework for networking programming.  However, I'd probably skim
 most of the Book.  I'm sorry... But as it happens, in the second page of the
@@ -36,8 +35,22 @@ fun either.
 
 Don't expect me to finish this book.
 
+.. rubric:: Update of a couple of hours later...
+
+A few lines below the illustration of matters, they actually say:
+
+  "The event-driven version of the program interleaves the execution of the
+  three tasks, but in a single thread of control."
+
+So, let's give it another try.
+
 
 .. _apples and oranges: http://en.wikipedia.org/wiki/Apples_and_oranges
 .. _Twisted: http://www.twistedmatrix.com/
 .. _Tornado: http://www.tornadoweb.org/
 .. _Diesel: http://diesel.io/
+
+..
+   Local Variables:
+   ispell-dictionary: "en"
+   End:

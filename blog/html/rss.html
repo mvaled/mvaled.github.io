@@ -37,6 +37,12 @@ pleasure but for information.  Finding a piece of data that is not trustworthy
 raises a flag and I start to read with a magnifying glass... And that’s not
 fun either.</p>
 <p>Don’t expect me to finish this book.</p>
+<p class="rubric">Update of a couple of hours later...</p>
+<p>A few lines below the illustration of matters, they actually say:</p>
+<blockquote>
+<div>“The event-driven version of the program interleaves the execution of the
+three tasks, but in a single thread of control.”</div></blockquote>
+<p>So, let’s give it another try.</p>
 ]]></description>
             <category><![CDATA[ Book Reviews ]]></category>
              <pubDate>Tue, 09 Dec 2014 00:00:00 -0500</pubDate>
@@ -571,30 +577,30 @@ in <a class="reference external" href="https://github.com/merchise-autrement/xot
 <li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
 code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
 test.</p>
-<p>The idea of having a <em class="xref std std-term">query object</em> that stands for the expression
+<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a> that stands for the expression
 was not totally consolidated.  The components of the query were not
 defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
 <p>In this case the “literate” spirit dominated the design process, not the
 testing.  Simply we didn’t have a full-stack: ie. the language and the
-<em class="xref std std-term">translators</em> so that a query could actually be
+<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.2)"><em class="xref std std-term">translators</em></a> so that a query could actually be
 executed.</p>
 </li>
 <li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <em class="xref std std-ref">lack of clear
-boundaries</em> between several sub-expressions in a
-single <em class="xref std std-term">query</em>.</p>
+to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/inners.html#inner-workings" title="(in xotl.ql v0.2)"><em class="xref std std-ref">lack of clear
+boundaries</em></a> between several sub-expressions in a
+single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.2)"><em class="xref std std-term">query</em></a>.</p>
 <p>This was the hardest stage.  Testing was employed to keep track of several
 design decisions.  In this stage made appearance our “Particle Bubble” and
 this was complex enough to deserve a handful of tests.  Although several
 tests did influence the design, they hardly drove it.</p>
 </li>
-<li><p class="first">Then the core was done and we turned to <span class="xref py py-mod docutils literal"><span class="pre">translation</span></span>.  This stage was mainly TDD cause we
+<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/xotl.ql.translation.py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.2)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
 actually were testing a very TDD friendly layer:  Given this state of the
 world, the following query should return these objects.</p>
 </li>
 <li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
 our entire design and do reverse engineering of python byte-code to extract
-build the <em class="xref std std-term">query object</em>.</p>
+build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a>.</p>
 <p>What is foreseeable is that again a kind of literate driven design is going
 to be king: The core structure of the language (the query AST) is what’s
 being designed so, what’s the point of asking if the result of calling a
