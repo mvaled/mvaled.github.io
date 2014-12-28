@@ -16,26 +16,26 @@
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
         <title>What I’ve been doing lately &mdash; Manuel on Software - Reloaded</title>
-            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
-            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
-            <link rel="stylesheet" href="../_static/main.css" type="text/css">
-            <link rel="stylesheet" href="../_static/mva.css" type="text/css">
-            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/mva.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
         <!-- Load modernizr and JQuery -->
-<script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
-<script src="../_static/vendor/jquery-1.8.2.min.js"></script>
-<script src="../_static/plugins.js"></script>
-<script src="../_static/main.js"></script>
-<link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="next" title="Apples and Oranges. How books can mislead our thinking process." href="../09/apples-and-oranges.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.4.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -55,60 +55,62 @@
 
       <div id="container"><header role="banner">
             <hgroup>
-              <h1><a href="../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
+              <h1><a href="../../../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
           </header>
       <!--    <h1 id="toggle-nav" class="menu-toggle">
       <span class="screen-reader-text">Menu</span></h1>
     <nav role="navigation">
       <ul>
         <li class="main-nav">
-          <a href="../index.html">Home</a>
+          <a href="../../../index.html">Home</a>
         </li>
         <li class="main-nav">
-          <a href="../pages/about-this.html">About this</a>
+          <a href="../../../pages/about-this.html">About this</a>
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper clearfix"><article><div class="section" id="what-i-ve-been-doing-lately">
 <h1>What I&#8217;ve been doing lately</h1>
-<p>Lately my work has been mainly driven the need to efficiently and smoothly
+<p>Lately my work has been mainly driven by the need to efficiently and smoothly
 deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
-the same time I&#8217;m responsible several development and deployments in the
+the same time I&#8217;m responsible of several development and deployments in the
 enterprise.</p>
 <p>The accounting-related tasks have made me to study the accounting module, but
-also accounting in general from fundamental principles to advanced topics.
-Currently I own a collection of 9 books about accounting.  I still have more
+also accounting in general from fundamental principles to advanced topics.  I
+currently own a collection of 9 books about accounting.  I still have more
 studying to do, but now I&#8217;m versed enough to the point of being a (very
 junior) accounting consultant to the CEO.  This, of course, should yield
 future benefits since I&#8217;m planning to start a business.</p>
 <p>On the technical side, the last week I was doing a final verification of the
 module so that the (true) accountant of the enterprise finally migrates to
-OpenERP: Taking our QuickBooks files and, with Pentaho <a href="#id1"><span class="problematic" id="id2">Kettle_</span></a>, migrating the
-accounting information to OpenERP, and the comparing the legal reports.  This
-has finally yielded good results and we&#8217;re doing an opening entry to continue
+OpenERP: Taking our QuickBooks files and, with Pentaho <a class="reference external" href="http://community.pentaho.com/projects/data-integration/">Kettle</a>, migrating the
+accounting information to OpenERP, and comparing the legal reports.  This has
+finally yielded good results and we&#8217;re doing an opening entry to continue
 accounting in OpenERP (the enterprise has an accounting period the starts on
 Oct, 1st each year).</p>
-<p>At the same time a new server for OpenERP and a deployment based on <a href="#id3"><span class="problematic" id="id4">Buildout_</span></a>
+<p>At the same time a new server for OpenERP and a deployment based on <a class="reference external" href="https://pypi.python.org/pypi/zc.buildout/">Buildout</a>
 was another one of my tasks.  There&#8217;s still much to be done and I&#8217;m wondering
-if <a href="#id5"><span class="problematic" id="id6">Ansible_</span></a> would be a good choice to actually manage the deployment since it
-involve setting up <a href="#id7"><span class="problematic" id="id8">Postfix_</span></a> as the Mail Transfer Agent interfacing OpenERP for
+if <a class="reference external" href="https://github.com/ansible/ansible">Ansible</a> would be a good choice to actually manage the deployment since it
+involve setting up <a class="reference external" href="http://www.postfix.org/">Postfix</a> as the Mail Transfer Agent interfacing OpenERP for
 emails.  This means that besides the accounting books I have reviewed several
-mail related RFCs (<a href="#id9"><span class="problematic" id="id10">2822_</span></a>, <a href="#id11"><span class="problematic" id="id12">2821_</span></a> and <a href="#id13"><span class="problematic" id="id14">2476_</span></a> being those I&#8217;ve read the most) and
+email related RFCs (<a class="reference external" href="http://tools.ietf.org/html/rfc2822">2822</a>, <a class="reference external" href="http://tools.ietf.org/html/rfc2821">2821</a> and <a class="reference external" href="http://tools.ietf.org/html/rfc2476">2476</a> being those I&#8217;ve read the most) and
 the Postfix documentation.</p>
-<p>The messaging system of OpenERP was, then, another of my targets for
-reviewing.  The last thing I found is that OpenERP tries to submit emails
-using a From address it does not own without a proper Sender header and,
-worse, it sends a &#8220;MAIL FROM&#8221; command with that same address the MSA should
-reject being a foreign one.  This could lead to OpenERP&#8217;s MTAs being
-blacklisted by third parties if a simple address verification is performed.</p>
 <p>To fill the gaps, or more precisely: to take breaks from these topics I&#8217;m
 reading a couple of books and articles:</p>
 <ul class="simple">
 <li>High Performance Browser Networking by Ilya Grigorik.</li>
 <li><a class="reference external" href="http://book.mixu.net/distsys/ebook.html">Distributed Systems</a></li>
-<li>The <a href="#id15"><span class="problematic" id="id16">`report about Convergent and Commutative Replicated Data Types`_</span></a>.</li>
-<li>And fur fun, the last book of the Rama trilogy of Arthur Clark and Gentry
-Lee.  Which BTW I&#8217;ve only truly enjoyed the first book.</li>
+<li>The <a class="reference external" href="https://hal.inria.fr/inria-00555588">report about Convergent and Commutative Replicated Data Types</a> of
+Marc Shapiro and others.  RR-7506, pp. 50 &lt;inria-00555588&gt;.</li>
+<li>And for fun, the last book of the Rama saga of Arthur Clark and Gentry Lee.
+Which BTW I&#8217;ve only truly enjoyed the first book.</li>
 </ul>
+<div class="section" id="things-left-in-the-attic">
+<h2>Things left in the attic</h2>
+<p>At the beginning of 2014 I expected I could dedicate myself to finish
+<a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">xotl.ql</a> by August.  This was, however, not possible.  I still keep my eye
+on the topic from time to time, but this needs a lot of time to actually make
+a breakthrough.</p>
+</div>
 </div>
 
     <div class="postmeta">
@@ -116,8 +118,13 @@ Lee.  Which BTW I&#8217;ve only truly enjoyed the first book.</li>
         
         
         </div>
-    
-    </article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <div class="timestamp postmeta">
+            <span>December 27, 2014</span>
+        </div>
+    <ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../09/apples-and-oranges.html">Apples and Oranges.  How books can mislead our thinking process.</a> &raquo; </li>
+        </ul></article><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
       &copy; Copyright 2014, Manuel Vázquez Acosta. </p>

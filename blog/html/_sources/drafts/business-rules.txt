@@ -24,12 +24,12 @@ encode the following rule:
    ------------------+-------------------+-------------------
 
 
-The accountant that told you that, was generous enough not to use the
-`T-account`__ representation, but she made several assumptions:
+The accountant that told you that made several assumptions:
 
 a) There is a single or definite "Sales" journal.
 
-b) There is a single or definite "Receivable" account.
+b) There is a single or definite "Receivable" account.  Or you'll be using an
+   Auxiliary Ledger to keep trap of Receivables.
 
 c) There is a single or definite "Sales" account.
 
@@ -44,9 +44,9 @@ Then she will tell you that:
 
    Accounts          | Debits            |   Credits
    ------------------+-------------------+-------------------
-   Receivable        |                   |  $ XXXX
+         Receivable  |                   |  $ XXXX
    ------------------+-------------------+-------------------
-            Bank     | $ XXXX            |
+   Bank              | $ XXXX            |
    ------------------+-------------------+-------------------
 
 She will probably explain that this entry somehow "cancels" the previous one,

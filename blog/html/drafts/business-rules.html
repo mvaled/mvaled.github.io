@@ -85,11 +85,11 @@ Receivable        | $ XXXX            |
 ------------------+-------------------+-------------------
 </pre></div>
 </div>
-<p>The accountant that told you that, was generous enough not to use the
-<a class="reference external" href="http://en.wikipedia.org/wiki/Debits_and_credits#T-accounts">T-account</a> representation, but she made several assumptions:</p>
+<p>The accountant that told you that made several assumptions:</p>
 <ol class="loweralpha simple">
 <li>There is a single or definite &#8220;Sales&#8221; journal.</li>
-<li>There is a single or definite &#8220;Receivable&#8221; account.</li>
+<li>There is a single or definite &#8220;Receivable&#8221; account.  Or you&#8217;ll be using an
+Auxiliary Ledger to keep trap of Receivables.</li>
 <li>There is a single or definite &#8220;Sales&#8221; account.</li>
 </ol>
 <p>Then she will tell you that:</p>
@@ -98,9 +98,9 @@ Receivable        | $ XXXX            |
 &#8220;Bank&#8221; journal with the following two items (schematic):</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre>Accounts          | Debits            |   Credits
 ------------------+-------------------+-------------------
-Receivable        |                   |  $ XXXX
+      Receivable  |                   |  $ XXXX
 ------------------+-------------------+-------------------
-         Bank     | $ XXXX            |
+Bank              | $ XXXX            |
 ------------------+-------------------+-------------------
 </pre></div>
 </div>
@@ -161,7 +161,7 @@ valid <em>bypassing any validation</em>.</p>
 <p>Only in this case as well (I don&#8217;t know why yet) for lines in a sales or
 purchase journal, <span class="docutils literal"><span class="pre">validate()</span></span> <em>seems</em> to try to apply taxes
 <a class="footnote-reference" href="#cuban-taxes" id="id5">[4]</a>.  But I don&#8217;t see how that code would actually be reached.
-In the <a class="reference internal" href="#appendix-the-validate-method-as-of-openerp-7-0-the-19th-sep-2014">appendix</a> this is lines 45-62.</p>
+In the <a href="#id8"><span class="problematic" id="id9">appendix__</span></a> this is lines 45-62.</p>
 <p>Anyway I think this should not be here.</p>
 </li>
 <li><p class="first">If the sum of debits minus credits is not (close to) zero, it checks if this
@@ -191,7 +191,7 @@ validates that all the accounts in an entry belong to the same chart of
 accounts.</p>
 <p>So it seems that validations is both spread and tangled.  It&#8217;s hard to
 differentiate choices from requirements.  A probable concern is performance.
-Tangling is one of its effects as shown in the <a href="#id8"><span class="problematic" id="id9">`AOP original paper`_</span></a>.  But
+Tangling is one of its effects as shown in the <a href="#id10"><span class="problematic" id="id11">`AOP original paper`_</span></a>.  But
 even so, this code shows tangling that is probably too artificial.</p>
 <p>For business rules like the ones shown at the beginning of this article, we
 have to inspect the <span class="docutils literal"><span class="pre">account_invoice.py</span></span> module of the same addon, and
