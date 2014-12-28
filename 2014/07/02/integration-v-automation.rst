@@ -104,9 +104,9 @@ The issue.  The making off
 
 .. warning:: Technical stuff ahead.  Wearing hardhats is mandatory.
 
-By installing the "Accounting & Finance" addon [#v.accountant]_ you touch many
+By installing the "Accounting & Finance" addon [#v.accountant]_ you touch many
 parts of your system besides installing new stuff.  In fact, the module forces
-the installation of many other modules, including ``product`` [#no-gnucash]_.
+the installation of many other modules, including ``product`` [#no-gnucash]_.
 
 It also modifies the |res.partner| model from the ``base`` addon.  You may
 think about the |res.partner| model as an attempt to merge the contact

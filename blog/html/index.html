@@ -417,13 +417,13 @@ process.</p>
 <p class="first admonition-title">Warning</p>
 <p class="last">Technical stuff ahead.  Wearing hardhats is mandatory.</p>
 </div>
-<p>By installing the “Accounting &amp; Finance” addon <a class="footnote-reference" href="#v-accountant" id="id4">[2]</a> you touch many
+<p>By installing the “Accounting &amp; Finance” addon <a class="footnote-reference" href="#v-accountant" id="id4">[2]</a> you touch many
 parts of your system besides installing new stuff.  In fact, the module forces
-the installation of many other modules, including <a href="#id5"><span class="problematic" id="id6">``</span></a>product`` <a class="footnote-reference" href="#no-gnucash" id="id7">[3]</a>.</p>
+the installation of many other modules, including <span class="docutils literal"><span class="pre">product</span></span> <a class="footnote-reference" href="#no-gnucash" id="id5">[3]</a>.</p>
 <p>It also modifies the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model from the <span class="docutils literal"><span class="pre">base</span></span> addon.  You may
 think about the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model as an attempt to merge the contact
 information for both clients, suppliers and employees into a single
-entity <a class="footnote-reference" href="#v-contact-info" id="id8">[4]</a>.  It has many fields that comprise name, job
+entity <a class="footnote-reference" href="#v-contact-info" id="id6">[4]</a>.  It has many fields that comprise name, job
 position, contact information, etc...</p>
 <p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">"res.partner"</span></span> gets appended a
 whole bunch of other fields, including the said “account payable” and “account
@@ -455,7 +455,7 @@ are “special”.</p>
 <p>Properties are of course related to the “solution” for the problem described
 above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup">Database setup</a>
 in the OpenERP Book.  That’s the reason I’m using this case to open the
-<cite>OpenERP corner</cite>.  If you deploy CRM before accounting <a class="footnote-reference" href="#accounting-last" id="id9">[1]</a>
+<cite>OpenERP corner</cite>.  If you deploy CRM before accounting <a class="footnote-reference" href="#accounting-last" id="id7">[1]</a>
 you’d probably find no interest in reading a topic called “Database setup”...
 you have set your database up already, haven’t you?</p>
 <p>You should notice that both <cite>Account receivable</cite> and <cite>Account payable</cite> are, in
@@ -490,13 +490,13 @@ journal entries and before posting them, and change the account if needed.</li>
 </div>
 </div>
 </div>
-<div class="section" id="id10">
+<div class="section" id="id8">
 <h2>Integration v. Automation</h2>
 <p>An ERP should simplify things by <em>integrating business areas</em>, shouldn’t it?
 That’s the main driver behind the feature of automatically generating journal
 entries.  Under this principle when an invoice is sent to a client a journal
 entry should be made recording we should get paid for that, ie.  the client’s
-account receivable gets increased <a class="footnote-reference" href="#account-normal-balance" id="id11">[5]</a>.  Likewise when
+account receivable gets increased <a class="footnote-reference" href="#account-normal-balance" id="id9">[5]</a>.  Likewise when
 we get a supplier invoice, an entry should record that we must pay that bill,
 ie.  the supplier’s account payable gets increased.</p>
 <p>You see now how the “Account Receivable” and “Account Payable” fields for the
@@ -512,7 +512,7 @@ areas and how the integration happens in this case via a very specific kind of
 change and/or are not applicable this kind of automation does more harm that
 it helps.</p>
 <p>This is the reason the module that controls the “Anglo-Saxon
-accounting” <a class="footnote-reference" href="#basis" id="id12">[6]</a> is very difficult to understand and the result
+accounting” <a class="footnote-reference" href="#basis" id="id10">[6]</a> is very difficult to understand and the result
 artificial: they need an “interim” account to keep track the different stages.
 In the standard (for OpenERP) accounting the event to produce journal items in
 the debtor/creditor account is the creation of the invoice.  In the
@@ -550,7 +550,7 @@ maintain and evolve.</p>
 <table class="docutils footnote" frame="void" id="accounting-last" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
-<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id9">2</a>)</em> <p>This is no hypothetical at all.  We’re actually
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id7">2</a>)</em> <p>This is no hypothetical at all.  We’re actually
 deploying Accounting after having deployed Project Management and <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management">CRM</a>.</p>
 <p class="last">This has come with many surprises but that’s what this post is about.</p>
 </td></tr>
@@ -570,21 +570,21 @@ applications.  Installing the application forces the installation of the
 <table class="docutils footnote" frame="void" id="no-gnucash" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[3]</a></td><td>That is why I still do my personal (home) accounting with
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>That is why I still do my personal (home) accounting with
 <a class="reference external" href="http://www.gnucash.org">GNU Cash</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="v-contact-info" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id8">[4]</a></td><td>This merge has problems of its own, but that’s a matter
+<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td>This merge has problems of its own, but that’s a matter
 for another post.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="account-normal-balance" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id11">[5]</a></td><td>Though an account either gets credited or
+<tr><td class="label"><a class="fn-backref" href="#id9">[5]</a></td><td>Though an account either gets credited or
 debited, I will avoid that accounting-related terms cause it’s not needed
 for the argument in this post.  If you need to know, start by knowing that
 receivables have a debit <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_balance">normal balance</a> and go from there.</td></tr>
@@ -593,7 +593,7 @@ receivables have a debit <a class="reference external" href="http://en.wikipedia
 <table class="docutils footnote" frame="void" id="basis" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id12">[6]</a></td><td>I’m not quite sure if this “anglo-saxon accounting” refers to
+<tr><td class="label"><a class="fn-backref" href="#id10">[6]</a></td><td>I’m not quite sure if this “anglo-saxon accounting” refers to
 different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis_of_accounting">basis of accounting</a>.</td></tr>
 </tbody>
 </table>
