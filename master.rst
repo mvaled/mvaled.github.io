@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2015/02/18/greenlet-local-python-modules-an-experiment
    2014/12/27/lately
    2014/12/09/apples-and-oranges
    2014/08/28/reviewing-openerp-8-0
