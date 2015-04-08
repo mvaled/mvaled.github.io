@@ -5,18 +5,139 @@
         <link>http://mvaled.github.io/blog/html/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Wed, 18 Feb 2015 00:00:00 -0500</pubDate>
+        <pubDate>Wed, 08 Apr 2015 00:00:00 -0400</pubDate>
         
+        <item>
+            <link>http://mvaled.github.io/blog/html/2015/04/08/rememoring-microservices.html</link>
+            <guid>http://mvaled.github.io/blog/html/2015/04/08/rememoring-microservices.html</guid>
+            <title><![CDATA[Memento: microservices]]></title>
+            <description><![CDATA[<div class="section" id="memento-microservices">
+<h1>Memento: microservices</h1>
+<p>Lately there’s been a raise of the debate about Microservices architectures.
+Reading about the stuff I realized I did once architect an application called
+Pyxel based on the same principles, though different.</p>
+<p>Pyxel reached only its first prototype and was never actually deployed.  I’d
+say it wasn’t given the chance to prove itself.  So I argue it was technically
+sound and, although only a prototype and thus needing improvements, it would
+have meet its stated requirements <a class="footnote-reference" href="#disagreement" id="id1">[1]</a>.</p>
+<p>I haven’t been given permission to freely distribute the source code.  But the
+architecture was published in several public events, so I can freely describe
+it here.</p>
+<div class="section" id="pyxel">
+<h2>Pyxel</h2>
+<p>Pyxel’s goal was simple:</p>
+<blockquote>
+<div>Be a shared repository of photographs for the news media that wish to
+collaborate.</div></blockquote>
+<p>Pyxel required that images were tagged with IPTC metadata before uploading.
+Upon upload, the image went through several processes for extracting the
+metadata, and for producing web-friendly versions <a class="footnote-reference" href="#retina" id="id2">[2]</a> for several
+standard dimensions before being published.</p>
+<p>On the technical side we have also very hard constraints:</p>
+<ul class="simple">
+<li>the system would have to be highly accessible.</li>
+<li>it should run on spare machines; introducing a new machine to replace an old
+one should be possible with minimal interruption.</li>
+</ul>
+<p>This constraints were the main driver that lead us to design what we called a
+distributed system.  Each major component was designed to run in isolation of
+the rest.</p>
+<p>Pyxel was split in several processes:</p>
+<ul class="simple">
+<li>An image queue holding new images.  This was kind of a FIFO queue over the
+network.</li>
+<li>A catalog holding indexes for retrieving images based of queries.  Queries
+were defined a syntax allowing from very simple queries aided with pattern
+recognition (PR) of names and dates, to very specific queries that make the
+PR mostly unused.</li>
+<li>A “feature” index.  This basically allowed to find similar images.  There
+were two indexes, one based on Hu moments and the other based on wavelets.</li>
+<li>Several image processing nodes, that take images from the queue and:<ul>
+<li>Extract IPTC metadata and put it the catalog</li>
+<li>Extract image features to allow detection of similar images.</li>
+<li>Produce “web versions” for the image.  We always kept the original file,
+but to keep the design of the prototype simple there was an “as-is web
+version” that simply returned the same file as the input.</li>
+</ul>
+</li>
+<li>A web application that communicates with the index and the catalogs.</li>
+<li>An FTP server that injects images to the queue using a FUSE mount point
+(drag-and-drop to the browser wasn’t common yet).</li>
+</ul>
+<p>That were the main components and all of them ran independently.  Of course
+for some services to perform at 100%, they required others to be working.  The
+web application would not be able to perform a search if the catalog was down,
+or to upload new images if the queue was out of reach.</p>
+</div>
+<div class="section" id="the-principles-stand">
+<h2>The principles stand</h2>
+<p>Microservices are “a take” on the same old issue about software composition.
+Conceptually <a class="reference external" href="https://www.cs.umd.edu/class/spring2003/cmsc838p/Design/criteria.pdf">Parnas</a> still rules: must do modules.  Names have changed and
+several rules to build better modules (components, services, etc) have been
+provided.</p>
+<p>Exposition of the modules as services have also been promoted.</p>
+<p>In the web, the modules have drifted away from the server into the client.</p>
+</div>
+<div class="section" id="microservices-and-pyxel">
+<h2>Microservices and Pyxel</h2>
+<p>Pyxel was not actually a microservice architecture as it is understood now.
+Deep down it used a central name-server that matched services names to network
+endpoints.  We used <a class="reference external" href="https://pypi.python.org/Pyro">Pyro</a> for this prototype.</p>
+<p>We did recognize that this was an <em>accidental</em> choice, a matter of convenience
+to have the prototype working as soon as possible.</p>
+<p>We chose Pyro to test our prototype not to keep it forever if it performed
+poorly.  And though our first tests were positive there was some slowness.</p>
+<p>To accommodate for a possible replacement of Pyro we chose to provide our own
+“idiom” (in Python) to connect and communicate with services:</p>
+<div class="highlight-python"><div class="highlight"><pre>with service('pyxel.queue') as queue
+    queue.method(*arguments)
+</pre></div>
+</div>
+<p>That pattern was designed to have an appearance as simple as RPC.  Later we
+found that <a class="reference external" href="http://steve.vinoski.net/pdf/IEEE-RPC_Under_Fire.pdf">RPC was under fire</a>, but the project was being shut down, so we
+didn’t fix that.</p>
+<p>Under current views Pyxel needs several changes.  I can think of a couple:</p>
+<ul class="simple">
+<li>Probably exposing the queue to the client-side of the web application
+instead sending the images first to the server-side of the web application.</li>
+<li>Extract the user registration, authentication and authorization into a
+service.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="notes">
+<h1>Notes</h1>
+<table class="docutils footnote" frame="void" id="disagreement" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Actually one of the main causes of Pyxel being a failure
+was I could not make all participants agreed on the requirements.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="retina" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Current retina displays would make that thumbnails look like
+icons and bandwidth is also more likely to allow very big pictures to be
+friendly.</td></tr>
+</tbody>
+</table>
+</div>
+]]></description>
+            <category><![CDATA[ architecture ]]></category>
+             <pubDate>Wed, 08 Apr 2015 00:00:00 -0400</pubDate>
+        </item>
+    
         <item>
             <link>http://mvaled.github.io/blog/html/2015/02/18/greenlet-local-python-modules-an-experiment.html</link>
             <guid>http://mvaled.github.io/blog/html/2015/02/18/greenlet-local-python-modules-an-experiment.html</guid>
             <title><![CDATA[Hot-swapping Python modules. An experiment.]]></title>
             <description><![CDATA[<h1>Hot-swapping Python modules. An experiment.</h1>
 <p>A new project I’m involved with will <em>probably</em> require dozens of servers
-running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest">greenlets</a> each.  Top-level greenlets represent jobs
+running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlets</a> each.  Top-level greenlets represent jobs
 and their children will be individual tasks those greenlets are
 coordinating/supervising.</p>
-<p>This model, however prototypical, resembles that of the <a class="reference external" href="http://www.erlang.org">OTP</a> in Erlang.  A
+<p>This model, however prototypical, resembles that of the <a class="reference external" href="http://www.erlang.org/">OTP</a> in Erlang.  A
 greenlet may be either a supervisor or a worker.</p>
 <p>But there’s something missing in our platform that Erlang do have and that
 might yield huge benefits.  You can change your Erlang code while the program
@@ -105,7 +226,7 @@ Passed. I have the right magic number 1000
 <div class="section" id="future-work">
 <h2>Future work</h2>
 <p>Since we are at the very early stages of this project is not easy to predict
-if we’ll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest">celery</a> based solution be
+if we’ll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest/">celery</a> based solution be
 enough.</p>
 <p>If we were to keep it, there are several things to improve:</p>
 <ul>
@@ -119,9 +240,9 @@ be) the repr of the greenlet object.</p>
 <p>For the purposes of isolating different versions of the same code we can
 either use the timestamp of the files, the version of the distribution,
 etc...</p>
-<p>Running a <a class="reference external" href="http://diesel.io">diesel</a> server will quickly eat all your RAM unless this is
+<p>Running a <a class="reference external" href="http://diesel.io/">diesel</a> server will quickly eat all your RAM unless this is
 changed.</p>
-<p>When a <a class="reference external" href="https://greenlet.readthedocs.org/en/latest">greenlet</a> dies the only one informed is its parent.  But we certainly
+<p>When a <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlet</a> dies the only one informed is its parent.  But we certainly
 don’t want jobs to mess with <span class="docutils literal"><span class="pre">sys.modules</span></span> to clean our own mess.</p>
 <p>This poses a challenge of its own and may be delegated outside <cite>xoutil</cite>
 itself.</p>
@@ -157,7 +278,7 @@ in the box.</p>
             <title><![CDATA[What I've been doing lately]]></title>
             <description><![CDATA[<h1>What I’ve been doing lately</h1>
 <p>Lately my work has been mainly driven by the need to efficiently and smoothly
-deploy the Accounting module of <a class="reference external" href="http://www.odoo.com">OpenERP</a> in my employer enterprise.  But at
+deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
 the same time I’m responsible of several development and deployments in the
 enterprise.</p>
 <p>The accounting-related tasks have made me to study the accounting module, but
@@ -168,15 +289,15 @@ junior) accounting consultant to the CEO.  This, of course, should yield
 future benefits since I’m planning to start a business.</p>
 <p>On the technical side, the last week I was doing a final verification of the
 module so that the (true) accountant of the enterprise finally migrates to
-OpenERP: Taking our QuickBooks files and, with Pentaho <a class="reference external" href="http://community.pentaho.com/projects/data-integration">Kettle</a>, migrating the
+OpenERP: Taking our QuickBooks files and, with Pentaho <a class="reference external" href="http://community.pentaho.com/projects/data-integration/">Kettle</a>, migrating the
 accounting information to OpenERP, and comparing the legal reports.  This has
 finally yielded good results and we’re doing an opening entry to continue
 accounting in OpenERP (the enterprise has an accounting period the starts on
 Oct, 1st each year).</p>
-<p>At the same time a new server for OpenERP and a deployment based on <a class="reference external" href="https://pypi.python.org/pypi/zc.buildout">Buildout</a>
+<p>At the same time a new server for OpenERP and a deployment based on <a class="reference external" href="https://pypi.python.org/pypi/zc.buildout/">Buildout</a>
 was another one of my tasks.  There’s still much to be done and I’m wondering
 if <a class="reference external" href="https://github.com/ansible/ansible">Ansible</a> would be a good choice to actually manage the deployment since it
-involve setting up <a class="reference external" href="http://www.postfix.org">Postfix</a> as the Mail Transfer Agent interfacing OpenERP for
+involve setting up <a class="reference external" href="http://www.postfix.org/">Postfix</a> as the Mail Transfer Agent interfacing OpenERP for
 emails.  This means that besides the accounting books I have reviewed several
 email related RFCs (<a class="reference external" href="http://tools.ietf.org/html/rfc2822">2822</a>, <a class="reference external" href="http://tools.ietf.org/html/rfc2821">2821</a> and <a class="reference external" href="http://tools.ietf.org/html/rfc2476">2476</a> being those I’ve read the most) and
 the Postfix documentation.</p>
@@ -206,7 +327,7 @@ a breakthrough.</p>
             <guid>http://mvaled.github.io/blog/html/2014/12/09/apples-and-oranges.html</guid>
             <title><![CDATA[Apples and Oranges.  How books can mislead our thinking process.]]></title>
             <description><![CDATA[<h1>Apples and Oranges.  How books can mislead our thinking process.</h1>
-<p>I’ve just began to read the book “Twisted Network Programming”... <a class="reference external" href="http://www.twistedmatrix.com">Twisted</a> is
+<p>I’ve just began to read the book “Twisted Network Programming”... <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
 a popular framework for networking programming.  However, I’d probably skim
 most of the Book.  I’m sorry... But as it happens, in the second page of the
 second chapter (the one that I began with) they show an illustration on
@@ -214,7 +335,7 @@ second chapter (the one that I began with) they show an illustration on
 <p>Hum... <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
 some impact on how events are dealt with, but are they truly comparable or the
 sole responsibles for the program flow?</p>
-<p><a class="reference external" href="http://diesel.io">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org">Tornado</a>.  You may, of
+<p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
 course, run programs written with them in multiple processes (or threads) to
 avoid contention when the volume of clients (events) is too high.</p>
 <p>Even with a single thread most of the time the system is waiting for the IO
@@ -284,7 +405,7 @@ a try and it seemed to work out-of-box.</p>
 <p>My first guess was that multi-process deployments would need to pass messages
 around between the HTTP processes.  That requires a kind of Inter-Processes
 Communication (IPC).  Popular choices for achieving this in web applications
-are <a class="reference external" href="http://redis.io">Redis</a> and <a class="reference external" href="http://www.rabbitmq.com">RabbitMQ</a>, but then you’d need to setup either for this to
+are <a class="reference external" href="http://redis.io/">Redis</a> and <a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a>, but then you’d need to setup either for this to
 work.</p>
 <p>After thinking in this a bit more (actually the thinking about this occurred
 at the same time I was writing this post) I realized that the <em>current</em>
@@ -419,9 +540,9 @@ Redundancy is not always bad when it comes to user interface.</p>
             <description><![CDATA[<h1>Integration v. Automation</h1>
 <div class="sidebar">
 <p class="first sidebar-title">Editorial note</p>
-<p>I’m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation">old blog</a>.  It’s published as it were
+<p>I’m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation/">old blog</a>.  It’s published as it were
 when I first made it online with only minor changes.  I’m planning a follow
-up on the subject and more post about my experiences with <a class="reference external" href="http://www.odoo.com">Odoo</a> (OpenERP).
+up on the subject and more post about my experiences with <a class="reference external" href="http://www.odoo.com/">Odoo</a> (OpenERP).
 That’s I deem this repost needed.</p>
 <p class="last">Hope you’ll enjoy the reading.</p>
 </div>
@@ -467,7 +588,7 @@ can resume his work and finish processing his CRM lead.</p>
 <p>So, what is wrong with this story?</p>
 <div class="figure">
 <img alt="Computer problems." src="http://mvaled.github.io/blog/html/_images/computer_problems.png"/>
-<p class="caption">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com">xkcb</a>.</p>
+<p class="caption">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</p>
 </div>
 <div class="section" id="depiction-of-wrongness">
 <h3>Depiction of wrongness</h3>
@@ -531,7 +652,7 @@ are “special”.</p>
 <div class="section" id="on-using-properties">
 <h4>On using properties</h4>
 <p>Properties are of course related to the “solution” for the problem described
-above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup">Database setup</a>
+above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup/">Database setup</a>
 in the OpenERP Book.  That’s the reason I’m using this case to open the
 <cite>OpenERP corner</cite>.  If you deploy CRM before accounting <a class="footnote-reference" href="#accounting-last" id="id7">[1]</a>
 you’d probably find no interest in reading a topic called “Database setup”...
@@ -649,7 +770,7 @@ applications.  Installing the application forces the installation of the
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>That is why I still do my personal (home) accounting with
-<a class="reference external" href="http://www.gnucash.org">GNU Cash</a>.</td></tr>
+<a class="reference external" href="http://www.gnucash.org/">GNU Cash</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="v-contact-info" rules="none">
@@ -689,7 +810,7 @@ different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis
             <description><![CDATA[<h1>Odoo... I mean OpenERP</h1>
 <p>This is old news: OpenERP has changed its name and now becomes Odoo.  I don’t
 care much about the change in the name.  It’s the processes I’m interested in.</p>
-<p>The rename was synchronized with a move from <a class="reference external" href="https://launchpad.net">Launchpad</a> to <a class="reference external" href="https://github.com">Github</a>.  This, I
+<p>The rename was synchronized with a move from <a class="reference external" href="https://launchpad.net/">Launchpad</a> to <a class="reference external" href="https://github.com/">Github</a>.  This, I
 much appreciate it.  I’m one of those that once the Git virus got me, I’m
 almost unable to work comfortably with any other Version Control tool.</p>
 <p>I this regard I have a couple of questions:</p>
@@ -715,7 +836,7 @@ know.</p>
 </ul>
 <div class="section" id="postdata">
 <h2>Postdata</h2>
-<p>My long-planned “<a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/03/25/announcing-the-openerp-corner">OpenERP corner</a>” will simply be renamed accordingly.</p>
+<p>My long-planned “<a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/03/25/announcing-the-openerp-corner/">OpenERP corner</a>” will simply be renamed accordingly.</p>
 <p>This reminds me I have broken my promise to keep my old blog in-sync with this
 new one.  Apologies.  But it’s sooo comfortable to work with this blog-model
 that I barely looked back once.  So I’ll announce it: I will not keep my old
@@ -843,7 +964,7 @@ on.</p>
             <guid>http://mvaled.github.io/blog/html/2014/05/13/welcome.html</guid>
             <title><![CDATA[Welcome]]></title>
             <description><![CDATA[<h1>Welcome</h1>
-<p>This post intends to be one to welcome my previous readers from <a class="reference external" href="http://manuelonsoftware.wordpress.com">Wordpress</a>.  I
+<p>This post intends to be one to welcome my previous readers from <a class="reference external" href="http://manuelonsoftware.wordpress.com/">Wordpress</a>.  I
 still have much to do to make this blog actually <strong>my</strong> blog:</p>
 <ol class="loweralpha simple">
 <li>Polish a theme that resembles my current Wordpress look and feel.  I like
@@ -852,7 +973,7 @@ on.</li>
 <li>Port my last posts to this new blog.</li>
 </ol>
 <p>For the moment, though, this post is enough to avoid the default “Not found”
-message.  For the moment, also, I’m using <a class="reference external" href="http://tinkerer.me">Tinkerer</a> to create this blog.</p>
+message.  For the moment, also, I’m using <a class="reference external" href="http://tinkerer.me/">Tinkerer</a> to create this blog.</p>
 ]]></description>
             <category><![CDATA[ Blogroll ]]></category>
              <pubDate>Tue, 13 May 2014 00:00:00 -0400</pubDate>
