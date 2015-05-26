@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2015/05/26/odoo-at-last
    2015/04/08/rememoring-microservices
    2015/02/18/greenlet-local-python-modules-an-experiment
    2014/12/27/lately
