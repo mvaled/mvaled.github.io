@@ -20,7 +20,7 @@ description = 'Blog mostly about software.'
 author = u'Manuel Vázquez Acosta'
 
 # Change this to your copyright string
-copyright = '2014, ' + author
+copyright = '2014, 2015, ' + author
 
 # Generated language
 language = 'en'
