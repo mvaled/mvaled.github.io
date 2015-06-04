@@ -4,6 +4,16 @@ Odoo at last!
 .. categories:: Management, Programming
 .. tags:: Odoo, OpenERP
 
+.. sidebar:: Updated 2015-06-03
+
+   `The menu decomposition`_ described below was actually an error in a custom
+   addon and not related with migration process.
+
+   While still using OpenERP, we backported the partner merge feature from
+   Odoo and made it work in OpenERP.  We even added a fuzzy match feature so
+   that minor typos were not missed.  Now in Odoo it seems our modifications
+   messed things up.
+
 
 After several months, we have finally moved from OpenERP to Odoo.  It took
 several rounds of testing, finding bugs and incompatibilities in our own
