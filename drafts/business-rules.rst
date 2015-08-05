@@ -110,8 +110,8 @@ It does the following for each journal entry provided [#many-objs]_:
 
   Only in this case as well (I don't know why yet) for lines in a sales or
   purchase journal, ``validate()`` *seems* to try to apply taxes
-  [#cuban-taxes]_.  But I don't see how that code would actually be reached.
-  See the actual code at `github.com`__
+  [#cuban-taxes]_.  But `I don't see how`__ that code would actually be
+  reached.
 
   Anyway I think this should not be here.
 
@@ -129,7 +129,7 @@ It does the following for each journal entry provided [#many-objs]_:
   calls the ``create_analytic_lines`` for the all the lines of valid entries.
 
 
-__ https://github.com/merchise-autrement/odoo/
+__ https://github.com/odoo/odoo/issues/2753
 
 
 The ``validate()`` method is called when you try to *post* one or more

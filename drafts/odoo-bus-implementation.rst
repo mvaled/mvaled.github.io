@@ -7,16 +7,18 @@
 
 As I commented on my `post about our migration to Odoo`_, our users open many
 tabs to the same Odoo instance.  When the chat is active this means an open
-connection for each tab, and since a chat is interactive in nature all but one
-of these connections are not actually required [#notify]_.  This is only valid
-cause all those polling connections are `updating the same rows` in the DB.
+connection for each tab and, since a chat is interactive in nature, all but
+one of these connections are not actually required [#notify]_.  This is only
+valid cause all those polling connections are `updating the same rows` in the
+DB.
 
 A few days ago `I reported`_ that switching from a threaded based deployment
 to a forked one (with a gevent_ based process for long polling connections),
 actually spiked the concurrency issues we were witnessing in our DB.  Our DB
-complained about being unable to *serialize* concurrent transactions.  Almost
-always this has to do with an update to the table ``im_chat_presence``, that
-holds the status of users in the chat.
+complained about being unable to *serialize* concurrent transactions.  By
+inspecting the logs we noticed that almost always this had to do with an
+update to the table ``im_chat_presence``, that holds the status of users in
+the chat.
 
 I thought the forked model would diminish the chance of collisions because (I
 thought) Odoo would use a single DB connection per worker process and another
