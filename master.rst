@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today
    2015/05/26/odoo-at-last
    2015/04/08/rememoring-microservices
    2015/02/18/greenlet-local-python-modules-an-experiment

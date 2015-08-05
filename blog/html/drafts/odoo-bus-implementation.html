@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
-        <title>Filed under Programming &mdash; Manuel on Software - Reloaded</title>
+        <title>Improving the bus implementation in Odoo &mdash; Manuel on Software - Reloaded</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -68,86 +68,70 @@
           <a href="../pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="archive">
-        <h1>Filed under <span class="title_category">Programming</span></h1><div class="year">
-            <h1>2015</h1>
-            <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Aug 04</span>
-        </div>
-                    <h2><a href="../2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of today</a></h2>
-                    <div class="postmeta">
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="improving-the-bus-implementation-in-odoo">
+<h1>Improving the bus <em>implementation</em> in Odoo</h1>
+<p>As I commented on my <a href="#id2"><span class="problematic" id="id3">`post about our migration to Odoo`_</span></a>, our users open many
+tabs to the same Odoo instance.  When the chat is active this means an open
+connection for each tab, and since a chat is interactive in nature all but one
+of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.  This is only valid
+cause all those polling connections are <cite>updating the same rows</cite> in the DB.</p>
+<p>A few days ago <a href="#id4"><span class="problematic" id="id5">`I reported`_</span></a> that switching from a threaded based deployment
+to a forked one (with a <a href="#id6"><span class="problematic" id="id7">gevent_</span></a> based process for long polling connections),
+actually spiked the concurrency issues we were witnessing in our DB.  Our DB
+complained about being unable to <em>serialize</em> concurrent transactions.  Almost
+always this has to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>, that
+holds the status of users in the chat.</p>
+<p>I thought the forked model would diminish the chance of collisions because (I
+thought) Odoo would use a single DB connection per worker process and another
+one for the gevent worker that would simply serialize <em>all</em> the chat related
+queries.</p>
+<p>This spike was against all rationale I could think of, but honestly I didn&#8217;t
+check my assumptions by reading the code.  They might just be the wrong
+assumptions in the first place, and I need to really read the code to see
+what&#8217;s really happening.</p>
+<p>After restoring the threaded deployment the concurrency issues dropped again.
+They didn&#8217;t get to the levels they were before, but at the same time we were
+introducing other modules (and the related staff), so there are more open
+tabs...</p>
+<div class="section" id="it-s-time-to-stop-the-concurrency-issues">
+<h2>It&#8217;s time to stop the concurrency issues</h2>
+<p>There are several questions that need to be answered before making a final
+decision in this issue:</p>
+<ul class="simple">
+<li>Why does Odoo seems to be using a <a href="#id8"><span class="problematic" id="id9">`serializable isolation level`_</span></a>?  Or
+does the reported error message is misleading?</li>
+<li>Do we actually keep a single process with a single DB connection when using
+the gevent process?</li>
+</ul>
+</div>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<table class="docutils footnote" frame="void" id="notify" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course it allows the web app to change the window&#8217;s title when
+then user has an unread message, but in our case this notification is also
+unneeded, because the message is actually being read in another tab.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+    <div class="postmeta">
         
         <div class="categories">
             <span>
                 Filed under:
-                <a href="#">Programming</a></span>
-        </div>
-        
-        </div>
-                </li></ul>
-                    <div class="separator summary_separator"></div>
-             <ul><li>
-                    <div class="timestamp postmeta">
-            <span>May 26</span>
-        </div>
-                    <h2><a href="../2015/05/26/odoo-at-last.html">Odoo at last!</a></h2>
-                    <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="management.html">Management</a>, <a href="#">Programming</a></span>
+                <a href="../categories/web-development.html">Web Development</a></span>
         </div>
         <div class="tags">
             <span>
                 Tags:
-                <a href="../tags/odoo.html">Odoo</a>, <a href="../tags/openerp.html">OpenERP</a></span>
+                <a href="../tags/html5.html">HTML5</a></span>
         </div>
         </div>
-                </li></ul>
-                    <div class="separator summary_separator"></div>
-             <ul><li>
-                    <div class="timestamp postmeta">
-            <span>Feb 18</span>
-        </div>
-                    <h2><a href="../2015/02/18/greenlet-local-python-modules-an-experiment.html">Hot-swapping Python modules. An experiment.</a></h2>
-                    <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="python.html">Python</a>, <a href="#">Programming</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="../tags/isolation.html">isolation</a>, <a href="../tags/erlang.html">erlang</a></span>
-        </div>
-        </div>
-                </li></ul>
-        </div><div class="separator year_separator"></div><div class="year">
-            <h1>2014</h1>
-            <ul><li>
-                    <div class="timestamp postmeta">
-            <span>May 27</span>
-        </div>
-                    <h2><a href="../2014/05/27/tdd-is-dead-rally.html">TDD is dead rally</a></h2>
-                    <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="#">Programming</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="../tags/design.html">design</a>, <a href="../tags/tests.html">tests</a></span>
-        </div>
-        </div>
-                </li></ul>
-        </div></div></article>
+    
+    </article>
     <div id="disqus_thread"></div>
     <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */

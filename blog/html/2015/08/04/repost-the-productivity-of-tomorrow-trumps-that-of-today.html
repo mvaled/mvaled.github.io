@@ -1,0 +1,183 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Blog mostly about software.">
+        <meta name="viewport" content="width=device-width">
+        <title>The productivity of tomorrow trumps that of today &mdash; Manuel on Software - Reloaded</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/mva.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="next" title="Odoo at last!" href="../../05/26/odoo-at-last.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <!-- link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.0-alpha' type='text/css' media='all' / -->
+    <!-- link rel='stylesheet' id='syntax-merriweather-css'  href='http://fonts.googleapis.com/css?family=Merriweather%3A400%2C300%2C300italic%2C400italic%2C700%2C700italic&#038;ver=4.0-alpha' type='text/css' media='all' / --></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
+          </header>
+      <!--    <h1 id="toggle-nav" class="menu-toggle">
+      <span class="screen-reader-text">Menu</span></h1>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/about-this.html">About this</a>
+        </li>
+        </ul>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="the-productivity-of-tomorrow-trumps-that-of-today">
+<h1>The productivity of tomorrow trumps that of today</h1>
+<div class="sidebar">
+<p class="first sidebar-title">Editorial note</p>
+<p>I&#8217;m republishing this post from my old blog (which is no longer online).
+It&#8217;s published as it were when I first made it online with only minor
+changes.  But I think I stand by this still.</p>
+<p class="last">Hope you&#8217;ll enjoy the reading.</p>
+</div>
+<p>That&#8217;s probably harsh, but I think it is absolutely right.  Doing crappy
+software today to be more productive today will make you less productive
+tomorrow.  It&#8217;s this simple.  And that&#8217;s cumulative too; meaning that if you
+neglect your future productivity, it will be slowly diminishing until a point
+of negative competitive disadvantage where you&#8217;ll find yourself struggling to
+keep up instead of innovating.</p>
+<p>And it&#8217;s so damn exhausting to explain why...</p>
+<p>Software complexity does not come from the tools, but from the mental
+framework required (and imposed at times) to understand it.  So don&#8217;t ever
+think measuring Cyclomatic Complexity (CC) and other similar metrics will
+yield something close to the <a class="reference external" href="http://www.osnews.com/story/19266/WTFs_m">true measure</a> of the
+<a class="reference external" href="http://blog.codinghorror.com/whos-your-coding-buddy/">quality of your code</a>.</p>
+<blockquote>
+<div><p>There are only <a class="reference external" href="http://martinfowler.com/bliki/TwoHardThings.html">two hard things</a> in Computer Science: cache invalidation
+and naming things.</p>
+<p class="attribution">&mdash;Phil Karlton</p>
+</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+       <span class="k">return</span> <span class="n">l</span>
+    <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+       <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span><span class="n">m</span> <span class="p">:</span>
+          <span class="n">l1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+       <span class="k">else</span><span class="p">:</span>
+          <span class="n">l2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_check</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span><span class="n">_check</span><span class="p">(</span><span class="n">l2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code has a nice CC of 4 which is very nice; yet it will take you at least
+a minute to figure out what it does.  If only I had chosen to name the
+function <cite>quicksort</cite>...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+<span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
+</pre></div>
+</div>
+<p>A quiz in less than 5 seconds: What does it mean in OpenERP&#8217;s ORM the
+following lines of code?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s">&#39;implied_ids&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
+</pre></div>
+</div>
+<p>This line of code has a CC of 1: as good as it gets, isn&#8217;t it?  But it&#8217;s so
+darn difficult to read that unless you have your brain wired up to see &#8220;forget
+the link between this group and the implied_group&#8221;...  To be fair there is
+someone out there in the OpenERP universe that cared a bit about this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># file addons/base/ir/ir_fields.py</span>
+
+<span class="n">CREATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="n">UPDATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="n">DELETE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">FORGET</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">LINK_TO</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">DELETE_ALL</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">REPLACE_WITH</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ids</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But no one else is using it!</p>
+<p>And, yes, it&#8217;s exhausting going over this.</p>
+</div>
+
+    <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="../../../categories/programming.html">Programming</a></span>
+        </div>
+        
+        </div>
+    <div class="timestamp postmeta">
+            <span>August 04, 2015</span>
+        </div>
+    <ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../../05/26/odoo-at-last.html">Odoo at last!</a> &raquo; </li>
+        </ul></article>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'mvaled-io';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the
+      <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
+      &copy; Copyright 2014, 2015, Manuel Vázquez Acosta. </p>
+      <p>Content licensed under the Creative Commons
+      attribution-noncommercial-sharealike License.
+      </p></footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
