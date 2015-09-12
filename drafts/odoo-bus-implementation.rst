@@ -35,18 +35,29 @@ They didn't get to the levels they were before, but at the same time we were
 introducing other modules (and the related staff), so there are more open
 tabs...
 
+A few days ago I deployed a `patch <Odoo bus patch_>`__ to the Odoo bus
+implementation that simply reduced the frequency of polling when the `page is
+hidden <Visibility API_>`__.
 
-It's time to stop the concurrency issues
-========================================
+The concurrency issues are mostly gone: from about a thousand a day to no more
+that 50.
 
-There are several questions that need to be answered before making a final
-decision in this issue:
+We're still have unanswered questions regarding the DB connection management
+in Odoo.  The are suspicious signs there.  For instance reducing the
+``db_maxconn`` option to 8 or less makes the Odoo start complaining about the
+Connection Pool being full very often.  We already know that:
 
-- Why does Odoo seems to be using a `serializable isolation level`_\ ?  Or
-  does the reported error message is misleading?
+- For each cron worker at least 2 connections are used: one holds the cron job
+  locked while the other is used by the job itself.
 
-- Do we actually keep a single process with a single DB connection when using
-  the gevent process?
+- The bus (used for the chat) also uses another connection to the DB called
+  "postgres": Notifications and wake-ups of bus-related events use this
+  connection.
+
+We don't know if other addons try to open other connections to DB.
+
+The most suspicious sign, however, is that with a pool size of 32 we have seen
+this issue come from time to time.
 
 
 Notes
@@ -55,3 +66,5 @@ Notes
 .. [#notify] Of course it allows the web app to change the window's title when
    then user has an unread message, but in our case this notification is also
    unneeded, because the message is actually being read in another tab.
+
+.. _Visibility API: http://www.w3.org/TR/page-visibility/
