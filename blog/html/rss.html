@@ -5,8 +5,72 @@
         <link>http://mvaled.github.io/blog/html/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Tue, 04 Aug 2015 00:00:00 -0400</pubDate>
+        <pubDate>Sat, 12 Sep 2015 00:00:00 -0400</pubDate>
         
+        <item>
+            <link>http://mvaled.github.io/blog/html/2015/09/12/odoo-bus-implementation.html</link>
+            <guid>http://mvaled.github.io/blog/html/2015/09/12/odoo-bus-implementation.html</guid>
+            <title><![CDATA[The bus implementation in Odoo]]></title>
+            <description><![CDATA[<h1>The bus <em>implementation</em> in Odoo</h1>
+<p>As I commented on my <a href="#id3"><span class="problematic" id="id4">`post about our migration to Odoo`__</span></a>, our users open many
+tabs to the same Odoo instance.  When the chat is active this means an open
+connection for each tab and, since a chat is interactive in nature, all but
+one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
+<p>Some weeks ago <a href="#id3"><span class="problematic" id="id5">`I reported`__</span></a> that switching from a threaded based deployment
+to a pre forked processes one (with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based process for long polling
+connections), actually spiked the concurrency issues we were witnessing in our
+DB.  Our DB complained about being unable to <em>serialize</em> concurrent
+transactions.  By inspecting the logs we noticed that almost always this had
+to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>, that holds the status
+of users in the chat.</p>
+<p>I thought the forked model would diminish the chance of collisions because (I
+thought) Odoo would use a single DB connection per worker process and another
+one for the gevent worker that would simply serialize <em>all</em> the chat related
+queries.</p>
+<p>This spike was against all rationale I could think of, but honestly I didn’t
+check my assumptions by reading the code.  They might just be the wrong
+assumptions in the first place, and I needed to really read the code to see
+what was really happening.</p>
+<p>After restoring the threaded deployment the concurrency issues dropped again.
+They didn’t get to the levels they were before, but at the same time we were
+introducing other modules (and the related staff), so there are more open
+tabs...  Afterwards we went back to the process model, and the issues spiked
+again, however in a smaller amount.</p>
+<p>A few days ago I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
+implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
+hidden</a>.</p>
+<p>The concurrency issues are now mostly gone: from about 3k a day to no more
+than 50.</p>
+<p>We’re still have unanswered questions regarding the DB connection management
+in Odoo.  The are suspicious signs there.  For instance reducing the
+<span class="docutils literal"><span class="pre">db_maxconn</span></span> option to 8 or less makes Odoo start complaining about the
+Connection Pool being full very often.  We already know that:</p>
+<ul class="simple">
+<li>For each cron worker at least 2 connections are used: one holds the cron job
+locked while the other is used by the job itself.</li>
+<li>The bus (used for the chat) also uses another connection to the DB called
+“postgres”: Notifications and wake-ups of bus-related events use this
+connection.</li>
+</ul>
+<p>We don’t know yet if other addons try to open other connections to DB.</p>
+<p>The most suspicious sign, however, is that with a pool size of 32 we have seen
+this issue come from time to time.</p>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<table class="docutils footnote" frame="void" id="notify" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course it allows the web app to change the window’s title when
+then user has an unread message, but in our case this notification is also
+unneeded, because the message is actually being read in another tab.</td></tr>
+</tbody>
+</table>
+</div>
+]]></description>
+            <category><![CDATA[ Web Development ]]></category>
+             <pubDate>Sat, 12 Sep 2015 00:00:00 -0400</pubDate>
+        </item>
+    
         <item>
             <link>http://mvaled.github.io/blog/html/2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html</link>
             <guid>http://mvaled.github.io/blog/html/2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html</guid>
@@ -1079,30 +1143,30 @@ in <a class="reference external" href="https://github.com/merchise-autrement/xot
 <li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
 code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
 test.</p>
-<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a> that stands for the expression
+<p>The idea of having a <em class="xref std std-term">query object</em> that stands for the expression
 was not totally consolidated.  The components of the query were not
 defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
 <p>In this case the “literate” spirit dominated the design process, not the
 testing.  Simply we didn’t have a full-stack: ie. the language and the
-<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.2)"><em class="xref std std-term">translators</em></a> so that a query could actually be
+<em class="xref std std-term">translators</em> so that a query could actually be
 executed.</p>
 </li>
 <li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/inners.html#inner-workings" title="(in xotl.ql v0.2)"><em class="xref std std-ref">lack of clear
-boundaries</em></a> between several sub-expressions in a
-single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.2)"><em class="xref std std-term">query</em></a>.</p>
+to cope with implementation difficulties, i.e. the <em class="xref std std-ref">lack of clear
+boundaries</em> between several sub-expressions in a
+single <em class="xref std std-term">query</em>.</p>
 <p>This was the hardest stage.  Testing was employed to keep track of several
 design decisions.  In this stage made appearance our “Particle Bubble” and
 this was complex enough to deserve a handful of tests.  Although several
 tests did influence the design, they hardly drove it.</p>
 </li>
-<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/xotl.ql.translation.py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.2)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
+<li><p class="first">Then the core was done and we turned to <span class="xref py py-mod docutils literal"><span class="pre">translation</span></span>.  This stage was mainly TDD cause we
 actually were testing a very TDD friendly layer:  Given this state of the
 world, the following query should return these objects.</p>
 </li>
 <li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
 our entire design and do reverse engineering of python byte-code to extract
-build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a>.</p>
+build the <em class="xref std std-term">query object</em>.</p>
 <p>What is foreseeable is that again a kind of literate driven design is going
 to be king: The core structure of the language (the query AST) is what’s
 being designed so, what’s the point of asking if the result of calling a

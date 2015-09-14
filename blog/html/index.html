@@ -68,7 +68,78 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of today</a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo</a></h1>
+<p>As I commented on my <a href="#id3"><span class="problematic" id="id4">`post about our migration to Odoo`__</span></a>, our users open many
+tabs to the same Odoo instance.  When the chat is active this means an open
+connection for each tab and, since a chat is interactive in nature, all but
+one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
+<p>Some weeks ago <a href="#id3"><span class="problematic" id="id5">`I reported`__</span></a> that switching from a threaded based deployment
+to a pre forked processes one (with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based process for long polling
+connections), actually spiked the concurrency issues we were witnessing in our
+DB.  Our DB complained about being unable to <em>serialize</em> concurrent
+transactions.  By inspecting the logs we noticed that almost always this had
+to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>, that holds the status
+of users in the chat.</p>
+<p>I thought the forked model would diminish the chance of collisions because (I
+thought) Odoo would use a single DB connection per worker process and another
+one for the gevent worker that would simply serialize <em>all</em> the chat related
+queries.</p>
+<p>This spike was against all rationale I could think of, but honestly I didn’t
+check my assumptions by reading the code.  They might just be the wrong
+assumptions in the first place, and I needed to really read the code to see
+what was really happening.</p>
+<p>After restoring the threaded deployment the concurrency issues dropped again.
+They didn’t get to the levels they were before, but at the same time we were
+introducing other modules (and the related staff), so there are more open
+tabs...  Afterwards we went back to the process model, and the issues spiked
+again, however in a smaller amount.</p>
+<p>A few days ago I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
+implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
+hidden</a>.</p>
+<p>The concurrency issues are now mostly gone: from about 3k a day to no more
+than 50.</p>
+<p>We’re still have unanswered questions regarding the DB connection management
+in Odoo.  The are suspicious signs there.  For instance reducing the
+<span class="docutils literal"><span class="pre">db_maxconn</span></span> option to 8 or less makes Odoo start complaining about the
+Connection Pool being full very often.  We already know that:</p>
+<ul class="simple">
+<li>For each cron worker at least 2 connections are used: one holds the cron job
+locked while the other is used by the job itself.</li>
+<li>The bus (used for the chat) also uses another connection to the DB called
+“postgres”: Notifications and wake-ups of bus-related events use this
+connection.</li>
+</ul>
+<p>We don’t know yet if other addons try to open other connections to DB.</p>
+<p>The most suspicious sign, however, is that with a pool size of 32 we have seen
+this issue come from time to time.</p>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<table class="docutils footnote" frame="void" id="notify" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course it allows the web app to change the window’s title when
+then user has an unread message, but in our case this notification is also
+unneeded, because the message is actually being read in another tab.</td></tr>
+</tbody>
+</table>
+</div>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/web-development.html">Web Development</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/html5.html">HTML5</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>September 12, 2015</span>
+        </div><div class="separator post_separator"></div><h1><a href="2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of today</a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Editorial note</p>
 <p>I’m republishing this post from my old blog (which is no longer online).
@@ -1140,107 +1211,6 @@ it.</p>
         </div>
         <div class="timestamp postmeta">
             <span>June 05, 2014</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/05/27/tdd-is-dead-rally.html">TDD is dead rally</a></h1>
-<p>These days there’s a kind of a rally about “TDD being dead”.</p>
-<p>Most TDD fan supporters are true that you must have a way to proof your code
-works.  Many computer <a class="reference external" href="http://en.wikipedia.org/wiki/Tony_Hoare">scientists</a> have done several attempts into
-the “proofs of correctness” for a program.  But tests are not always proofs,
-some are <a class="footnote-reference" href="#some-are" id="id1">[1]</a>.</p>
-<p>I think the main argument is about when TDD is too much.  Several <a class="reference external" href="https://www.destroyallsoftware.com">Destroy all
-software</a> screencasts show a TDD flow that I simply find it’s too
-much.  But they are, indeed, screencasts; and they are probably intended to
-illustrate a point and not to be followed without deviations.</p>
-<p>Nevertheless, I don’t like the “TDD is dead” mantra either.  It gives space to
-a flame war I’m not willing to get into.  I use tests and that’s it.  Tests,
-at different, levels may express several concerns I need to keep stable:</p>
-<ol class="loweralpha">
-<li><p class="first">A public API, for instance, should not change just like that.  At least not
-after you have made the commitment to keep it stable.</p>
-<p>You may even need to test for deprecation warnings being issued when you
-need to change an API.</p>
-</li>
-<li><p class="first">Collaborative in-progress debugging.  This tests allow to express standing
-issues.  Some regression tests fall into this category.</p>
-</li>
-</ol>
-<p>How do you do tests?</p>
-<div class="section" id="update-amplification-and-support-to-david-s-arguments">
-<h2>Update: Amplification and support to <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">David’s arguments</a></h2>
-<p>The previous words were written just after skimming over several tweets.  I
-had read <a class="reference external" href="http://david.heinemeierhansson.com/2014/test-induced-design-damage.html">David’s test-induced design damage</a> but I had missed the previous
-post <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">TDD is dead.  Long live testing</a>.  So this update is my one cent to
-the issue, but I will not discuss about “slow collaborators” but about my
-design experience with our <a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">Python Query Language</a>.</p>
-<p>The test-first mantra assumes too much about how you are going to decompose
-your problem.  Let’s start with a retrospective account of how this happened
-in <a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">xotl.ql</a>.</p>
-<p>I can detect four distinct stages:</p>
-<ol class="loweralpha">
-<li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
-code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
-test.</p>
-<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a> that stands for the expression
-was not totally consolidated.  The components of the query were not
-defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
-<p>In this case the “literate” spirit dominated the design process, not the
-testing.  Simply we didn’t have a full-stack: ie. the language and the
-<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.2)"><em class="xref std std-term">translators</em></a> so that a query could actually be
-executed.</p>
-</li>
-<li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/inners.html#inner-workings" title="(in xotl.ql v0.2)"><em class="xref std std-ref">lack of clear
-boundaries</em></a> between several sub-expressions in a
-single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.2)"><em class="xref std std-term">query</em></a>.</p>
-<p>This was the hardest stage.  Testing was employed to keep track of several
-design decisions.  In this stage made appearance our “Particle Bubble” and
-this was complex enough to deserve a handful of tests.  Although several
-tests did influence the design, they hardly drove it.</p>
-</li>
-<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/xotl.ql.translation.py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.2)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
-actually were testing a very TDD friendly layer:  Given this state of the
-world, the following query should return these objects.</p>
-</li>
-<li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
-our entire design and do reverse engineering of python byte-code to extract
-build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.2)"><em class="xref std std-term">query object</em></a>.</p>
-<p>What is foreseeable is that again a kind of literate driven design is going
-to be king: The core structure of the language (the query AST) is what’s
-being designed so, what’s the point of asking if the result of calling a
-function with a given query expression is a particular AST if the AST is
-what’s needs to be validated not the function itself?  At this point this
-is non-sense.  At a later stage where the AST is stable enough those kind
-of tests would actually make sense: they will protect the query language
-against unintentional API-breaking changes.</p>
-</li>
-</ol>
-</div>
-<div class="section" id="footnotes">
-<h2>Footnotes</h2>
-<table class="docutils footnote" frame="void" id="some-are" rules="none">
-<colgroup><col class="label"/><col/></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If I recall correctly, the book by <cite>R.L Graham</cite>, <cite>D.E. Knuth</cite>
-and <cite>O. Patashnik</cite> called “Concrete Mathematics” shows some proofs that
-allow “proof-by-instances”.</td></tr>
-</tbody>
-</table>
-</div>
-
-        <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="categories/programming.html">Programming</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/design.html">design</a>, <a href="tags/tests.html">tests</a></span>
-        </div>
-        </div>
-        <div class="timestamp postmeta">
-            <span>May 27, 2014</span>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">

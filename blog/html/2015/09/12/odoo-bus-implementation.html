@@ -1,0 +1,175 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Blog mostly about software.">
+        <meta name="viewport" content="width=device-width">
+        <title>The bus implementation in Odoo &mdash; Manuel on Software - Reloaded</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/mva.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="next" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <!-- link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.0-alpha' type='text/css' media='all' / -->
+    <!-- link rel='stylesheet' id='syntax-merriweather-css'  href='http://fonts.googleapis.com/css?family=Merriweather%3A400%2C300%2C300italic%2C400italic%2C700%2C700italic&#038;ver=4.0-alpha' type='text/css' media='all' / --></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
+          </header>
+      <!--    <h1 id="toggle-nav" class="menu-toggle">
+      <span class="screen-reader-text">Menu</span></h1>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/about-this.html">About this</a>
+        </li>
+        </ul>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="the-bus-implementation-in-odoo">
+<h1>The bus <em>implementation</em> in Odoo</h1>
+<p>As I commented on my <a href="#id3"><span class="problematic" id="id4">`post about our migration to Odoo`__</span></a>, our users open many
+tabs to the same Odoo instance.  When the chat is active this means an open
+connection for each tab and, since a chat is interactive in nature, all but
+one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
+<p>Some weeks ago <a href="#id3"><span class="problematic" id="id5">`I reported`__</span></a> that switching from a threaded based deployment
+to a pre forked processes one (with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based process for long polling
+connections), actually spiked the concurrency issues we were witnessing in our
+DB.  Our DB complained about being unable to <em>serialize</em> concurrent
+transactions.  By inspecting the logs we noticed that almost always this had
+to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>, that holds the status
+of users in the chat.</p>
+<p>I thought the forked model would diminish the chance of collisions because (I
+thought) Odoo would use a single DB connection per worker process and another
+one for the gevent worker that would simply serialize <em>all</em> the chat related
+queries.</p>
+<p>This spike was against all rationale I could think of, but honestly I didn&#8217;t
+check my assumptions by reading the code.  They might just be the wrong
+assumptions in the first place, and I needed to really read the code to see
+what was really happening.</p>
+<p>After restoring the threaded deployment the concurrency issues dropped again.
+They didn&#8217;t get to the levels they were before, but at the same time we were
+introducing other modules (and the related staff), so there are more open
+tabs...  Afterwards we went back to the process model, and the issues spiked
+again, however in a smaller amount.</p>
+<p>A few days ago I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
+implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
+hidden</a>.</p>
+<p>The concurrency issues are now mostly gone: from about 3k a day to no more
+than 50.</p>
+<p>We&#8217;re still have unanswered questions regarding the DB connection management
+in Odoo.  The are suspicious signs there.  For instance reducing the
+<span class="docutils literal"><span class="pre">db_maxconn</span></span> option to 8 or less makes Odoo start complaining about the
+Connection Pool being full very often.  We already know that:</p>
+<ul class="simple">
+<li>For each cron worker at least 2 connections are used: one holds the cron job
+locked while the other is used by the job itself.</li>
+<li>The bus (used for the chat) also uses another connection to the DB called
+&#8220;postgres&#8221;: Notifications and wake-ups of bus-related events use this
+connection.</li>
+</ul>
+<p>We don&#8217;t know yet if other addons try to open other connections to DB.</p>
+<p>The most suspicious sign, however, is that with a pool size of 32 we have seen
+this issue come from time to time.</p>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<table class="docutils footnote" frame="void" id="notify" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course it allows the web app to change the window&#8217;s title when
+then user has an unread message, but in our case this notification is also
+unneeded, because the message is actually being read in another tab.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+    <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="../../../categories/web-development.html">Web Development</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/html5.html">HTML5</a></span>
+        </div>
+        </div>
+    <div class="timestamp postmeta">
+            <span>September 12, 2015</span>
+        </div>
+    <ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of today</a> &raquo; </li>
+        </ul></article>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'mvaled-io';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the
+      <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
+      &copy; Copyright 2014, 2015, Manuel Vázquez Acosta. </p>
+      <p>Content licensed under the Creative Commons
+      attribution-noncommercial-sharealike License.
+      </p></footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
