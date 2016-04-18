@@ -172,9 +172,9 @@ table.footnote td {
 }
 
 .sidebar-title, p.rubric {
-    font-size: 125%;
+    font-size: 1rem;
     text-align: center;
-    font-weight: inherit;
+    font-weight: bolder;
 }
 
 .sidebar {
@@ -182,8 +182,9 @@ table.footnote td {
     width: 50%;
     float: right;
     border-radius: .25em;
-    background: #DDD;
+    background: #EDEDED;
     overflow: hidden;
+    font-size: .85rem;
 }
 
 .sidebar > * {
@@ -239,4 +240,13 @@ table.footnote td {
 
 span.pre {
     font-family: monospace;
+}
+
+div.note {
+    font-size: .85rem;
+    border: 1.5px solid #303030;
+}
+
+div.note > .admonition-title {
+    display: none;
 }
