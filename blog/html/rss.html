@@ -10,19 +10,33 @@
         <item>
             <link>http://mvaled.github.io/blog/html/2015/09/12/odoo-bus-implementation.html</link>
             <guid>http://mvaled.github.io/blog/html/2015/09/12/odoo-bus-implementation.html</guid>
-            <title><![CDATA[The bus implementation in Odoo]]></title>
-            <description><![CDATA[<h1>The bus <em>implementation</em> in Odoo</h1>
-<p>As I commented on my <a href="#id3"><span class="problematic" id="id4">`post about our migration to Odoo`__</span></a>, our users open many
-tabs to the same Odoo instance.  When the chat is active this means an open
-connection for each tab and, since a chat is interactive in nature, all but
-one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
-<p>Some weeks ago <a href="#id3"><span class="problematic" id="id5">`I reported`__</span></a> that switching from a threaded based deployment
-to a pre forked processes one (with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based process for long polling
-connections), actually spiked the concurrency issues we were witnessing in our
-DB.  Our DB complained about being unable to <em>serialize</em> concurrent
-transactions.  By inspecting the logs we noticed that almost always this had
-to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>, that holds the status
-of users in the chat.</p>
+            <title><![CDATA[The bus implementation in Odoo and notification systems in the Web]]></title>
+            <description><![CDATA[<h1>The bus <em>implementation</em> in Odoo and notification systems in the Web</h1>
+<div class="sidebar">
+<p class="first sidebar-title">Delayed post.</p>
+<p>This post has been delayed for a very, very long time.  If I trust the logs
+in my blog’s git repository the post is “finished” since Sat Sep 12, 2015.
+Well, that’s not true, and I must really finish it now.</p>
+<p>As it happens, in the meantime, I was not twiddling my fingers and I made
+two “advances” about the bus implementation:</p>
+<ul class="last simple">
+<li>I made a successful implementation of a cross-tab bus implementation:
+<a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-8.0-bus-service-worker">https://github.com/merchise-autrement/odoo/tree/merchise-8.0-bus-service-worker</a></li>
+<li>I discovered that Odoo 9’s code base already has the cross-tab feature
+integrated.</li>
+</ul>
+</div>
+<p>I commented on my <a class="reference internal" href="http://mvaled.github.io/blog/html/2015/05/26/odoo-at-last.html#odoo-at-last"><span>post about our migration to Odoo</span></a> that
+our users open many tabs to the same Odoo instance.  When the chat is active
+this means an open connection for each tab and, since a chat is interactive in
+nature, all but one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
+<p>A while ago <a class="reference external" href="https://twitter.com/mvaled/status/615973409697050624">I reported</a> that switching from a
+threaded based deployment to a pre-forked processes one with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based
+process for long polling connections, actually spiked the concurrency issues
+we were witnessing in our DB.  Our DB complained about being unable to
+<em>serialize</em> concurrent transactions.  By inspecting the logs we noticed that
+almost always this had to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>,
+that holds the status of users in the chat.</p>
 <p>I thought the forked model would diminish the chance of collisions because (I
 thought) Odoo would use a single DB connection per worker process and another
 one for the gevent worker that would simply serialize <em>all</em> the chat related
@@ -32,29 +46,65 @@ check my assumptions by reading the code.  They might just be the wrong
 assumptions in the first place, and I needed to really read the code to see
 what was really happening.</p>
 <p>After restoring the threaded deployment the concurrency issues dropped again.
-They didn’t get to the levels they were before, but at the same time we were
-introducing other modules (and the related staff), so there are more open
+They didn’t get to the same levels they were before, but, at the same time, we
+were introducing other modules (and the related staff), so there are more open
 tabs...  Afterwards we went back to the process model, and the issues spiked
 again, however in a smaller amount.</p>
-<p>A few days ago I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
+<p>Several weeks later I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
 implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
-hidden</a>.</p>
-<p>The concurrency issues are now mostly gone: from about 3k a day to no more
-than 50.</p>
-<p>We’re still have unanswered questions regarding the DB connection management
-in Odoo.  The are suspicious signs there.  For instance reducing the
-<span class="docutils literal"><span class="pre">db_maxconn</span></span> option to 8 or less makes Odoo start complaining about the
-Connection Pool being full very often.  We already know that:</p>
+hidden</a>.  The concurrency issues were now mostly gone:
+from about 3k a day to no more than 50.</p>
+<p>We still had unanswered questions regarding the DB connection management in
+Odoo.  There were suspicious signs.  For instance reducing the <span class="docutils literal"><span class="pre">db_maxconn</span></span>
+option to 8 or less made Odoo start complaining about the Connection Pool
+being full very often.  We already knew that:</p>
 <ul class="simple">
 <li>For each cron worker at least 2 connections are used: one holds the cron job
 locked while the other is used by the job itself.</li>
-<li>The bus (used for the chat) also uses another connection to the DB called
+<li>The bus (used for the chat) also uses another connection to the DB
 “postgres”: Notifications and wake-ups of bus-related events use this
 connection.</li>
 </ul>
-<p>We don’t know yet if other addons try to open other connections to DB.</p>
-<p>The most suspicious sign, however, is that with a pool size of 32 we have seen
-this issue come from time to time.</p>
+<p>The most suspicious sign, however, was that with a pool size of 32, this issue
+came from time to time.</p>
+<p>Time went by and the issue remained at an acceptable (for us) level of few
+dozens per day.  You may say it’s too much, but, bear with me, it’s reasonable
+for our hardware and user base.</p>
+<p>Just a few days ago, we realized that issues coming from our gevent-based
+process were not being properly reported to our <a class="reference external" href="http://getsentry.com/">Sentry</a>.  We <a class="reference external" href="https://github.com/merchise-autrement/xoeuf/commit/d4b3bb7f0d972f31382aad8e6d1bf37c5a74ce99">fixed the issue</a> and observed that we’re getting about 2.5k DB collisions
+per day reports again.  And once more the query the table where most of
+collisions happen is ‘im_chat_presence’.</p>
+<p>As a workaround we simply <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/555b5699b96178d5c87f36c0f692dbe8dcf0facb">reduced</a> the update rate for that table.  But a
+better solutions needed to be found.</p>
+<div class="section" id="cross-tab-polling">
+<h2>Cross-tab polling</h2>
+<p>By looking better our users’ usage pattern, we discovered that users switch
+from tab to tab regularly and thus the polling is still high.  So we went down
+the path of figuring out a way to have a single polling connection even when
+many were opened.</p>
+<p>I remembered the Local Storage API and went down to write a simple proof of
+concept of listening events of the <span class="docutils literal"><span class="pre">localStorage</span></span> from different tabs.  The
+proof of concept yielded good results, and so I turned to Google and search
+for “cross-tab communication” and found the <a class="reference external" href="https://github.com/nodeca/tabex">tabex</a> library.</p>
+<p>After that, replacing the implementation of the bus for a new one that was
+based on a exchanged between tabs was not very hard.  These are the commits
+done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
+<div class="highlight-python"><div class="highlight"><pre>0555434 * bus: Clarify the channel delay in polls.
+d10a1b5 * bus: Checks for the right state.
+af4a6dc * bus: Add language tag in the documentation.
+636490b * im_chat: Revert "Reduce the presure on im_chat_presence table."
+eda7638 * bus: Don't notify if not in polling state.
+4d09ac6 * web_celery: Use a dedicated bus exchange for jobs.
+84239e3 * im_chat: Beep only in the master tab.
+2cb27da * Improve the bus to allow tab synchronization.
+</pre></div>
+</div>
+<p>The file <a class="reference external" href="https://github.com/merchise-autrement/odoo/blob/merchise-8.0-bus-service-worker/addons/bus/static/src/js/bus.rst"><span class="docutils literal"><span class="pre">addons/bus/static/src/js/bus.rst</span></span></a> contains the new design explained.</p>
+<p>A few weeks ago I did the <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/4690d8d466fe622a1a2449403cc41ae78d4caafe">first merge</a> our 8.0 changes into the 9.0 branch.
+On the process I realized that Odoo 9.0’s bus was improved and now contains
+the a cross-tab communication feature.</p>
+<p>So probably I end up backporting their implementation into 8.0.</p>
+</div>
 <div class="section" id="notes">
 <h2>Notes</h2>
 <table class="docutils footnote" frame="void" id="notify" rules="none">
@@ -68,6 +118,7 @@ unneeded, because the message is actually being read in another tab.</td></tr>
 </div>
 ]]></description>
             <category><![CDATA[ Web Development ]]></category>
+            <category><![CDATA[ Programming ]]></category>
              <pubDate>Sat, 12 Sep 2015 00:00:00 -0400</pubDate>
         </item>
     
@@ -151,7 +202,7 @@ someone out there in the OpenERP universe that cared a bit about this:</p>
             <link>http://mvaled.github.io/blog/html/2015/05/26/odoo-at-last.html</link>
             <guid>http://mvaled.github.io/blog/html/2015/05/26/odoo-at-last.html</guid>
             <title><![CDATA[Odoo at last!]]></title>
-            <description><![CDATA[<h1>Odoo at last!</h1>
+            <description><![CDATA[<span id="id1"/><h1>Odoo at last!</h1>
 <div class="sidebar">
 <p class="first sidebar-title">Updated 2015-06-03</p>
 <p><a class="reference internal" href="http://mvaled.github.io/blog/html/2015/05/26/odoo-at-last.html#the-menu-decomposition">The menu decomposition</a> described below was actually an error in a custom
@@ -720,9 +771,9 @@ features that would benefit from this.</p>
 inbox was updated real-time) and realized that the Messaging addons has lost
 the “compose a new message” that was previously accessible from the inbox, let
 me show you a picture (7.0 on the right, 8.0 on the left):</p>
-<div class="figure">
+<div class="figure" id="id2">
 <img alt="../../../_images/odoo-vs-openerp.png" src="http://mvaled.github.io/blog/html/_images/odoo-vs-openerp.png"/>
-<p class="caption">Odoo is missing the “Compose new message” button.</p>
+<p class="caption"><span class="caption-text">Odoo is missing the “Compose new message” button.</span></p>
 </div>
 <p>This commit has some explanation:</p>
 <div class="highlight-python"><div class="highlight"><pre>commit 0714b231646bb439b121a6aaa43df32fedcb5e6e
@@ -837,9 +888,9 @@ They say they will do that today...  Let’s ask Stephanie.</div></blockquote>
 can resume his work and finish processing his CRM lead.</p>
 <p>The end.</p>
 <p>So, what is wrong with this story?</p>
-<div class="figure">
+<div class="figure" id="id11">
 <img alt="Computer problems." src="http://mvaled.github.io/blog/html/_images/computer_problems.png"/>
-<p class="caption">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</p>
+<p class="caption"><span class="caption-text">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</span></p>
 </div>
 <div class="section" id="depiction-of-wrongness">
 <h3>Depiction of wrongness</h3>
@@ -1143,30 +1194,30 @@ in <a class="reference external" href="https://github.com/merchise-autrement/xot
 <li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
 code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
 test.</p>
-<p>The idea of having a <em class="xref std std-term">query object</em> that stands for the expression
+<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">query object</span></a> that stands for the expression
 was not totally consolidated.  The components of the query were not
 defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
 <p>In this case the “literate” spirit dominated the design process, not the
 testing.  Simply we didn’t have a full-stack: ie. the language and the
-<em class="xref std std-term">translators</em> so that a query could actually be
+<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">translators</span></a> so that a query could actually be
 executed.</p>
 </li>
 <li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <em class="xref std std-ref">lack of clear
-boundaries</em> between several sub-expressions in a
-single <em class="xref std std-term">query</em>.</p>
+to cope with implementation difficulties, i.e. the <span class="xref std std-ref">lack of clear
+boundaries</span> between several sub-expressions in a
+single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">query</span></a>.</p>
 <p>This was the hardest stage.  Testing was employed to keep track of several
 design decisions.  In this stage made appearance our “Particle Bubble” and
 this was complex enough to deserve a handful of tests.  Although several
 tests did influence the design, they hardly drove it.</p>
 </li>
-<li><p class="first">Then the core was done and we turned to <span class="xref py py-mod docutils literal"><span class="pre">translation</span></span>.  This stage was mainly TDD cause we
+<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/translation/py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.3.0)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
 actually were testing a very TDD friendly layer:  Given this state of the
 world, the following query should return these objects.</p>
 </li>
 <li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
 our entire design and do reverse engineering of python byte-code to extract
-build the <em class="xref std std-term">query object</em>.</p>
+build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">query object</span></a>.</p>
 <p>What is foreseeable is that again a kind of literate driven design is going
 to be king: The core structure of the language (the query AST) is what’s
 being designed so, what’s the point of asking if the result of calling a

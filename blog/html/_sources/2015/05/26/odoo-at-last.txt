@@ -1,3 +1,5 @@
+.. _odoo-at-last:
+
 Odoo at last!
 =============
 

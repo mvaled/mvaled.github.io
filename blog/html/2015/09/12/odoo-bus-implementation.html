@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
-        <title>The bus implementation in Odoo &mdash; Manuel on Software - Reloaded</title>
+        <title>The bus implementation in Odoo and notification systems in the Web &mdash; Manuel on Software - Reloaded</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -68,19 +68,33 @@
           <a href="../../../pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="the-bus-implementation-in-odoo">
-<h1>The bus <em>implementation</em> in Odoo</h1>
-<p>As I commented on my <a href="#id3"><span class="problematic" id="id4">`post about our migration to Odoo`__</span></a>, our users open many
-tabs to the same Odoo instance.  When the chat is active this means an open
-connection for each tab and, since a chat is interactive in nature, all but
-one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
-<p>Some weeks ago <a href="#id3"><span class="problematic" id="id5">`I reported`__</span></a> that switching from a threaded based deployment
-to a pre forked processes one (with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based process for long polling
-connections), actually spiked the concurrency issues we were witnessing in our
-DB.  Our DB complained about being unable to <em>serialize</em> concurrent
-transactions.  By inspecting the logs we noticed that almost always this had
-to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>, that holds the status
-of users in the chat.</p>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="the-bus-implementation-in-odoo-and-notification-systems-in-the-web">
+<h1>The bus <em>implementation</em> in Odoo and notification systems in the Web</h1>
+<div class="sidebar">
+<p class="first sidebar-title">Delayed post.</p>
+<p>This post has been delayed for a very, very long time.  If I trust the logs
+in my blog&#8217;s git repository the post is &#8220;finished&#8221; since Sat&nbsp;Sep&nbsp;12, 2015.
+Well, that&#8217;s not true, and I must really finish it now.</p>
+<p>As it happens, in the meantime, I was not twiddling my fingers and I made
+two &#8220;advances&#8221; about the bus implementation:</p>
+<ul class="last simple">
+<li>I made a successful implementation of a cross-tab bus implementation:
+<a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-8.0-bus-service-worker">https://github.com/merchise-autrement/odoo/tree/merchise-8.0-bus-service-worker</a></li>
+<li>I discovered that Odoo 9&#8217;s code base already has the cross-tab feature
+integrated.</li>
+</ul>
+</div>
+<p>I commented on my <a class="reference internal" href="../../05/26/odoo-at-last.html#odoo-at-last"><span>post about our migration to Odoo</span></a> that
+our users open many tabs to the same Odoo instance.  When the chat is active
+this means an open connection for each tab and, since a chat is interactive in
+nature, all but one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
+<p>A while ago <a class="reference external" href="https://twitter.com/mvaled/status/615973409697050624">I reported</a> that switching from a
+threaded based deployment to a pre-forked processes one with a <a class="reference external" href="https://pypi.python.org/pypi/gevent">gevent</a> based
+process for long polling connections, actually spiked the concurrency issues
+we were witnessing in our DB.  Our DB complained about being unable to
+<em>serialize</em> concurrent transactions.  By inspecting the logs we noticed that
+almost always this had to do with an update to the table <span class="docutils literal"><span class="pre">im_chat_presence</span></span>,
+that holds the status of users in the chat.</p>
 <p>I thought the forked model would diminish the chance of collisions because (I
 thought) Odoo would use a single DB connection per worker process and another
 one for the gevent worker that would simply serialize <em>all</em> the chat related
@@ -90,29 +104,65 @@ check my assumptions by reading the code.  They might just be the wrong
 assumptions in the first place, and I needed to really read the code to see
 what was really happening.</p>
 <p>After restoring the threaded deployment the concurrency issues dropped again.
-They didn&#8217;t get to the levels they were before, but at the same time we were
-introducing other modules (and the related staff), so there are more open
+They didn&#8217;t get to the same levels they were before, but, at the same time, we
+were introducing other modules (and the related staff), so there are more open
 tabs...  Afterwards we went back to the process model, and the issues spiked
 again, however in a smaller amount.</p>
-<p>A few days ago I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
+<p>Several weeks later I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
 implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
-hidden</a>.</p>
-<p>The concurrency issues are now mostly gone: from about 3k a day to no more
-than 50.</p>
-<p>We&#8217;re still have unanswered questions regarding the DB connection management
-in Odoo.  The are suspicious signs there.  For instance reducing the
-<span class="docutils literal"><span class="pre">db_maxconn</span></span> option to 8 or less makes Odoo start complaining about the
-Connection Pool being full very often.  We already know that:</p>
+hidden</a>.  The concurrency issues were now mostly gone:
+from about 3k a day to no more than 50.</p>
+<p>We still had unanswered questions regarding the DB connection management in
+Odoo.  There were suspicious signs.  For instance reducing the <span class="docutils literal"><span class="pre">db_maxconn</span></span>
+option to 8 or less made Odoo start complaining about the Connection Pool
+being full very often.  We already knew that:</p>
 <ul class="simple">
 <li>For each cron worker at least 2 connections are used: one holds the cron job
 locked while the other is used by the job itself.</li>
-<li>The bus (used for the chat) also uses another connection to the DB called
+<li>The bus (used for the chat) also uses another connection to the DB
 &#8220;postgres&#8221;: Notifications and wake-ups of bus-related events use this
 connection.</li>
 </ul>
-<p>We don&#8217;t know yet if other addons try to open other connections to DB.</p>
-<p>The most suspicious sign, however, is that with a pool size of 32 we have seen
-this issue come from time to time.</p>
+<p>The most suspicious sign, however, was that with a pool size of 32, this issue
+came from time to time.</p>
+<p>Time went by and the issue remained at an acceptable (for us) level of few
+dozens per day.  You may say it&#8217;s too much, but, bear with me, it&#8217;s reasonable
+for our hardware and user base.</p>
+<p>Just a few days ago, we realized that issues coming from our gevent-based
+process were not being properly reported to our <a class="reference external" href="http://getsentry.com/">Sentry</a>.  We <a class="reference external" href="https://github.com/merchise-autrement/xoeuf/commit/d4b3bb7f0d972f31382aad8e6d1bf37c5a74ce99">fixed the issue</a> and observed that we&#8217;re getting about 2.5k DB collisions
+per day reports again.  And once more the query the table where most of
+collisions happen is &#8216;im_chat_presence&#8217;.</p>
+<p>As a workaround we simply <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/555b5699b96178d5c87f36c0f692dbe8dcf0facb">reduced</a> the update rate for that table.  But a
+better solutions needed to be found.</p>
+<div class="section" id="cross-tab-polling">
+<h2>Cross-tab polling</h2>
+<p>By looking better our users&#8217; usage pattern, we discovered that users switch
+from tab to tab regularly and thus the polling is still high.  So we went down
+the path of figuring out a way to have a single polling connection even when
+many were opened.</p>
+<p>I remembered the Local Storage API and went down to write a simple proof of
+concept of listening events of the <span class="docutils literal"><span class="pre">localStorage</span></span> from different tabs.  The
+proof of concept yielded good results, and so I turned to Google and search
+for &#8220;cross-tab communication&#8221; and found the <a class="reference external" href="https://github.com/nodeca/tabex">tabex</a> library.</p>
+<p>After that, replacing the implementation of the bus for a new one that was
+based on a exchanged between tabs was not very hard.  These are the commits
+done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
+<div class="highlight-python"><div class="highlight"><pre>0555434 * bus: Clarify the channel delay in polls.
+d10a1b5 * bus: Checks for the right state.
+af4a6dc * bus: Add language tag in the documentation.
+636490b * im_chat: Revert &quot;Reduce the presure on im_chat_presence table.&quot;
+eda7638 * bus: Don&#39;t notify if not in polling state.
+4d09ac6 * web_celery: Use a dedicated bus exchange for jobs.
+84239e3 * im_chat: Beep only in the master tab.
+2cb27da * Improve the bus to allow tab synchronization.
+</pre></div>
+</div>
+<p>The file <a class="reference external" href="https://github.com/merchise-autrement/odoo/blob/merchise-8.0-bus-service-worker/addons/bus/static/src/js/bus.rst"><span class="docutils literal"><span class="pre">addons/bus/static/src/js/bus.rst</span></span></a> contains the new design explained.</p>
+<p>A few weeks ago I did the <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/4690d8d466fe622a1a2449403cc41ae78d4caafe">first merge</a> our 8.0 changes into the 9.0 branch.
+On the process I realized that Odoo 9.0&#8217;s bus was improved and now contains
+the a cross-tab communication feature.</p>
+<p>So probably I end up backporting their implementation into 8.0.</p>
+</div>
 <div class="section" id="notes">
 <h2>Notes</h2>
 <table class="docutils footnote" frame="void" id="notify" rules="none">
@@ -131,12 +181,12 @@ unneeded, because the message is actually being read in another tab.</td></tr>
         <div class="categories">
             <span>
                 Filed under:
-                <a href="../../../categories/web-development.html">Web Development</a></span>
+                <a href="../../../categories/web-development.html">Web Development</a>, <a href="../../../categories/programming.html">Programming</a></span>
         </div>
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/html5.html">HTML5</a></span>
+                <a href="../../../tags/html5.html">HTML5</a>, <a href="../../../tags/odoo.html">Odoo</a></span>
         </div>
         </div>
     <div class="timestamp postmeta">

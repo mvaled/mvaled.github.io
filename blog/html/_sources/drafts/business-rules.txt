@@ -2,9 +2,9 @@
  Business rules: A case about coding standards/issues
 ======================================================
 
+.. categories:: Programming
+.. tags:: Odoo
 
-.. categories:: OpenERP, Odoo
-.. tags:: integration, programming
 
 How do you express a business rule in your code?  Would you recognize it a
 separate thing that you may or may not use?  For instance, how would you
