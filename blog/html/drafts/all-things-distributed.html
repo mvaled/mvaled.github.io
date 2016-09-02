@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Blog mostly about software.">
         <meta name="viewport" content="width=device-width">
-        <title>Filed under Free Time &mdash; Manuel on Software - Reloaded</title>
+        <title>All things distributed &mdash; Manuel on Software - Reloaded</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -68,8 +68,46 @@
           <a href="../pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="archive">
-        <h1>Filed under <span class="title_category">Free Time</span></h1></div></article>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="all-things-distributed">
+<h1>All things distributed</h1>
+<p>In the <a href="#id1"><span class="problematic" id="id2">`Riak Handbook by Mathias Meyer &lt;riak-handbook_&gt;`__</span></a> there a
+first definition of a distributed system:</p>
+<blockquote>
+<div>&#8220;By distributed systems I&#8217;m referring to systems that use more
+than one computer, a node, to get a job done&#8221;</div></blockquote>
+<p>By this definition even a simple website may simply be distributed
+by having a computer for the DB, another for the web application
+itself, and (if needed) another computer for the SMTP server that
+sends emails on behalf of the site.</p>
+<p>Of course, all of that software (the DB, the web app and the mail
+server) could be stuffed into a single box and now the system is not
+distributed... Not quite right, isn&#8217;t it?</p>
+<p>This definition does not satisfy our intuition about what a
+distributed system is.  By it everything is.</p>
+<p>When does my system is a distributed system?  Put it differently:
+when do I need to make my system a distributed one?  Is it only when
+the capacity of a single node is depleted and another node is
+required?  Does my DB and application boxes count as separate nodes?</p>
+<p>The answer to that question requires a clear definition of what a
+distributed system is, or the benefits to design your system as a
+distributed system.</p>
+<p>Though I don&#8217;t pretend to give a definition in this post, I will
+argue that many information system should follow distributed
+patterns.  In fact, I will argue that ERP systems are going to
+collapse unless integration is done with distribution in mind.</p>
+</div>
+
+    <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="../categories/programming.html">Programming</a>, <a href="../categories/thoughts.html">Thoughts</a></span>
+        </div>
+        
+        </div>
+    
+    </article>
     <div id="disqus_thread"></div>
     <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */

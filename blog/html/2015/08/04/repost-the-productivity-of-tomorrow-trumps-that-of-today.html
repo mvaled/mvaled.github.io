@@ -94,7 +94,7 @@ yield something close to the <a class="reference external" href="http://www.osne
 and naming things.</p>
 <p class="attribution">&mdash;Phil Karlton</p>
 </div></blockquote>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
        <span class="k">return</span> <span class="n">l</span>
     <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -110,28 +110,28 @@ and naming things.</p>
 <p>This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
 function <cite>quicksort</cite>...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
 <span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
 </pre></div>
 </div>
 <p>A quiz in less than 5 seconds: What does it mean in OpenERP&#8217;s ORM the
 following lines of code?</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s">&#39;implied_ids&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">&#39;implied_ids&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
 </pre></div>
 </div>
 <p>This line of code has a CC of 1: as good as it gets, isn&#8217;t it?  But it&#8217;s so
 darn difficult to read that unless you have your brain wired up to see &#8220;forget
 the link between this group and the implied_group&#8221;...  To be fair there is
 someone out there in the OpenERP universe that cared a bit about this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># file addons/base/ir/ir_fields.py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># file addons/base/ir/ir_fields.py</span>
 
-<span class="n">CREATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="n">CREATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
 <span class="n">UPDATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-<span class="n">DELETE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">FORGET</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">LINK_TO</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">DELETE_ALL</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">REPLACE_WITH</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ids</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
+<span class="n">DELETE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">FORGET</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">LINK_TO</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">DELETE_ALL</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">REPLACE_WITH</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ids</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>But no one else is using it!</p>
@@ -170,7 +170,7 @@ someone out there in the OpenERP universe that cared a bit about this:</p>
       <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
-      &copy; Copyright 2014, 2015, Manuel Vázquez Acosta. </p>
+      &copy; Copyright 2016, Manuel Vázquez Acosta. </p>
       <p>Content licensed under the Creative Commons
       attribution-noncommercial-sharealike License.
       </p></footer></div> <!-- footer-container -->

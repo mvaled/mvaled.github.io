@@ -68,7 +68,53 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the Web</a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2016/09/02/generating-unique-static-urls-in-odoo.html">Generating unique static URLs in Odoo</a></h1>
+<p>By default Odoo bundles static assets (JS and CSS) within a couple of
+files: All CSS files are bundled into a single big CSS file.  The same
+happens for JS files.</p>
+<p>The URLs of those bundles vary with any change within any of the
+included files.  But those files are big.  Therefore changing assets
+put some stress in the network and diminish the usefulness of caches.</p>
+<p>Since Sep 19th, 2015 we introduced a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/03741a2cb81907b4b67ca8437f260b073689d212">patch</a> in
+Odoo to avoid bundling of static assets when using a SPDY or HTTP/2
+proxy like Nginx.</p>
+<p>Reportedly, this has worked very good in our case where some users
+have slow connections.  However, measuring the logs of a week we see
+that about 21% of GET request are assets:</p>
+<div class="highlight-default"><div class="highlight"><pre><span/>$ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
+10554
+
+$ egrep 'GET .* HTTP' /var/log/nginx/o.access.log.1 | wc -l
+50216
+</pre></div>
+</div>
+<p>Odoo’s default cache expiration time is seven days.  This is
+considerably low taking into account that bundle’s URLs change when
+the content does.</p>
+<p>Another issue is that assets that change can be served staled from the
+caches for seven days.</p>
+<p>We’re taking the path to produce unique URLs for static assets.  Our
+current work can be seen in our <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-unique-static-urls">merchise-unique-static-urls</a>
+branch.  In our development/deployment scenarios these simple changes
+would suffice for JS and CSS.  There’s still work to do regarding
+invalidation of static images in our templates.</p>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/programming.html">Programming</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/odoo.html">Odoo</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>September 02, 2016</span>
+        </div><div class="separator post_separator"></div><h1><a href="2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the Web</a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Delayed post.</p>
 <p>This post has been delayed for a very, very long time.  If I trust the logs
@@ -83,7 +129,7 @@ two “advances” about the bus implementation:</p>
 integrated.</li>
 </ul>
 </div>
-<p>I commented on my <a class="reference internal" href="2015/05/26/odoo-at-last.html#odoo-at-last"><span>post about our migration to Odoo</span></a> that
+<p>I commented on my <a class="reference internal" href="2015/05/26/odoo-at-last.html#odoo-at-last"><span class="std std-ref">post about our migration to Odoo</span></a> that
 our users open many tabs to the same Odoo instance.  When the chat is active
 this means an open connection for each tab and, since a chat is interactive in
 nature, all but one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
@@ -146,14 +192,14 @@ for “cross-tab communication” and found the <a class="reference external" hr
 <p>After that, replacing the implementation of the bus for a new one that was
 based on a exchanged between tabs was not very hard.  These are the commits
 done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
-<div class="highlight-python"><div class="highlight"><pre>0555434 * bus: Clarify the channel delay in polls.
-d10a1b5 * bus: Checks for the right state.
-af4a6dc * bus: Add language tag in the documentation.
-636490b * im_chat: Revert "Reduce the presure on im_chat_presence table."
-eda7638 * bus: Don't notify if not in polling state.
-4d09ac6 * web_celery: Use a dedicated bus exchange for jobs.
-84239e3 * im_chat: Beep only in the master tab.
-2cb27da * Improve the bus to allow tab synchronization.
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="mi">0555434</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Clarify</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">polls</span><span class="o">.</span>
+<span class="n">d10a1b5</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Checks</span> <span class="k">for</span> <span class="n">the</span> <span class="n">right</span> <span class="n">state</span><span class="o">.</span>
+<span class="n">af4a6dc</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Add</span> <span class="n">language</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="o">.</span>
+<span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">"Reduce the presure on im_chat_presence table."</span>
+<span class="n">eda7638</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Don</span><span class="s1">'t notify if not in polling state.</span>
+<span class="mi">4</span><span class="n">d09ac6</span> <span class="o">*</span> <span class="n">web_celery</span><span class="p">:</span> <span class="n">Use</span> <span class="n">a</span> <span class="n">dedicated</span> <span class="n">bus</span> <span class="n">exchange</span> <span class="k">for</span> <span class="n">jobs</span><span class="o">.</span>
+<span class="mi">84239</span><span class="n">e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
+<span class="mi">2</span><span class="n">cb27da</span> <span class="o">*</span> <span class="n">Improve</span> <span class="n">the</span> <span class="n">bus</span> <span class="n">to</span> <span class="n">allow</span> <span class="n">tab</span> <span class="n">synchronization</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>The file <a class="reference external" href="https://github.com/merchise-autrement/odoo/blob/merchise-8.0-bus-service-worker/addons/bus/static/src/js/bus.rst"><span class="docutils literal"><span class="pre">addons/bus/static/src/js/bus.rst</span></span></a> contains the new design explained.</p>
@@ -214,7 +260,7 @@ yield something close to the <a class="reference external" href="http://www.osne
 and naming things.</p>
 <p class="attribution">—Phil Karlton</p>
 </div></blockquote>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
        <span class="k">return</span> <span class="n">l</span>
     <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -230,28 +276,28 @@ and naming things.</p>
 <p>This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
 function <cite>quicksort</cite>...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
 <span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
 </pre></div>
 </div>
 <p>A quiz in less than 5 seconds: What does it mean in OpenERP’s ORM the
 following lines of code?</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s">'implied_ids'</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'implied_ids'</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
 </pre></div>
 </div>
 <p>This line of code has a CC of 1: as good as it gets, isn’t it?  But it’s so
 darn difficult to read that unless you have your brain wired up to see “forget
 the link between this group and the implied_group”...  To be fair there is
 someone out there in the OpenERP universe that cared a bit about this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># file addons/base/ir/ir_fields.py</span>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="c1"># file addons/base/ir/ir_fields.py</span>
 
-<span class="n">CREATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="n">CREATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
 <span class="n">UPDATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-<span class="n">DELETE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">FORGET</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">LINK_TO</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">DELETE_ALL</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-<span class="n">REPLACE_WITH</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ids</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
+<span class="n">DELETE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">FORGET</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">LINK_TO</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">DELETE_ALL</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">REPLACE_WITH</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ids</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>But no one else is using it!</p>
@@ -463,8 +509,8 @@ to have the prototype working as soon as possible.</p>
 poorly.  And though our first tests were positive there was some slowness.</p>
 <p>To accommodate for a possible replacement of Pyro we chose to provide our own
 “idiom” (in Python) to connect and communicate with services:</p>
-<div class="highlight-python"><div class="highlight"><pre>with service('pyxel.queue') as queue
-    queue.method(*arguments)
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="k">with</span> <span class="n">service</span><span class="p">(</span><span class="s1">'pyxel.queue'</span><span class="p">)</span> <span class="k">as</span> <span class="n">queue</span>
+    <span class="n">queue</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That pattern was designed to have an appearance as simple as RPC.  Later we
@@ -529,14 +575,14 @@ is running.</p>
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.</p>
 <p>To exemplify, let’s say a typical tasks is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
-   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="kn">import</span> <span class="n">send_email</span>
-   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="kn">import</span> <span class="n">wait_reply</span>
-   <span class="c"># Assume both send_email and wait_reply switch away from the current</span>
-   <span class="c"># greenlet and only switch back after they are done.</span>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
+   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">send_email</span>
+   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">wait_reply</span>
+   <span class="c1"># Assume both send_email and wait_reply switch away from the current</span>
+   <span class="c1"># greenlet and only switch back after they are done.</span>
    <span class="n">message</span> <span class="o">=</span> <span class="n">send_email</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">)</span>
    <span class="n">res</span> <span class="o">=</span> <span class="n">wait_reply</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-   <span class="k">return</span> <span class="n">res</span>  <span class="c"># this will be sent to the parent greenlet</span>
+   <span class="k">return</span> <span class="n">res</span>  <span class="c1"># this will be sent to the parent greenlet</span>
 </pre></div>
 </div>
 <p>The servers start and hundreds of this task are launched in different jobs.
@@ -549,7 +595,7 @@ users have entered a wrong email address.  A change is in order.</p>
 <cite>job</cite> that involves receiving confirmation email when a new user registers.</p>
 <p>We’d love to simply update our <span class="docutils literal"><span class="pre">jobs.util</span></span> package and be done with it like
 this:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ source server-virtual-env/bin/activate
+<div class="highlight-default"><div class="highlight"><pre><span/>$ source server-virtual-env/bin/activate
 $ pip install -U jobs.util -i https://my.private.server/
 </pre></div>
 </div>
@@ -573,7 +619,7 @@ and asserts it returns the “right” magic value.  Between launches the module
 gets updated to return a different magic value, which is passed as an argument
 to the newly created greenlet.</p>
 <p>A single run will print something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python test_modulet.py
+<div class="highlight-default"><div class="highlight"><pre><span/>$ python test_modulet.py
 Beginning with 3 in /tmp/tmp1d4rK5
 Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module'
 Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module'
@@ -584,7 +630,7 @@ Passed. I have the right magic number 1000
 </pre></div>
 </div>
 <p>If you comment the bootstrapping of modulets, then you’ll get something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python test_modulet.py
+<div class="highlight-default"><div class="highlight"><pre><span/>$ python test_modulet.py
 Beginning with 3 in /tmp/tmpeI1oYA
 Wrong magic number
 Traceback (most recent call last):
@@ -770,7 +816,7 @@ install it.</p>
 <p>I’m working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
 Of course I’m using the branch “8.0” for this review.</p>
 <p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like this:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python setup.py develop
+<div class="highlight-default"><div class="highlight"><pre><span/>$ python setup.py develop
 </pre></div>
 </div>
 <p>The first I noticed is that several new requirements are in place, and the
@@ -802,7 +848,7 @@ at the same time I was writing this post) I realized that the <em>current</em>
 multi-process deployments would still need this IPC to properly work.  So I
 ran <span class="docutils literal"><span class="pre">./openerp-server</span> <span class="pre">--workers=2</span></span> and tested it again.  The chat stopped to
 work and the following error was logged from time to time:</p>
-<div class="highlight-traceback"><div class="highlight"><pre>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
+<div class="highlight-traceback"><div class="highlight"><pre><span/>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
 Traceback (most recent call last):
   File "/&lt;..&gt;/odoo/openerp/http.py", line 476, in _handle_exception
     return super(JsonRequest, self)._handle_exception(exception)
@@ -825,19 +871,19 @@ Exception: bus.Bus unavailable
 </div>
 <p>The code explains it all.  This is the method <span class="docutils literal"><span class="pre">ImDispatch.start()</span></span> in file
 <span class="docutils literal"><span class="pre">addons/bus/bus.py</span></span>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">evented</span><span class="p">:</span>
-        <span class="c"># gevent mode</span>
+        <span class="c1"># gevent mode</span>
         <span class="kn">import</span> <span class="nn">gevent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">gevent</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span>
         <span class="n">gevent</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">openerp</span><span class="o">.</span><span class="n">multi_process</span><span class="p">:</span>
-<span class="hll">        <span class="c"># disabled in prefork mode</span>
+<span class="hll">        <span class="c1"># disabled in prefork mode</span>
 </span>        <span class="k">return</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c"># threaded mode</span>
+        <span class="c1"># threaded mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"</span><span class="si">%s</span><span class="s">.Bus"</span> <span class="o">%</span> <span class="n">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"</span><span class="si">%s</span><span class="s2">.Bus"</span> <span class="o">%</span> <span class="n">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
         <span class="n">t</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span>
@@ -864,41 +910,41 @@ me show you a picture (7.0 on the right, 8.0 on the left):</p>
 <p class="caption"><span class="caption-text">Odoo is missing the “Compose new message” button.</span></p>
 </div>
 <p>This commit has some explanation:</p>
-<div class="highlight-python"><div class="highlight"><pre>commit 0714b231646bb439b121a6aaa43df32fedcb5e6e
-Author: Thibault Delavallée &lt;tde@openerp.com&gt;
-Date:   Wed Aug 13 14:35:25 2014 +0200
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="mi">0714</span><span class="n">b231646bb439b121a6aaa43df32fedcb5e6e</span>
+<span class="n">Author</span><span class="p">:</span> <span class="n">Thibault</span> <span class="n">Delavallée</span> <span class="o">&lt;</span><span class="n">tde</span><span class="nd">@openerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Date</span><span class="p">:</span>   <span class="n">Wed</span> <span class="n">Aug</span> <span class="mi">13</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mi">25</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
-[FIX] mail: when having only mail installed, do not show any 'share with my
-followers' compose box. This comes only with hr, for the inbox. This was
-probably forgotten when updating the mailboxes hr-goal and hr-related
-gamification / chatter stuff.
+<span class="p">[</span><span class="n">FIX</span><span class="p">]</span> <span class="n">mail</span><span class="p">:</span> <span class="n">when</span> <span class="n">having</span> <span class="n">only</span> <span class="n">mail</span> <span class="n">installed</span><span class="p">,</span> <span class="n">do</span> <span class="ow">not</span> <span class="n">show</span> <span class="nb">any</span> <span class="s1">'share with my</span>
+<span class="n">followers</span><span class="s1">' compose box. This comes only with hr, for the inbox. This was</span>
+<span class="n">probably</span> <span class="n">forgotten</span> <span class="n">when</span> <span class="n">updating</span> <span class="n">the</span> <span class="n">mailboxes</span> <span class="n">hr</span><span class="o">-</span><span class="n">goal</span> <span class="ow">and</span> <span class="n">hr</span><span class="o">-</span><span class="n">related</span>
+<span class="n">gamification</span> <span class="o">/</span> <span class="n">chatter</span> <span class="n">stuff</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>I then installed the “Employee directory” addon and the “Share with my
 followers” box appeared.</p>
 <p>More digging in the logs reveals the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>commit e6f8666b521fe8c2522d6e94c0c3def54a5f73ed
-Merge: d57a97d bf3d4a7
-Author: Amit Vora &lt;avo@tinyerp.com&gt;
-Date:   Thu Apr 17 11:41:33 2014 +0200
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="n">e6f8666b521fe8c2522d6e94c0c3def54a5f73ed</span>
+<span class="n">Merge</span><span class="p">:</span> <span class="n">d57a97d</span> <span class="n">bf3d4a7</span>
+<span class="n">Author</span><span class="p">:</span> <span class="n">Amit</span> <span class="n">Vora</span> <span class="o">&lt;</span><span class="n">avo</span><span class="nd">@tinyerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Date</span><span class="p">:</span>   <span class="n">Thu</span> <span class="n">Apr</span> <span class="mi">17</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">33</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
-[MERGE] [IMP] mail: Inbox usability improvements :
-- notficiation_email_send field, renamed into notify_email, has now 2 values: always or never, in
-order to ease the choice and simplify options.
-- inbox: removed 'compose a new messages or write to my followers', because those 2 options are
-already available. The first one is accessible using the top-right email icon, the second one
-is accessible with the 'write to my followers' text box alread present in the inbox.
+<span class="p">[</span><span class="n">MERGE</span><span class="p">]</span> <span class="p">[</span><span class="n">IMP</span><span class="p">]</span> <span class="n">mail</span><span class="p">:</span> <span class="n">Inbox</span> <span class="n">usability</span> <span class="n">improvements</span> <span class="p">:</span>
+<span class="o">-</span> <span class="n">notficiation_email_send</span> <span class="n">field</span><span class="p">,</span> <span class="n">renamed</span> <span class="n">into</span> <span class="n">notify_email</span><span class="p">,</span> <span class="n">has</span> <span class="n">now</span> <span class="mi">2</span> <span class="n">values</span><span class="p">:</span> <span class="n">always</span> <span class="ow">or</span> <span class="n">never</span><span class="p">,</span> <span class="ow">in</span>
+<span class="n">order</span> <span class="n">to</span> <span class="n">ease</span> <span class="n">the</span> <span class="n">choice</span> <span class="ow">and</span> <span class="n">simplify</span> <span class="n">options</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">inbox</span><span class="p">:</span> <span class="n">removed</span> <span class="s1">'compose a new messages or write to my followers'</span><span class="p">,</span> <span class="n">because</span> <span class="n">those</span> <span class="mi">2</span> <span class="n">options</span> <span class="n">are</span>
+<span class="n">already</span> <span class="n">available</span><span class="o">.</span> <span class="n">The</span> <span class="n">first</span> <span class="n">one</span> <span class="ow">is</span> <span class="n">accessible</span> <span class="n">using</span> <span class="n">the</span> <span class="n">top</span><span class="o">-</span><span class="n">right</span> <span class="n">email</span> <span class="n">icon</span><span class="p">,</span> <span class="n">the</span> <span class="n">second</span> <span class="n">one</span>
+<span class="ow">is</span> <span class="n">accessible</span> <span class="k">with</span> <span class="n">the</span> <span class="s1">'write to my followers'</span> <span class="n">text</span> <span class="n">box</span> <span class="n">alread</span> <span class="n">present</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">inbox</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>However I don’t see the mentioned “top-right email icon”.  In fact, that icon
 is present in 7.0, but not in 8.0.  More digging:</p>
-<div class="highlight-python"><div class="highlight"><pre>commit 5209fbc7ed9fcad966ab064654a8a8697142be42
-Author: Antony Lesuisse &lt;al@openerp.com&gt;
-Date:   Mon Jun 30 01:51:40 2014 +0200
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="mi">5209</span><span class="n">fbc7ed9fcad966ab064654a8a8697142be42</span>
+<span class="n">Author</span><span class="p">:</span> <span class="n">Antony</span> <span class="n">Lesuisse</span> <span class="o">&lt;</span><span class="n">al</span><span class="nd">@openerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Date</span><span class="p">:</span>   <span class="n">Mon</span> <span class="n">Jun</span> <span class="mi">30</span> <span class="mi">01</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">40</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
-[REM] useless icon send a message
+<span class="p">[</span><span class="n">REM</span><span class="p">]</span> <span class="n">useless</span> <span class="n">icon</span> <span class="n">send</span> <span class="n">a</span> <span class="n">message</span>
 
-The action is available from the wall.
+<span class="n">The</span> <span class="n">action</span> <span class="ow">is</span> <span class="n">available</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">wall</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>Got you!  So, Antony removed the icon cause he thought it was the wall, but
@@ -1023,23 +1069,23 @@ position, contact information, etc...</p>
 <p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">"res.partner"</span></span> gets appended a
 whole bunch of other fields, including the said “account payable” and “account
 receivable” fields, which are also marked as mandatory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">'property_account_payable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
-    <span class="s">'account.account'</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s">'many2one'</span><span class="p">,</span>
-    <span class="n">relation</span><span class="o">=</span><span class="s">'account.account'</span><span class="p">,</span>
-    <span class="n">string</span><span class="o">=</span><span class="s">"Account Payable"</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="s1">'property_account_payable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+    <span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
+    <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">"Account Payable"</span><span class="p">,</span>
     <span class="n">view_load</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">domain</span><span class="o">=</span><span class="s">"[('type', '=', 'payable')]"</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s">"This account will be used instead of the default one as the payable account for the current partner"</span><span class="p">,</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">"[('type', '=', 'payable')]"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"This account will be used instead of the default one as the payable account for the current partner"</span><span class="p">,</span>
     <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
-<span class="s">'property_account_receivable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
-    <span class="s">'account.account'</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s">'many2one'</span><span class="p">,</span>
-    <span class="n">relation</span><span class="o">=</span><span class="s">'account.account'</span><span class="p">,</span>
-    <span class="n">string</span><span class="o">=</span><span class="s">"Account Receivable"</span><span class="p">,</span>
+<span class="s1">'property_account_receivable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+    <span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
+    <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">"Account Receivable"</span><span class="p">,</span>
     <span class="n">view_load</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">domain</span><span class="o">=</span><span class="s">"[('type', '=', 'receivable')]"</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s">"This account will be used instead of the default one as the receivable account for the current partner"</span><span class="p">,</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">"[('type', '=', 'receivable')]"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"This account will be used instead of the default one as the receivable account for the current partner"</span><span class="p">,</span>
     <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
 </pre></div>
 </div>
@@ -1209,58 +1255,6 @@ different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis
         </div>
         <div class="timestamp postmeta">
             <span>July 02, 2014</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/06/05/odoo.html">Odoo... I mean OpenERP</a></h1>
-<p>This is old news: OpenERP has changed its name and now becomes Odoo.  I don’t
-care much about the change in the name.  It’s the processes I’m interested in.</p>
-<p>The rename was synchronized with a move from <a class="reference external" href="https://launchpad.net/">Launchpad</a> to <a class="reference external" href="https://github.com/">Github</a>.  This, I
-much appreciate it.  I’m one of those that once the Git virus got me, I’m
-almost unable to work comfortably with any other Version Control tool.</p>
-<p>I this regard I have a couple of questions:</p>
-<ul>
-<li><p class="first">Will they use the “standard” Github’s pull-requests model for contributions?
-Probably they are longing for this kind of long-tail of contributors model
-to kick off now at Github.  I haven’t found any “Why the move to Github” in
-the FAQ of the move and other sources (but again my connection is slow and I
-didn’t waste much time).</p>
-</li>
-<li><p class="first">Will they require some kind of a “waive” of copyrights to accept
-contributions?</p>
-<p>The model of the Plone Foundation requires this.  But this foundation is
-non-profit unlike Odoo.</p>
-<p>Does this align with the company’s view of the Open Source model?  I don’t
-know.</p>
-</li>
-</ul>
-<p>So, my only strategy is:</p>
-<ul class="simple">
-<li>Fork the <a class="reference external" href="https://github.com/odoo/odoo">Github repository</a></li>
-<li>Send as many PRs as I’m able to fix/improve something and hope for the best.</li>
-</ul>
-<div class="section" id="postdata">
-<h2>Postdata</h2>
-<p>My long-planned “<a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/03/25/announcing-the-openerp-corner/">OpenERP corner</a>” will simply be renamed accordingly.</p>
-<p>This reminds me I have broken my promise to keep my old blog in-sync with this
-new one.  Apologies.  But it’s sooo comfortable to work with this blog-model
-that I barely looked back once.  So I’ll announce it: I will not keep my old
-blog anymore.  I will commit myself to improve the look of this one and that’s
-it.</p>
-</div>
-
-        <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="categories/openerp.html">OpenERP</a>, <a href="categories/blogroll.html">Blogroll</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/news.html">news</a></span>
-        </div>
-        </div>
-        <div class="timestamp postmeta">
-            <span>June 05, 2014</span>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -1283,7 +1277,7 @@ it.</p>
       <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
-      &copy; Copyright 2014, 2015, Manuel Vázquez Acosta. </p>
+      &copy; Copyright 2016, Manuel Vázquez Acosta. </p>
       <p>Content licensed under the Creative Commons
       attribution-noncommercial-sharealike License.
       </p></footer></div> <!-- footer-container -->

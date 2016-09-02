@@ -27,7 +27,7 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="next" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="prev" title="Generating unique static URLs in Odoo" href="../../../2016/09/02/generating-unique-static-urls-in-odoo.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.5',
@@ -84,7 +84,7 @@ two &#8220;advances&#8221; about the bus implementation:</p>
 integrated.</li>
 </ul>
 </div>
-<p>I commented on my <a class="reference internal" href="../../05/26/odoo-at-last.html#odoo-at-last"><span>post about our migration to Odoo</span></a> that
+<p>I commented on my <a class="reference internal" href="../../05/26/odoo-at-last.html#odoo-at-last"><span class="std std-ref">post about our migration to Odoo</span></a> that
 our users open many tabs to the same Odoo instance.  When the chat is active
 this means an open connection for each tab and, since a chat is interactive in
 nature, all but one of these connections are not actually required <a class="footnote-reference" href="#notify" id="id1">[1]</a>.</p>
@@ -147,14 +147,14 @@ for &#8220;cross-tab communication&#8221; and found the <a class="reference exte
 <p>After that, replacing the implementation of the bus for a new one that was
 based on a exchanged between tabs was not very hard.  These are the commits
 done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
-<div class="highlight-python"><div class="highlight"><pre>0555434 * bus: Clarify the channel delay in polls.
-d10a1b5 * bus: Checks for the right state.
-af4a6dc * bus: Add language tag in the documentation.
-636490b * im_chat: Revert &quot;Reduce the presure on im_chat_presence table.&quot;
-eda7638 * bus: Don&#39;t notify if not in polling state.
-4d09ac6 * web_celery: Use a dedicated bus exchange for jobs.
-84239e3 * im_chat: Beep only in the master tab.
-2cb27da * Improve the bus to allow tab synchronization.
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0555434</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Clarify</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">polls</span><span class="o">.</span>
+<span class="n">d10a1b5</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Checks</span> <span class="k">for</span> <span class="n">the</span> <span class="n">right</span> <span class="n">state</span><span class="o">.</span>
+<span class="n">af4a6dc</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Add</span> <span class="n">language</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="o">.</span>
+<span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">&quot;Reduce the presure on im_chat_presence table.&quot;</span>
+<span class="n">eda7638</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Don</span><span class="s1">&#39;t notify if not in polling state.</span>
+<span class="mi">4</span><span class="n">d09ac6</span> <span class="o">*</span> <span class="n">web_celery</span><span class="p">:</span> <span class="n">Use</span> <span class="n">a</span> <span class="n">dedicated</span> <span class="n">bus</span> <span class="n">exchange</span> <span class="k">for</span> <span class="n">jobs</span><span class="o">.</span>
+<span class="mi">84239</span><span class="n">e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
+<span class="mi">2</span><span class="n">cb27da</span> <span class="o">*</span> <span class="n">Improve</span> <span class="n">the</span> <span class="n">bus</span> <span class="n">to</span> <span class="n">allow</span> <span class="n">tab</span> <span class="n">synchronization</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>The file <a class="reference external" href="https://github.com/merchise-autrement/odoo/blob/merchise-8.0-bus-service-worker/addons/bus/static/src/js/bus.rst"><span class="docutils literal"><span class="pre">addons/bus/static/src/js/bus.rst</span></span></a> contains the new design explained.</p>
@@ -193,7 +193,7 @@ unneeded, because the message is actually being read in another tab.</td></tr>
             <span>September 12, 2015</span>
         </div>
     <ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../../../2016/09/02/generating-unique-static-urls-in-odoo.html">Generating unique static URLs in Odoo</a></li>
             <li class="right"><a href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of today</a> &raquo; </li>
         </ul></article>
     <div id="disqus_thread"></div>
@@ -212,7 +212,7 @@ unneeded, because the message is actually being read in another tab.</td></tr>
       <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
-      &copy; Copyright 2014, 2015, Manuel Vázquez Acosta. </p>
+      &copy; Copyright 2016, Manuel Vázquez Acosta. </p>
       <p>Content licensed under the Creative Commons
       attribution-noncommercial-sharealike License.
       </p></footer></div> <!-- footer-container -->

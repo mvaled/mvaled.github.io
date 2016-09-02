@@ -20,7 +20,7 @@ description = 'Blog mostly about software.'
 author = u'Manuel Vázquez Acosta'
 
 # Change this to your copyright string
-copyright = '2014, 2015, ' + author
+copyright = '2016, ' + author
 
 # Generated language
 language = 'en'
@@ -43,7 +43,13 @@ disqus_shortname = None
 html_theme = "mva"
 
 # Theme-specific options, see docs
-html_theme_options = {}
+html_theme_options = {
+    # 'font_family': ("'Ubuntu Mono', "
+    #                 "'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', "
+    #                 "'Lucida Consola', monospace"),
+    # 'font_size': "16px",
+    # 'head_font_family': "'Open Sans', 'Helvetica', 'Arial', sans-serif",
+}
 
 # Link to RSS service like FeedBurner if any, otherwise feed is
 # linked directly

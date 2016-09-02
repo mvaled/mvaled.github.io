@@ -85,14 +85,14 @@ is running.</p>
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.</p>
 <p>To exemplify, let&#8217;s say a typical tasks is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
-   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="kn">import</span> <span class="n">send_email</span>
-   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="kn">import</span> <span class="n">wait_reply</span>
-   <span class="c"># Assume both send_email and wait_reply switch away from the current</span>
-   <span class="c"># greenlet and only switch back after they are done.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
+   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">send_email</span>
+   <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">wait_reply</span>
+   <span class="c1"># Assume both send_email and wait_reply switch away from the current</span>
+   <span class="c1"># greenlet and only switch back after they are done.</span>
    <span class="n">message</span> <span class="o">=</span> <span class="n">send_email</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">)</span>
    <span class="n">res</span> <span class="o">=</span> <span class="n">wait_reply</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-   <span class="k">return</span> <span class="n">res</span>  <span class="c"># this will be sent to the parent greenlet</span>
+   <span class="k">return</span> <span class="n">res</span>  <span class="c1"># this will be sent to the parent greenlet</span>
 </pre></div>
 </div>
 <p>The servers start and hundreds of this task are launched in different jobs.
@@ -105,7 +105,7 @@ users have entered a wrong email address.  A change is in order.</p>
 <cite>job</cite> that involves receiving confirmation email when a new user registers.</p>
 <p>We&#8217;d love to simply update our <span class="docutils literal"><span class="pre">jobs.util</span></span> package and be done with it like
 this:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ source server-virtual-env/bin/activate
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ source server-virtual-env/bin/activate
 $ pip install -U jobs.util -i https://my.private.server/
 </pre></div>
 </div>
@@ -129,7 +129,7 @@ and asserts it returns the &#8220;right&#8221; magic value.  Between launches th
 gets updated to return a different magic value, which is passed as an argument
 to the newly created greenlet.</p>
 <p>A single run will print something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python test_modulet.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python test_modulet.py
 Beginning with 3 in /tmp/tmp1d4rK5
 Isolating &#39;magic_module&#39; as &#39;&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module&#39;
 Isolating &#39;magic_module&#39; as &#39;&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module&#39;
@@ -140,7 +140,7 @@ Passed. I have the right magic number 1000
 </pre></div>
 </div>
 <p>If you comment the bootstrapping of modulets, then you&#8217;ll get something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python test_modulet.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python test_modulet.py
 Beginning with 3 in /tmp/tmpeI1oYA
 Wrong magic number
 Traceback (most recent call last):
@@ -241,7 +241,7 @@ in the box.</p>
       <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
-      &copy; Copyright 2014, 2015, Manuel Vázquez Acosta. </p>
+      &copy; Copyright 2016, Manuel Vázquez Acosta. </p>
       <p>Content licensed under the Creative Commons
       attribution-noncommercial-sharealike License.
       </p></footer></div> <!-- footer-container -->
