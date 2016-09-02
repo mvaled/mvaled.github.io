@@ -78,7 +78,7 @@ put some stress in the network and diminish the usefulness of caches.</p>
 <p>Since Sep 19th, 2015 we introduced a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/03741a2cb81907b4b67ca8437f260b073689d212">patch</a> in
 Odoo to avoid bundling of static assets when using a SPDY or HTTP/2
 proxy like Nginx.</p>
-<p>Reportedly, this has worked very good in our case where some users
+<p>Reportedly, this has worked very well in our case where some users
 have slow connections.  However, measuring the logs of a week we see
 that about 21% of GET request are assets:</p>
 <div class="highlight-default"><div class="highlight"><pre><span/>$ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l

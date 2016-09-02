@@ -18,7 +18,7 @@ Since Sep 19th, 2015 we introduced a `patch <merchise-8.0-spdy_>`__ in
 Odoo to avoid bundling of static assets when using a SPDY or HTTP/2
 proxy like Nginx.
 
-Reportedly, this has worked very good in our case where some users
+Reportedly, this has worked very well in our case where some users
 have slow connections.  However, measuring the logs of a week we see
 that about 21% of GET request are assets::
 
