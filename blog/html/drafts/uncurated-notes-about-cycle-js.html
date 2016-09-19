@@ -1,0 +1,256 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Blog mostly about software.">
+        <meta name="viewport" content="width=device-width">
+        <title>Non-curated notes about Cycle.js &mdash; Manuel on Software - Reloaded</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/mva.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <!-- Load modernizr and JQuery -->
+<script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="../_static/vendor/jquery-1.8.2.min.js"></script>
+<script src="../_static/plugins.js"></script>
+<script src="../_static/main.js"></script>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <!-- link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.0-alpha' type='text/css' media='all' / -->
+    <!-- link rel='stylesheet' id='syntax-merriweather-css'  href='http://fonts.googleapis.com/css?family=Merriweather%3A400%2C300%2C300italic%2C400italic%2C700%2C700italic&#038;ver=4.0-alpha' type='text/css' media='all' / --></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../index.html">Manuel on Software - Reloaded</a></h1></hgroup>
+          </header>
+      <!--    <h1 id="toggle-nav" class="menu-toggle">
+      <span class="screen-reader-text">Menu</span></h1>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../pages/about-this.html">About this</a>
+        </li>
+        </ul>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="non-curated-notes-about-cycle-js">
+<h1>Non-curated notes about Cycle.js</h1>
+<p>In the past few days I have been reading about Reactive Programming.  Mostly
+about how it&#8217;s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
+post is by no means an account of well thought ideas, but my first ideas and
+notes while reading about it.</p>
+<p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my
+opinion:</p>
+<ul>
+<li><p class="first">There&#8217;s a single type of connector between the components: the streams.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Both <span class="docutils literal"><span class="pre">sources</span></span> and <span class="docutils literal"><span class="pre">sinks</span></span> return streams.</p>
+</div>
+</li>
+<li><p class="first">There are two distinct type of computational components: the drivers and the
+the <span class="docutils literal"><span class="pre">main(sources)</span></span> function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Intent, view and model functions may be regarded as internal
+structure of <span class="docutils literal"><span class="pre">main()</span></span>.</p>
+</div>
+</li>
+</ul>
+<p>This is appealing because the architecture is simple.  You may understand the
+main points of this architecture in about an hour.  You may recall this is
+actually an evolution (or instance) of the producer-consumer pattern.</p>
+<p>There&#8217;s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
+the &#8216;dialog abstraction&#8217;.  Actually, this is what caught my attention in the
+first place.  It goes like: your program outputs are the input to an external
+(possibly human) entity which, in turn, may react and produce more events in
+your program&#8217;s source streams.</p>
+<p>Architecturally this is simple and good.</p>
+<div class="section" id="components">
+<h2>Components</h2>
+<blockquote>
+<div><p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
+<p class="attribution">&mdash;From the Cycle.js documentation</p>
+</div></blockquote>
+<p>When it comes to designing an application or component you have to decide
+about the type of events your application may receive and the expected output
+events it may produce in response.</p>
+<p>The previous statement is only true in two cases:</p>
+<ul class="simple">
+<li>Your &#8216;smaller&#8217; Cycle.js application does not need to interact with other
+parts of your &#8216;larger&#8217; application.</li>
+<li>Your &#8216;smaller&#8217; Cycle.js application exposes its model; or you have &#8220;model
+drivers&#8221;.</li>
+</ul>
+<p>I think this becomes rather obvious in the 16th part of the Egghead&#8217;s video
+series on Cycle.js.  The one when they make the slider component and they need
+to expose the stream of &#8216;values&#8217; from the slider.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Actually the documentation states that components expose, somehow,
+its state.</p>
+</div>
+<div class="section" id="streams-to-the-extreme-and-localization">
+<h3>Streams to the extreme (and localization)</h3>
+<p>The Egghead&#8217;s series exposes how Cycle.js became to be and you can, therefore,
+see the evolution it is.  Is a short video series worth watching: right to the
+point without many detours.</p>
+<p>There&#8217;s a video when they needed to make a component out of the Height and
+Weight sliders, and they needed to pass parameters like the label, min value
+and max value. I thought they were going to use old plain closures:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">const</span> <span class="n">label</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">label</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
+    <span class="k">return</span> <span class="n">main</span><span class="p">(</span><span class="n">sources</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It came as a surprise that they put those parameters into a <span class="docutils literal"><span class="pre">props</span></span>
+<strong>source</strong> to the <span class="docutils literal"><span class="pre">main()</span></span> function of the component.</p>
+<p>At first I thought that was really far fetched, but after thinking about it a
+bit more I think is can be really useful.</p>
+<p>I started to think about an application with just a slider and a language
+selector:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Height</span><span class="p">:</span> <span class="mi">6</span> <span class="n">feet</span>   <span class="o">&lt;-----</span><span class="n">o</span><span class="o">--&gt;</span>
+
+<span class="n">Choose</span> <span class="n">language</span><span class="p">:</span> <span class="p">[</span><span class="n">ENG</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The slider component is the one we see in the video series.  The language
+selector is a selection component and the expected behavior is that when I
+change the language the <em>entire application</em> changes to the new language.</p>
+<p>My first thought is that the language selector gets is value from a driver
+(which I don&#8217;t know if it already exists) that deals with localization.  Let&#8217;s
+say you can obtain such a driver like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
+   <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
+   <span class="n">locale</span><span class="p">:</span> <span class="n">makeLocaleDriver</span><span class="p">({</span><span class="n">languages</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;en_US&#39;</span><span class="p">,</span> <span class="s1">&#39;es_ES&#39;</span><span class="p">],</span> <span class="o">...</span><span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>The driver would let you respond to changes in translations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = sources.locale.select(&#39;Height&#39;);
+</pre></div>
+</div>
+<p>Or combining with another mapping from another stream so that the <span class="docutils literal"><span class="pre">props</span></span>
+stream remains almost unchanged:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
+</pre></div>
+</div>
+<p>However, after revisiting that last idea, I noticed that it doesn&#8217;t work.  A
+change in in the locale does not trigger any event in the <span class="docutils literal"><span class="pre">props$</span></span> stream.
+Assuming that <span class="docutils literal"><span class="pre">locale.current$</span></span> is a stream of localization object, this may
+work:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = props$.combine(sources.locale.current$)
+                     .map((label, locale) =&gt; locale.gettext(label));
+</pre></div>
+</div>
+<p>The thing gets a little bit more tricky when it comes to changing the units:
+feet vs meter, etc...  I&#8217;ve been thinking about it for a bit.  The most
+problematic issue is that state is not clearly owned unless we introduce a
+kind of <em>quantity</em> for which the unit of measure is explicit:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
+    <span class="n">props</span><span class="p">:</span> <span class="n">xs</span><span class="o">.</span><span class="n">of</span><span class="p">({</span>
+       <span class="n">value</span><span class="p">:</span> <span class="n">new</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="n">Unit</span><span class="o">.</span><span class="n">Length</span><span class="o">.</span><span class="n">cm</span><span class="p">),</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>However this may seem a bit overreaching for a single <em>value</em> that only needs
+to be in between two boundaries (slider).</p>
+<p>This is, IMO the breaking point: If I really need to manage units on my
+application and those need to be fully localized, my components might be
+regarded as over-engineered for other apps.  My only hope is that a simple
+slider, without any knowledge of units, might be wrapped inside a
+<cite>FullyLocalizedSlider</cite> for that purpose.</p>
+</div>
+</div>
+<div class="section" id="open-questions">
+<h2>Open questions</h2>
+<p>Most of the ideas exposed above are not battle tested.  I happen to be
+evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
+that require almost real-times updates, and the stream interface is thus quite
+natural.</p>
+<p>There are challenges about integrating my components with the rest of the
+application, and being an application that must display at least three
+languages I need to think on advance about the problems I would face.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="../categories/programming.html">Programming</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../tags/ui.html">UI</a>, <a href="../tags/thought.html">Thought</a></span>
+        </div>
+        </div>
+    
+    </article>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'mvaled-io';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the
+      <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><aside class="sidebar"></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper"><p>
+      &copy; Copyright 2016, Manuel Vázquez Acosta. </p>
+      <p>Content licensed under the Creative Commons
+      attribution-noncommercial-sharealike License.
+      </p></footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
