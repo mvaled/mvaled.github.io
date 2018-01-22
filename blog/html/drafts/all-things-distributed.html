@@ -27,12 +27,13 @@
 <script src="../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../_static/plugins.js"></script>
 <script src="../_static/main.js"></script>
-<link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script>
@@ -73,15 +74,15 @@
 <p>In the <a href="#id1"><span class="problematic" id="id2">`Riak Handbook by Mathias Meyer &lt;riak-handbook_&gt;`__</span></a> there a
 first definition of a distributed system:</p>
 <blockquote>
-<div>&#8220;By distributed systems I&#8217;m referring to systems that use more
-than one computer, a node, to get a job done&#8221;</div></blockquote>
+<div>“By distributed systems I’m referring to systems that use more
+than one computer, a node, to get a job done”</div></blockquote>
 <p>By this definition even a simple website may simply be distributed
 by having a computer for the DB, another for the web application
 itself, and (if needed) another computer for the SMTP server that
 sends emails on behalf of the site.</p>
 <p>Of course, all of that software (the DB, the web app and the mail
 server) could be stuffed into a single box and now the system is not
-distributed... Not quite right, isn&#8217;t it?</p>
+distributed… Not quite right, isn’t it?</p>
 <p>This definition does not satisfy our intuition about what a
 distributed system is.  By it everything is.</p>
 <p>When does my system is a distributed system?  Put it differently:
@@ -91,7 +92,7 @@ required?  Does my DB and application boxes count as separate nodes?</p>
 <p>The answer to that question requires a clear definition of what a
 distributed system is, or the benefits to design your system as a
 distributed system.</p>
-<p>Though I don&#8217;t pretend to give a definition in this post, I will
+<p>Though I don’t pretend to give a definition in this post, I will
 argue that many information system should follow distributed
 patterns.  In fact, I will argue that ERP systems are going to
 collapse unless integration is done with distribution in mind.</p>

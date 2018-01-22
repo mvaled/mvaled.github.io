@@ -4,8 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
-   2016/09/19/uncurated-notes-about-cycle-js
-   2016/09/02/generating-unique-static-urls-in-odoo
+   2018/01/22/foldl-in-terms-of-foldr
    2015/09/12/odoo-bus-implementation
    2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today
    2015/05/26/odoo-at-last

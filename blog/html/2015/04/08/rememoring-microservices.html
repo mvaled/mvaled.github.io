@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="Hot-swapping Python modules. An experiment." href="../../02/18/greenlet-local-python-modules-an-experiment.html" /><link rel="prev" title="Odoo at last!" href="../../05/26/odoo-at-last.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Hot-swapping Python modules. An experiment." href="../../02/18/greenlet-local-python-modules-an-experiment.html" /><link rel="prev" title="Odoo at last!" href="../../05/26/odoo-at-last.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -70,19 +71,19 @@
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="memento-microservices">
 <h1>Memento: microservices</h1>
-<p>Lately there&#8217;s been a raise of the debate about Microservices architectures.
+<p>Lately there’s been a raise of the debate about Microservices architectures.
 Reading about the stuff I realized I did once architect an application called
 Pyxel based on the same principles, though different.</p>
-<p>Pyxel reached only its first prototype and was never actually deployed.  I&#8217;d
-say it wasn&#8217;t given the chance to prove itself.  So I argue it was technically
+<p>Pyxel reached only its first prototype and was never actually deployed.  I’d
+say it wasn’t given the chance to prove itself.  So I argue it was technically
 sound and, although only a prototype and thus needing improvements, it would
 have meet its stated requirements <a class="footnote-reference" href="#disagreement" id="id1">[1]</a>.</p>
-<p>I haven&#8217;t been given permission to freely distribute the source code.  But the
+<p>I haven’t been given permission to freely distribute the source code.  But the
 architecture was published in several public events, so I can freely describe
 it here.</p>
 <div class="section" id="pyxel">
 <h2>Pyxel</h2>
-<p>Pyxel&#8217;s goal was simple:</p>
+<p>Pyxel’s goal was simple:</p>
 <blockquote>
 <div>Be a shared repository of photographs for the news media that wish to
 collaborate.</div></blockquote>
@@ -107,19 +108,19 @@ network.</li>
 were defined a syntax allowing from very simple queries aided with pattern
 recognition (PR) of names and dates, to very specific queries that make the
 PR mostly unused.</li>
-<li>A &#8220;feature&#8221; index.  This basically allowed to find similar images.  There
+<li>A “feature” index.  This basically allowed to find similar images.  There
 were two indexes, one based on Hu moments and the other based on wavelets.</li>
 <li>Several image processing nodes, that take images from the queue and:<ul>
 <li>Extract IPTC metadata and put it the catalog</li>
 <li>Extract image features to allow detection of similar images.</li>
-<li>Produce &#8220;web versions&#8221; for the image.  We always kept the original file,
-but to keep the design of the prototype simple there was an &#8220;as-is web
-version&#8221; that simply returned the same file as the input.</li>
+<li>Produce “web versions” for the image.  We always kept the original file,
+but to keep the design of the prototype simple there was an “as-is web
+version” that simply returned the same file as the input.</li>
 </ul>
 </li>
 <li>A web application that communicates with the index and the catalogs.</li>
 <li>An FTP server that injects images to the queue using a FUSE mount point
-(drag-and-drop to the browser wasn&#8217;t common yet).</li>
+(drag-and-drop to the browser wasn’t common yet).</li>
 </ul>
 <p>That were the main components and all of them ran independently.  Of course
 for some services to perform at 100%, they required others to be working.  The
@@ -128,7 +129,7 @@ or to upload new images if the queue was out of reach.</p>
 </div>
 <div class="section" id="the-principles-stand">
 <h2>The principles stand</h2>
-<p>Microservices are &#8220;a take&#8221; on the same old issue about software composition.
+<p>Microservices are “a take” on the same old issue about software composition.
 Conceptually <a class="reference external" href="https://www.cs.umd.edu/class/spring2003/cmsc838p/Design/criteria.pdf">Parnas</a> still rules: must do modules.  Names have changed and
 several rules to build better modules (components, services, etc) have been
 provided.</p>
@@ -145,14 +146,14 @@ to have the prototype working as soon as possible.</p>
 <p>We chose Pyro to test our prototype not to keep it forever if it performed
 poorly.  And though our first tests were positive there was some slowness.</p>
 <p>To accommodate for a possible replacement of Pyro we chose to provide our own
-&#8220;idiom&#8221; (in Python) to connect and communicate with services:</p>
+“idiom” (in Python) to connect and communicate with services:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">service</span><span class="p">(</span><span class="s1">&#39;pyxel.queue&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">queue</span>
     <span class="n">queue</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That pattern was designed to have an appearance as simple as RPC.  Later we
 found that <a class="reference external" href="http://steve.vinoski.net/pdf/IEEE-RPC_Under_Fire.pdf">RPC was under fire</a>, but the project was being shut down, so we
-didn&#8217;t fix that.</p>
+didn’t fix that.</p>
 <p>Under current views Pyxel needs several changes.  I can think of a couple:</p>
 <ul class="simple">
 <li>Probably exposing the queue to the client-side of the web application

@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="The bus implementation in Odoo and notification systems in the Web" href="../../../2015/09/12/odoo-bus-implementation.html" /><link rel="prev" title="Non-curated notes about Cycle.js" href="../19/uncurated-notes-about-cycle-js.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -89,15 +90,15 @@ $ egrep &#39;GET .* HTTP&#39; /var/log/nginx/o.access.log.1 | wc -l
 50216
 </pre></div>
 </div>
-<p>Odoo&#8217;s default cache expiration time is seven days.  This is
-considerably low taking into account that bundle&#8217;s URLs change when
+<p>Odoo’s default cache expiration time is seven days.  This is
+considerably low taking into account that bundle’s URLs change when
 the content does.</p>
 <p>Another issue is that assets that change can be served staled from the
 caches for seven days.</p>
-<p>We&#8217;re taking the path to produce unique URLs for static assets.  Our
+<p>We’re taking the path to produce unique URLs for static assets.  Our
 current work can be seen in our <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-unique-static-urls">merchise-unique-static-urls</a>
 branch.  In our development/deployment scenarios these simple changes
-would suffice for JS and CSS.  There&#8217;s still work to do regarding
+would suffice for JS and CSS.  There’s still work to do regarding
 invalidation of static images in our templates.</p>
 </div>
 
@@ -117,10 +118,7 @@ invalidation of static images in our templates.</p>
     <div class="timestamp postmeta">
             <span>September 02, 2016</span>
         </div>
-    <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../19/uncurated-notes-about-cycle-js.html">Non-curated notes about Cycle.js</a></li>
-            <li class="right"><a href="../../../2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the Web</a> &raquo; </li>
-        </ul></article>
+    </article>
     <div id="disqus_thread"></div>
     <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */

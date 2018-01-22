@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="What I’ve been doing lately" href="../../../2014/12/27/lately.html" /><link rel="prev" title="Memento: microservices" href="../../04/08/rememoring-microservices.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="What I’ve been doing lately" href="../../../2014/12/27/lately.html" /><link rel="prev" title="Memento: microservices" href="../../04/08/rememoring-microservices.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -70,13 +71,13 @@
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="hot-swapping-python-modules-an-experiment">
 <h1>Hot-swapping Python modules. An experiment.</h1>
-<p>A new project I&#8217;m involved with will <em>probably</em> require dozens of servers
+<p>A new project I’m involved with will <em>probably</em> require dozens of servers
 running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlets</a> each.  Top-level greenlets represent jobs
 and their children will be individual tasks those greenlets are
 coordinating/supervising.</p>
 <p>This model, however prototypical, resembles that of the <a class="reference external" href="http://www.erlang.org/">OTP</a> in Erlang.  A
 greenlet may be either a supervisor or a worker.</p>
-<p>But there&#8217;s something missing in our platform that Erlang do have and that
+<p>But there’s something missing in our platform that Erlang do have and that
 might yield huge benefits.  You can change your Erlang code while the program
 is running.</p>
 <div class="section" id="modulets-the-idea">
@@ -84,7 +85,7 @@ is running.</p>
 <p>I asked myself if I could devise an <em>import mechanism</em> that would allow to
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.</p>
-<p>To exemplify, let&#8217;s say a typical tasks is:</p>
+<p>To exemplify, let’s say a typical tasks is:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
    <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">send_email</span>
    <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">wait_reply</span>
@@ -101,9 +102,9 @@ their confirmation emails and replying to them (or ignoring them).</p>
 <p>However, we start receiving lot of bounces in the postmaster inbox.  Some
 users have entered a wrong email address.  A change is in order.</p>
 <p>In response, we change our implementation of <span class="docutils literal"><span class="pre">send_email</span></span> so that it does
-<a class="reference external" href="http://en.wikipedia.org/wiki/Variable_envelope_return_path">VERP</a> to know which recipients&#8217; address are bouncing, and also create a new
+<a class="reference external" href="http://en.wikipedia.org/wiki/Variable_envelope_return_path">VERP</a> to know which recipients’ address are bouncing, and also create a new
 <cite>job</cite> that involves receiving confirmation email when a new user registers.</p>
-<p>We&#8217;d love to simply update our <span class="docutils literal"><span class="pre">jobs.util</span></span> package and be done with it like
+<p>We’d love to simply update our <span class="docutils literal"><span class="pre">jobs.util</span></span> package and be done with it like
 this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ source server-virtual-env/bin/activate
 $ pip install -U jobs.util -i https://my.private.server/
@@ -112,20 +113,20 @@ $ pip install -U jobs.util -i https://my.private.server/
 <p>New jobs will pick up the new version and the older jobs will keep working as
 if nothing would have changed.</p>
 <p>That would be really nice.  Such a hot-swap of Python modules per job is what
-I&#8217;m calling a &#8220;modulet&#8221;.</p>
-<p>Currently I have a &#8220;working&#8221; <strong>yet very experimental and undertested</strong>
+I’m calling a “modulet”.</p>
+<p>Currently I have a “working” <strong>yet very experimental and undertested</strong>
 implementation of such a mechanism in our <a class="reference external" href="https://github.com/merchise-autrement/xoutil/tree/experimental-modulets/xoutil/modules">experimental modulets branch</a> in
 xoutil.</p>
 </div>
 <div class="section" id="modulets-in-xoutil">
 <h2>Modulets in xoutil</h2>
 <p>The current implementation is a very early proof of concept and not something
-you&#8217;d like to put outside your playground.</p>
+you’d like to put outside your playground.</p>
 <p>The file <a class="reference external" href="https://github.com/merchise-autrement/xoutil/blob/experimental-modulets/xoutil/modules/test_modulet.py"><span class="docutils literal"><span class="pre">test_modulet.py</span></span></a> is a simple script you may run to see it working.
 It simply creates a temporary module <span class="docutils literal"><span class="pre">magic_module</span></span> that has the
 <span class="docutils literal"><span class="pre">get_magic</span></span> function.  This function returns a single value.</p>
 <p>The test launches three greenlets that simply call the <span class="docutils literal"><span class="pre">get_magic</span></span> function
-and asserts it returns the &#8220;right&#8221; magic value.  Between launches the module
+and asserts it returns the “right” magic value.  Between launches the module
 gets updated to return a different magic value, which is passed as an argument
 to the newly created greenlet.</p>
 <p>A single run will print something like:</p>
@@ -139,7 +140,7 @@ Passed. I have the right magic number 1001
 Passed. I have the right magic number 1000
 </pre></div>
 </div>
-<p>If you comment the bootstrapping of modulets, then you&#8217;ll get something like:</p>
+<p>If you comment the bootstrapping of modulets, then you’ll get something like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ python test_modulet.py
 Beginning with 3 in /tmp/tmpeI1oYA
 Wrong magic number
@@ -163,7 +164,7 @@ Passed. I have the right magic number 1000
 <div class="section" id="future-work">
 <h2>Future work</h2>
 <p>Since we are at the very early stages of this project is not easy to predict
-if we&#8217;ll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest/">celery</a> based solution be
+if we’ll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest/">celery</a> based solution be
 enough.</p>
 <p>If we were to keep it, there are several things to improve:</p>
 <ul>
@@ -176,14 +177,14 @@ erases those that are no longer used.</p>
 be) the repr of the greenlet object.</p>
 <p>For the purposes of isolating different versions of the same code we can
 either use the timestamp of the files, the version of the distribution,
-etc...</p>
+etc…</p>
 <p>Running a <a class="reference external" href="http://diesel.io/">diesel</a> server will quickly eat all your RAM unless this is
 changed.</p>
 <p>When a <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlet</a> dies the only one informed is its parent.  But we certainly
-don&#8217;t want jobs to mess with <span class="docutils literal"><span class="pre">sys.modules</span></span> to clean our own mess.</p>
+don’t want jobs to mess with <span class="docutils literal"><span class="pre">sys.modules</span></span> to clean our own mess.</p>
 <p>This poses a challenge of its own and may be delegated outside <cite>xoutil</cite>
 itself.</p>
-<p>That being said, it&#8217;s likely that the calculation of the current namespace
+<p>That being said, it’s likely that the calculation of the current namespace
 and how to dispose of unused modules will be extensions points of
 <cite>modulets</cite>.</p>
 </li>
@@ -194,10 +195,10 @@ the entire standard library (which is not expected to change unless you
 change Python).</p>
 <p>We can also allow white-listing.  Both ways are on the table.</p>
 <p>The white-list imposes more explicit architecture of your platform since it
-requires throughout revision of which modules you&#8217;re willing to update on
+requires throughout revision of which modules you’re willing to update on
 the run.</p>
 <p>Access to both lists will be a public API of the Modulet Manager.  I can
-envision a remote-control console you&#8217;ll use to include a new module in the
+envision a remote-control console you’ll use to include a new module in the
 white-list.  But that will be an application of the modulet API and included
 in the box.</p>
 </li>
@@ -223,7 +224,7 @@ in the box.</p>
         </div>
     <ul class="related clearfix">
             <li class="left"> &laquo; <a href="../../04/08/rememoring-microservices.html">Memento: microservices</a></li>
-            <li class="right"><a href="../../../2014/12/27/lately.html">What I&#8217;ve been doing lately</a> &raquo; </li>
+            <li class="right"><a href="../../../2014/12/27/lately.html">What I’ve been doing lately</a> &raquo; </li>
         </ul></article>
     <div id="disqus_thread"></div>
     <script type="text/javascript">

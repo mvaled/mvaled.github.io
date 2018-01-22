@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="prev" title="Generating unique static URLs in Odoo" href="../../../2016/09/02/generating-unique-static-urls-in-odoo.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="prev" title="Dissecting foldl in terms of foldr" href="../../../2018/01/22/foldl-in-terms-of-foldr.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -73,14 +74,14 @@
 <div class="sidebar">
 <p class="first sidebar-title">Delayed post.</p>
 <p>This post has been delayed for a very, very long time.  If I trust the logs
-in my blog&#8217;s git repository the post is &#8220;finished&#8221; since Sat&nbsp;Sep&nbsp;12, 2015.
-Well, that&#8217;s not true, and I must really finish it now.</p>
+in my blog’s git repository the post is “finished” since Sat&nbsp;Sep&nbsp;12, 2015.
+Well, that’s not true, and I must really finish it now.</p>
 <p>As it happens, in the meantime, I was not twiddling my fingers and I made
-two &#8220;advances&#8221; about the bus implementation:</p>
+two “advances” about the bus implementation:</p>
 <ul class="last simple">
 <li>I made a successful implementation of a cross-tab bus implementation:
 <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-8.0-bus-service-worker">https://github.com/merchise-autrement/odoo/tree/merchise-8.0-bus-service-worker</a></li>
-<li>I discovered that Odoo 9&#8217;s code base already has the cross-tab feature
+<li>I discovered that Odoo 9’s code base already has the cross-tab feature
 integrated.</li>
 </ul>
 </div>
@@ -99,14 +100,14 @@ that holds the status of users in the chat.</p>
 thought) Odoo would use a single DB connection per worker process and another
 one for the gevent worker that would simply serialize <em>all</em> the chat related
 queries.</p>
-<p>This spike was against all rationale I could think of, but honestly I didn&#8217;t
+<p>This spike was against all rationale I could think of, but honestly I didn’t
 check my assumptions by reading the code.  They might just be the wrong
 assumptions in the first place, and I needed to really read the code to see
 what was really happening.</p>
 <p>After restoring the threaded deployment the concurrency issues dropped again.
-They didn&#8217;t get to the same levels they were before, but, at the same time, we
+They didn’t get to the same levels they were before, but, at the same time, we
 were introducing other modules (and the related staff), so there are more open
-tabs...  Afterwards we went back to the process model, and the issues spiked
+tabs…  Afterwards we went back to the process model, and the issues spiked
 again, however in a smaller amount.</p>
 <p>Several weeks later I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
 implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
@@ -120,30 +121,30 @@ being full very often.  We already knew that:</p>
 <li>For each cron worker at least 2 connections are used: one holds the cron job
 locked while the other is used by the job itself.</li>
 <li>The bus (used for the chat) also uses another connection to the DB
-&#8220;postgres&#8221;: Notifications and wake-ups of bus-related events use this
+“postgres”: Notifications and wake-ups of bus-related events use this
 connection.</li>
 </ul>
 <p>The most suspicious sign, however, was that with a pool size of 32, this issue
 came from time to time.</p>
 <p>Time went by and the issue remained at an acceptable (for us) level of few
-dozens per day.  You may say it&#8217;s too much, but, bear with me, it&#8217;s reasonable
+dozens per day.  You may say it’s too much, but, bear with me, it’s reasonable
 for our hardware and user base.</p>
 <p>Just a few days ago, we realized that issues coming from our gevent-based
-process were not being properly reported to our <a class="reference external" href="http://getsentry.com/">Sentry</a>.  We <a class="reference external" href="https://github.com/merchise-autrement/xoeuf/commit/d4b3bb7f0d972f31382aad8e6d1bf37c5a74ce99">fixed the issue</a> and observed that we&#8217;re getting about 2.5k DB collisions
+process were not being properly reported to our <a class="reference external" href="http://getsentry.com/">Sentry</a>.  We <a class="reference external" href="https://github.com/merchise-autrement/xoeuf/commit/d4b3bb7f0d972f31382aad8e6d1bf37c5a74ce99">fixed the issue</a> and observed that we’re getting about 2.5k DB collisions
 per day reports again.  And once more the query the table where most of
-collisions happen is &#8216;im_chat_presence&#8217;.</p>
+collisions happen is ‘im_chat_presence’.</p>
 <p>As a workaround we simply <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/555b5699b96178d5c87f36c0f692dbe8dcf0facb">reduced</a> the update rate for that table.  But a
 better solutions needed to be found.</p>
 <div class="section" id="cross-tab-polling">
 <h2>Cross-tab polling</h2>
-<p>By looking better our users&#8217; usage pattern, we discovered that users switch
+<p>By looking better our users’ usage pattern, we discovered that users switch
 from tab to tab regularly and thus the polling is still high.  So we went down
 the path of figuring out a way to have a single polling connection even when
 many were opened.</p>
 <p>I remembered the Local Storage API and went down to write a simple proof of
 concept of listening events of the <span class="docutils literal"><span class="pre">localStorage</span></span> from different tabs.  The
 proof of concept yielded good results, and so I turned to Google and search
-for &#8220;cross-tab communication&#8221; and found the <a class="reference external" href="https://github.com/nodeca/tabex">tabex</a> library.</p>
+for “cross-tab communication” and found the <a class="reference external" href="https://github.com/nodeca/tabex">tabex</a> library.</p>
 <p>After that, replacing the implementation of the bus for a new one that was
 based on a exchanged between tabs was not very hard.  These are the commits
 done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
@@ -153,13 +154,13 @@ done in our branch (in reverse topological order as in <span class="docutils lit
 <span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">&quot;Reduce the presure on im_chat_presence table.&quot;</span>
 <span class="n">eda7638</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Don</span><span class="s1">&#39;t notify if not in polling state.</span>
 <span class="mi">4</span><span class="n">d09ac6</span> <span class="o">*</span> <span class="n">web_celery</span><span class="p">:</span> <span class="n">Use</span> <span class="n">a</span> <span class="n">dedicated</span> <span class="n">bus</span> <span class="n">exchange</span> <span class="k">for</span> <span class="n">jobs</span><span class="o">.</span>
-<span class="mi">84239</span><span class="n">e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
+<span class="mf">84239e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
 <span class="mi">2</span><span class="n">cb27da</span> <span class="o">*</span> <span class="n">Improve</span> <span class="n">the</span> <span class="n">bus</span> <span class="n">to</span> <span class="n">allow</span> <span class="n">tab</span> <span class="n">synchronization</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>The file <a class="reference external" href="https://github.com/merchise-autrement/odoo/blob/merchise-8.0-bus-service-worker/addons/bus/static/src/js/bus.rst"><span class="docutils literal"><span class="pre">addons/bus/static/src/js/bus.rst</span></span></a> contains the new design explained.</p>
 <p>A few weeks ago I did the <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/4690d8d466fe622a1a2449403cc41ae78d4caafe">first merge</a> our 8.0 changes into the 9.0 branch.
-On the process I realized that Odoo 9.0&#8217;s bus was improved and now contains
+On the process I realized that Odoo 9.0’s bus was improved and now contains
 the a cross-tab communication feature.</p>
 <p>So probably I end up backporting their implementation into 8.0.</p>
 </div>
@@ -168,7 +169,7 @@ the a cross-tab communication feature.</p>
 <table class="docutils footnote" frame="void" id="notify" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course it allows the web app to change the window&#8217;s title when
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course it allows the web app to change the window’s title when
 then user has an unread message, but in our case this notification is also
 unneeded, because the message is actually being read in another tab.</td></tr>
 </tbody>
@@ -193,7 +194,7 @@ unneeded, because the message is actually being read in another tab.</td></tr>
             <span>September 12, 2015</span>
         </div>
     <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../../../2016/09/02/generating-unique-static-urls-in-odoo.html">Generating unique static URLs in Odoo</a></li>
+            <li class="left"> &laquo; <a href="../../../2018/01/22/foldl-in-terms-of-foldr.html">Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></a></li>
             <li class="right"><a href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of today</a> &raquo; </li>
         </ul></article>
     <div id="disqus_thread"></div>

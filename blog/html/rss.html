@@ -5,194 +5,84 @@
         <link>http://mvaled.github.io/blog/html/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Mon, 19 Sep 2016 00:00:00 -0400</pubDate>
+        <pubDate>Mon, 22 Jan 2018 00:00:00 -0500</pubDate>
         
         <item>
-            <link>http://mvaled.github.io/blog/html/2016/09/19/uncurated-notes-about-cycle-js.html</link>
-            <guid>http://mvaled.github.io/blog/html/2016/09/19/uncurated-notes-about-cycle-js.html</guid>
-            <title><![CDATA[Non-curated notes about Cycle.js]]></title>
-            <description><![CDATA[<h1>Non-curated notes about Cycle.js</h1>
-<p>In the past few days I have been reading about Reactive Programming.  Mostly
-about how it’s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
-post is by no means an account of well thought ideas, but my first ideas and
-notes while reading about it.</p>
-<p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my
-opinion:</p>
-<ul>
-<li><p class="first">There’s a single type of connector between the components: the streams.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Both <span class="docutils literal"><span class="pre">sources</span></span> and <span class="docutils literal"><span class="pre">sinks</span></span> return streams.</p>
-</div>
-</li>
-<li><p class="first">There are two distinct type of computational components: the drivers and the
-the <span class="docutils literal"><span class="pre">main(sources)</span></span> function.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Intent, view and model functions may be regarded as internal
-structure of <span class="docutils literal"><span class="pre">main()</span></span>.</p>
-</div>
-</li>
-</ul>
-<p>This is appealing because the architecture is simple.  You may understand the
-main points of this architecture in about an hour.  You may recall this is
-actually an evolution (or instance) of the producer-consumer pattern.</p>
-<p>There’s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
-the ‘dialog abstraction’.  Actually, this is what caught my attention in the
-first place.  It goes like: your program outputs are the input to an external
-(possibly human) entity which, in turn, may react and produce more events in
-your program’s source streams.</p>
-<p>Architecturally this is simple and good.</p>
-<div class="section" id="components">
-<h2>Components</h2>
-<blockquote>
-<div><p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
-<p class="attribution">—From the Cycle.js documentation</p>
-</div></blockquote>
-<p>When it comes to designing an application or component you have to decide
-about the type of events your application may receive and the expected output
-events it may produce in response.</p>
-<p>The previous statement is only true in two cases:</p>
-<ul class="simple">
-<li>Your ‘smaller’ Cycle.js application does not need to interact with other
-parts of your ‘larger’ application.</li>
-<li>Your ‘smaller’ Cycle.js exposes its model; or you have “model drivers”.</li>
-</ul>
-<p>I think this becomes rather obvious in the 16th part of the Egghead’s video
-series on Cycle.js.  The one when they make the slider component and they need
-to expose the stream of ‘values’ from the slider.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Actually the documentation states that components expose, somehow,
-its state.</p>
-</div>
-<div class="section" id="streams-to-the-extreme-and-localization">
-<h3>Streams to the extreme (and localization)</h3>
-<p>The Egghead’s series exposes how Cycle.js became to be and you can, therefore,
-see the evolution it is.  Is a short video series worth watching: right to the
-point without many detours.</p>
-<p>There’s a video when they needed to make a component out of the Height and
-Weight sliders, and they needed to pass parameters like the label, min value
-and max value. I thought they were going to use old plain closures:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">const</span> <span class="n">label</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">label</span><span class="p">;</span>
-    <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
-    <span class="k">return</span> <span class="n">main</span><span class="p">(</span><span class="n">sources</span><span class="p">);</span>
-<span class="p">}</span>
+            <link>http://mvaled.github.io/blog/html/2018/01/22/foldl-in-terms-of-foldr.html</link>
+            <guid>http://mvaled.github.io/blog/html/2018/01/22/foldl-in-terms-of-foldr.html</guid>
+            <title><![CDATA[Dissecting foldl in terms of foldr]]></title>
+            <description><![CDATA[<h1>Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></h1>
+<p>The book ‘Real World Haskell’ provides an implementation of <span class="docutils literal"><span class="pre">foldl</span></span> in terms
+of <span class="docutils literal"><span class="pre">foldr</span></span>:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">myFoldl</span><span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">myFoldl</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
+   <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>It came as a surprise that they put those parameters into a <span class="docutils literal"><span class="pre">props</span></span>
-<strong>source</strong> to the <span class="docutils literal"><span class="pre">main()</span></span> function of the component.</p>
-<p>At first I thought that was really far fetched, but after thinking about it a
-bit more I think is can be really useful.</p>
-<p>I started to think about an application with just a slider and a language
-selector:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Height</span><span class="p">:</span> <span class="mi">6</span> <span class="n">feet</span>   <span class="o">&lt;-----</span><span class="n">o</span><span class="o">--&gt;</span>
+<p>They ask the reader (me) to try to understand the implementation.  They warn
+it’s not trivial, but I found it interesting.  So, I just want to share my
+line of thought.</p>
+<p>The first thing I noticed is that <span class="docutils literal"><span class="pre">z</span></span> is not an argument to <span class="docutils literal"><span class="pre">foldr</span></span>; you
+can rewrite the first line as:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="p">(</span><span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span><span class="p">)</span> <span class="n">z</span>
+</pre></div>
+</div>
+<p>This makes visible that the result of the <span class="docutils literal"><span class="pre">foldr</span></span> is a function that takes
+<cite>z</cite> as an argument.  By looking a the case <span class="docutils literal"><span class="pre">foldr</span> <span class="pre">step</span> <span class="pre">id</span> <span class="pre">[]</span></span>, which equates
+to <span class="docutils literal"><span class="pre">id</span></span>, we can see that the type of the <span class="docutils literal"><span class="pre">foldr</span></span>’s result is <span class="docutils literal"><span class="pre">b</span> <span class="pre">-&gt;</span> <span class="pre">b</span></span>.</p>
+<p>This also implies that the type of <span class="docutils literal"><span class="pre">step</span></span> must be <span class="docutils literal"><span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span> <span class="pre">b)</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span>
+<span class="pre">b)</span></span>.  You can prove that by extracting <span class="docutils literal"><span class="pre">step</span></span>:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">step1</span> <span class="n">f</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 
-<span class="n">Choose</span> <span class="n">language</span><span class="p">:</span> <span class="p">[</span><span class="n">ENG</span><span class="p">]</span>
+<span class="nf">myFoldl1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">myFoldl1</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="n">step1</span> <span class="n">f</span><span class="p">)</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
 </pre></div>
 </div>
-<p>The slider component is the one we see in the video series.  The language
-selector is a selection component and the expected behavior is that when I
-change the language the <em>entire application</em> changes to the new language.</p>
-<p>My first thought is that the language selector gets is value from a driver
-(which I don’t know if it already exists) that deals with localization.  Let’s
-say you can obtain such a driver like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
-   <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
-   <span class="n">locale</span><span class="p">:</span> <span class="n">makeLocaleDriver</span><span class="p">({</span><span class="n">languages</span><span class="p">:</span> <span class="p">[</span><span class="s1">'en_US'</span><span class="p">,</span> <span class="s1">'es_ES'</span><span class="p">],</span> <span class="o">...</span><span class="p">})</span>
-<span class="p">})</span>
+<p>Use <cite>ghci</cite> to verify that.</p>
+<p>Now comes the <em>funny</em> part of the implementation: <span class="docutils literal"><span class="pre">step</span></span> is defined with
+three arguments</p>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The driver would let you respond to changes in translations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>const label$ = sources.locale.select('Height');
+<p>but <span class="docutils literal"><span class="pre">foldr</span></span> only passes the first two, and that’s totally fine; the result
+will be another function.</p>
+<p>You can make this explicit:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">myFoldl2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">myFoldl2</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
+   <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Or combining with another mapping from another stream so that the <span class="docutils literal"><span class="pre">props</span></span>
-stream remains almost unchanged:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
+<p>That’s a beautiful thing about Haskell both definitions of <span class="docutils literal"><span class="pre">step</span></span> are
+actually indistinguishable:</p>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="o">=</span> \<span class="n">a</span> <span class="o">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>However, after revisiting that last idea, I noticed that it doesn’t work.  A
-change in in the locale does not trigger any event in the <span class="docutils literal"><span class="pre">props$</span></span> stream.
-Assuming that <span class="docutils literal"><span class="pre">locale.current$</span></span> is a stream of localization object, this may
-work:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>const label$ = props$.combine(sources.locale.current$)
-                     .map((label, locale) =&gt; locale.gettext(label));
+<p>The first one takes an <em>equation-like</em> outlook that I find very elegant in a
+programming language.</p>
+<p>Having all that we can easily follow how the expression <span class="docutils literal"><span class="pre">myFoldl</span> <span class="pre">(+)</span> <span class="pre">0</span> <span class="pre">[1,</span>
+<span class="pre">2]</span></span> would proceed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span/>myFoldl (+) 0 [1, 2]
+(foldr step id [1, 2]) 0                  -- by def. of myFoldl
+(step 1 (foldr step id [2])) 0            -- by def. of foldr
+(step 1 (step 2 (foldr step id []))) 0    -- by def. of foldr
+(step 1 (step 2 id)) 0                    -- by def. of foldr for []
+(step 1 (\a -&gt; id(a + 2))) 0              -- applying `step 2 id`
+
+(step 1 (\a -&gt; a + 2)) 0                  -- applying id, Haskell might not
+                                             do this right now
+
+(\x -&gt; (\a -&gt; a + 2)(x + 1)) 0            -- applying step
+(\x -&gt; (x + 1) + 2) 0                     -- applying the inner lambda
+(0 + 1) + 2                               -- applying the outer lambda
 </pre></div>
 </div>
-<p>The thing gets a little bit more tricky when it comes to changing the units:
-feet vs meter, etc...  I’ve been thinking about it for a bit.  The most
-problematic issue is that state is not clearly owned unless we introduce a
-kind of <em>quantity</em> for which the unit of measure is explicit:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
-    <span class="n">props</span><span class="p">:</span> <span class="n">xs</span><span class="o">.</span><span class="n">of</span><span class="p">({</span>
-       <span class="n">value</span><span class="p">:</span> <span class="n">new</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="n">Unit</span><span class="o">.</span><span class="n">Length</span><span class="o">.</span><span class="n">cm</span><span class="p">),</span>
-    <span class="p">})</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-<p>However this may seem a bit overreaching for a single <em>value</em> that only needs
-to be in between two boundaries (slider).</p>
-<p>This is, IMO the breaking point: If I really need to manage units on my
-application and those need to be fully localized, my components might be
-regarded as over-engineered for other apps.  My only hope is that a simple
-slider, without any knowledge of units, might be wrapped inside a
-<cite>FullyLocalizedSlider</cite> for that purpose.</p>
-</div>
-</div>
-<div class="section" id="open-questions">
-<h2>Open questions</h2>
-<p>Most of the ideas exposed above are not battle tested.  I happen to be
-evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
-that require almost real-times updates, and the stream interface is thus quite
-natural.</p>
-<p>There are challenges about integrating my components with the rest of the
-application, and being an application that must display at least three
-languages I need to think on advance about the problems I would face.</p>
-</div>
+<p>And that’s (more or less) how <span class="docutils literal"><span class="pre">myFoldl</span></span> works.</p>
 ]]></description>
             <category><![CDATA[ Programming ]]></category>
-             <pubDate>Mon, 19 Sep 2016 00:00:00 -0400</pubDate>
-        </item>
-    
-        <item>
-            <link>http://mvaled.github.io/blog/html/2016/09/02/generating-unique-static-urls-in-odoo.html</link>
-            <guid>http://mvaled.github.io/blog/html/2016/09/02/generating-unique-static-urls-in-odoo.html</guid>
-            <title><![CDATA[Generating unique static URLs in Odoo]]></title>
-            <description><![CDATA[<h1>Generating unique static URLs in Odoo</h1>
-<p>By default Odoo bundles static assets (JS and CSS) within a couple of
-files: All CSS files are bundled into a single big CSS file.  The same
-happens for JS files.</p>
-<p>The URLs of those bundles vary with any change within any of the
-included files.  But those files are big.  Therefore changing assets
-put some stress in the network and diminish the usefulness of caches.</p>
-<p>Since Sep 19th, 2015 we introduced a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/03741a2cb81907b4b67ca8437f260b073689d212">patch</a> in
-Odoo to avoid bundling of static assets when using a SPDY or HTTP/2
-proxy like Nginx.</p>
-<p>Reportedly, this has worked very well in our case where some users
-have slow connections.  However, measuring the logs of a week we see
-that about 21% of GET request are assets:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>$ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
-10554
-
-$ egrep 'GET .* HTTP' /var/log/nginx/o.access.log.1 | wc -l
-50216
-</pre></div>
-</div>
-<p>Odoo’s default cache expiration time is seven days.  This is
-considerably low taking into account that bundle’s URLs change when
-the content does.</p>
-<p>Another issue is that assets that change can be served staled from the
-caches for seven days.</p>
-<p>We’re taking the path to produce unique URLs for static assets.  Our
-current work can be seen in our <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-unique-static-urls">merchise-unique-static-urls</a>
-branch.  In our development/deployment scenarios these simple changes
-would suffice for JS and CSS.  There’s still work to do regarding
-invalidation of static images in our templates.</p>
-]]></description>
-            <category><![CDATA[ Programming ]]></category>
-             <pubDate>Fri, 02 Sep 2016 00:00:00 -0400</pubDate>
+             <pubDate>Mon, 22 Jan 2018 00:00:00 -0500</pubDate>
         </item>
     
         <item>
@@ -236,7 +126,7 @@ what was really happening.</p>
 <p>After restoring the threaded deployment the concurrency issues dropped again.
 They didn’t get to the same levels they were before, but, at the same time, we
 were introducing other modules (and the related staff), so there are more open
-tabs...  Afterwards we went back to the process model, and the issues spiked
+tabs…  Afterwards we went back to the process model, and the issues spiked
 again, however in a smaller amount.</p>
 <p>Several weeks later I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
 implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
@@ -283,7 +173,7 @@ done in our branch (in reverse topological order as in <span class="docutils lit
 <span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">"Reduce the presure on im_chat_presence table."</span>
 <span class="n">eda7638</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Don</span><span class="s1">'t notify if not in polling state.</span>
 <span class="mi">4</span><span class="n">d09ac6</span> <span class="o">*</span> <span class="n">web_celery</span><span class="p">:</span> <span class="n">Use</span> <span class="n">a</span> <span class="n">dedicated</span> <span class="n">bus</span> <span class="n">exchange</span> <span class="k">for</span> <span class="n">jobs</span><span class="o">.</span>
-<span class="mi">84239</span><span class="n">e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
+<span class="mf">84239e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
 <span class="mi">2</span><span class="n">cb27da</span> <span class="o">*</span> <span class="n">Improve</span> <span class="n">the</span> <span class="n">bus</span> <span class="n">to</span> <span class="n">allow</span> <span class="n">tab</span> <span class="n">synchronization</span><span class="o">.</span>
 </pre></div>
 </div>
@@ -328,7 +218,7 @@ tomorrow.  It’s this simple.  And that’s cumulative too; meaning that if you
 neglect your future productivity, it will be slowly diminishing until a point
 of negative competitive disadvantage where you’ll find yourself struggling to
 keep up instead of innovating.</p>
-<p>And it’s so damn exhausting to explain why...</p>
+<p>And it’s so damn exhausting to explain why…</p>
 <p>Software complexity does not come from the tools, but from the mental
 framework required (and imposed at times) to understand it.  So don’t ever
 think measuring Cyclomatic Complexity (CC) and other similar metrics will
@@ -354,7 +244,7 @@ and naming things.</p>
 </div>
 <p>This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
-function <cite>quicksort</cite>...</p>
+function <cite>quicksort</cite>…</p>
 <div class="highlight-default"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
 <span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
 </pre></div>
@@ -366,7 +256,7 @@ following lines of code?</p>
 </div>
 <p>This line of code has a CC of 1: as good as it gets, isn’t it?  But it’s so
 darn difficult to read that unless you have your brain wired up to see “forget
-the link between this group and the implied_group”...  To be fair there is
+the link between this group and the implied_group”…  To be fair there is
 someone out there in the OpenERP universe that cared a bit about this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span/><span class="c1"># file addons/base/ir/ir_fields.py</span>
 
@@ -451,9 +341,9 @@ first place.</p>
 <p>Our users started to report slowness after a couple of hours of working.
 First, we noticed that the call to <span class="docutils literal"><span class="pre">load_needaction</span></span> was taking too long and
 find out this call asked for too much it did not need, we <a class="reference external" href="https://github.com/odoo/odoo/pull/6772">provided a fix</a> and some loose benchmarks.  Though this patch needs
-to be completed, the slowness was solved... for a moment.</p>
+to be completed, the slowness was solved… for a moment.</p>
 <p>Some users kept reporting the Odoo interface was freezing all the time, even
-inviting them to go out and drink a cup of coffee...  But other users were
+inviting them to go out and drink a cup of coffee…  But other users were
 happy about it after the patch.  Closer inspection showed many of the AJAX
 calls were blocking waiting for a socket to be available.</p>
 <p>It turned out these users had created a habit of opening several tabs when
@@ -729,7 +619,7 @@ erases those that are no longer used.</p>
 be) the repr of the greenlet object.</p>
 <p>For the purposes of isolating different versions of the same code we can
 either use the timestamp of the files, the version of the distribution,
-etc...</p>
+etc…</p>
 <p>Running a <a class="reference external" href="http://diesel.io/">diesel</a> server will quickly eat all your RAM unless this is
 changed.</p>
 <p>When a <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlet</a> dies the only one informed is its parent.  But we certainly
@@ -765,7 +655,7 @@ in the box.</p>
         <item>
             <link>http://mvaled.github.io/blog/html/2014/12/27/lately.html</link>
             <guid>http://mvaled.github.io/blog/html/2014/12/27/lately.html</guid>
-            <title><![CDATA[What I've been doing lately]]></title>
+            <title><![CDATA[What I’ve been doing lately]]></title>
             <description><![CDATA[<h1>What I’ve been doing lately</h1>
 <p>Lately my work has been mainly driven by the need to efficiently and smoothly
 deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
@@ -817,12 +707,12 @@ a breakthrough.</p>
             <guid>http://mvaled.github.io/blog/html/2014/12/09/apples-and-oranges.html</guid>
             <title><![CDATA[Apples and Oranges.  How books can mislead our thinking process.]]></title>
             <description><![CDATA[<h1>Apples and Oranges.  How books can mislead our thinking process.</h1>
-<p>I’ve just began to read the book “Twisted Network Programming”... <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
+<p>I’ve just began to read the book “Twisted Network Programming”… <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
 a popular framework for networking programming.  However, I’d probably skim
-most of the Book.  I’m sorry... But as it happens, in the second page of the
+most of the Book.  I’m sorry… But as it happens, in the second page of the
 second chapter (the one that I began with) they show an illustration on
 “Comparing single-threaded, multithreaded, and event-driven program flow”.</p>
-<p>Hum... <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+<p>Hum… <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
 some impact on how events are dealt with, but are they truly comparable or the
 sole responsibles for the program flow?</p>
 <p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
@@ -839,10 +729,10 @@ that’s simply dishonest.</p>
 <p>Probably this is not what the authors meant, and I’m probably going prejudiced
 just because of this wrong picture. However, I go to a book like this not for
 pleasure but for information.  Finding a piece of data that is not trustworthy
-raises a flag and I start to read with a magnifying glass... And that’s not
+raises a flag and I start to read with a magnifying glass… And that’s not
 fun either.</p>
 <p>Don’t expect me to finish this book.</p>
-<p class="rubric">Update of a couple of hours later...</p>
+<p class="rubric">Update of a couple of hours later…</p>
 <p>A few lines below the illustration of matters, they actually say:</p>
 <blockquote>
 <div>“The event-driven version of the program interleaves the execution of the
@@ -937,7 +827,7 @@ Exception: bus.Bus unavailable
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># threaded mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"</span><span class="si">%s</span><span class="s2">.Bus"</span> <span class="o">%</span> <span class="n">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"</span><span class="si">%s</span><span class="s2">.Bus"</span> <span class="o">%</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
         <span class="n">t</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span>
@@ -1003,12 +893,12 @@ is present in 7.0, but not in 8.0.  More digging:</p>
 </div>
 <p>Got you!  So, Antony removed the icon cause he thought it was the wall, but
 Amit had removed it from the wall cause because of the icon.  These things
-happen...</p>
+happen…</p>
 <p>After reverting this commit, the icon is reestablished.  But, then I realized
 that the feature, however hidden, is actually there: If you click on the
-“Share with ...” and instead of writing your message there, click on the
+“Share with …” and instead of writing your message there, click on the
 “expand” icon, then you get the same as pressing the (now missing) email icon.
-I think that the icon is required, though, since now the “Share...” box is not
+I think that the icon is required, though, since now the “Share…” box is not
 shown until HR is installed, and the email icon allows to send email to
 outsiders.  My current employer is willing to remove email in favor of this
 messaging module.  This may hold him back.</p>
@@ -1058,7 +948,7 @@ opens a window.  He fills the data and clicks “save”, but suddenly it fails
 saying that Bob (a salesperson) should have filled the “Account payable” and
 “Account receivable” fields.  So Bob says:</p>
 <blockquote>
-<div><p>Oh, boy!  What did I do wrong?.  Let’s try again...  Nope...  Uh.  What
+<div><p>Oh, boy!  What did I do wrong?.  Let’s try again…  Nope…  Uh.  What
 should I do?</p>
 <p>Hey!  Peter.  Do you know what’s happening here?  This won’t let me enter
 this client’s contact data, it keeps telling me that these accounts are
@@ -1066,12 +956,12 @@ wrong?  What the heck are these accounts anyway?</p>
 </div></blockquote>
 <p>And Peter has no idea, so he calls Sally who’s a very pretty girl that
 probably does not have a clue either about what’s happening but it’s so nice
-to have a reason to approach her...  Surprisingly Sally seems to be only one
+to have a reason to approach her…  Surprisingly Sally seems to be only one
 who actually paid attention to the information meeting that morning and she
 says:</p>
 <blockquote>
 <div>Ah!  This probably has to do with the Accounting module being installed.
-They say they will do that today...  Let’s ask Stephanie.</div></blockquote>
+They say they will do that today…  Let’s ask Stephanie.</div></blockquote>
 <p>And Stephanie realizes what’s happening and fix it somehow.  An hour later Bob
 can resume his work and finish processing his CRM lead.</p>
 <p>The end.</p>
@@ -1113,7 +1003,7 @@ the installation of many other modules, including <span class="docutils literal"
 think about the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model as an attempt to merge the contact
 information for both clients, suppliers and employees into a single
 entity <a class="footnote-reference" href="#v-contact-info" id="id6">[4]</a>.  It has many fields that comprise name, job
-position, contact information, etc...</p>
+position, contact information, etc…</p>
 <p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">"res.partner"</span></span> gets appended a
 whole bunch of other fields, including the said “account payable” and “account
 receivable” fields, which are also marked as mandatory:</p>
@@ -1145,7 +1035,7 @@ are “special”.</p>
 above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup/">Database setup</a>
 in the OpenERP Book.  That’s the reason I’m using this case to open the
 <cite>OpenERP corner</cite>.  If you deploy CRM before accounting <a class="footnote-reference" href="#accounting-last" id="id7">[1]</a>
-you’d probably find no interest in reading a topic called “Database setup”...
+you’d probably find no interest in reading a topic called “Database setup”…
 you have set your database up already, haven’t you?</p>
 <p>You should notice that both <cite>Account receivable</cite> and <cite>Account payable</cite> are, in
 fact, properties (i.e defined via <span class="docutils literal"><span class="pre">fields.property</span></span>).  This actually means
@@ -1296,8 +1186,8 @@ different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis
         <item>
             <link>http://mvaled.github.io/blog/html/2014/06/05/odoo.html</link>
             <guid>http://mvaled.github.io/blog/html/2014/06/05/odoo.html</guid>
-            <title><![CDATA[Odoo... I mean OpenERP]]></title>
-            <description><![CDATA[<h1>Odoo... I mean OpenERP</h1>
+            <title><![CDATA[Odoo… I mean OpenERP]]></title>
+            <description><![CDATA[<h1>Odoo… I mean OpenERP</h1>
 <p>This is old news: OpenERP has changed its name and now becomes Odoo.  I don’t
 care much about the change in the name.  It’s the processes I’m interested in.</p>
 <p>The rename was synchronized with a move from <a class="reference external" href="https://launchpad.net/">Launchpad</a> to <a class="reference external" href="https://github.com/">Github</a>.  This, I
@@ -1382,30 +1272,30 @@ in <a class="reference external" href="https://github.com/merchise-autrement/xot
 <li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
 code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
 test.</p>
-<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">query object</span></a> that stands for the expression
+<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query object</span></a> that stands for the expression
 was not totally consolidated.  The components of the query were not
 defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
 <p>In this case the “literate” spirit dominated the design process, not the
 testing.  Simply we didn’t have a full-stack: ie. the language and the
-<a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">translators</span></a> so that a query could actually be
+<a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">translators</span></a> so that a query could actually be
 executed.</p>
 </li>
 <li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <span class="xref std std-ref">lack of clear
-boundaries</span> between several sub-expressions in a
-single <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">query</span></a>.</p>
+to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/_revenge/index.html#inner-workings" title="(in xotl.ql v0.3.1)"><span class="xref std std-ref">lack of clear
+boundaries</span></a> between several sub-expressions in a
+single <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query</span></a>.</p>
 <p>This was the hardest stage.  Testing was employed to keep track of several
 design decisions.  In this stage made appearance our “Particle Bubble” and
 this was complex enough to deserve a handful of tests.  Although several
 tests did influence the design, they hardly drove it.</p>
 </li>
-<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/api/translation/py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.3.0)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
+<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/api/translation/py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.3.1)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
 actually were testing a very TDD friendly layer:  Given this state of the
 world, the following query should return these objects.</p>
 </li>
 <li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
 our entire design and do reverse engineering of python byte-code to extract
-build the <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.0)"><span class="xref std std-term">query object</span></a>.</p>
+build the <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query object</span></a>.</p>
 <p>What is foreseeable is that again a kind of literate driven design is going
 to be king: The core structure of the language (the query AST) is what’s
 being designed so, what’s the point of asking if the result of calling a

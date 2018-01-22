@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="Odoo at last!" href="../../05/26/odoo-at-last.html" /><link rel="prev" title="The bus implementation in Odoo and notification systems in the Web" href="../../09/12/odoo-bus-implementation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Odoo at last!" href="../../05/26/odoo-at-last.html" /><link rel="prev" title="The bus implementation in Odoo and notification systems in the Web" href="../../09/12/odoo-bus-implementation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -72,20 +73,20 @@
 <h1>The productivity of tomorrow trumps that of today</h1>
 <div class="sidebar">
 <p class="first sidebar-title">Editorial note</p>
-<p>I&#8217;m republishing this post from my old blog (which is no longer online).
-It&#8217;s published as it were when I first made it online with only minor
+<p>I’m republishing this post from my old blog (which is no longer online).
+It’s published as it were when I first made it online with only minor
 changes.  But I think I stand by this still.</p>
-<p class="last">Hope you&#8217;ll enjoy the reading.</p>
+<p class="last">Hope you’ll enjoy the reading.</p>
 </div>
-<p>That&#8217;s probably harsh, but I think it is absolutely right.  Doing crappy
+<p>That’s probably harsh, but I think it is absolutely right.  Doing crappy
 software today to be more productive today will make you less productive
-tomorrow.  It&#8217;s this simple.  And that&#8217;s cumulative too; meaning that if you
+tomorrow.  It’s this simple.  And that’s cumulative too; meaning that if you
 neglect your future productivity, it will be slowly diminishing until a point
-of negative competitive disadvantage where you&#8217;ll find yourself struggling to
+of negative competitive disadvantage where you’ll find yourself struggling to
 keep up instead of innovating.</p>
-<p>And it&#8217;s so damn exhausting to explain why...</p>
+<p>And it’s so damn exhausting to explain why…</p>
 <p>Software complexity does not come from the tools, but from the mental
-framework required (and imposed at times) to understand it.  So don&#8217;t ever
+framework required (and imposed at times) to understand it.  So don’t ever
 think measuring Cyclomatic Complexity (CC) and other similar metrics will
 yield something close to the <a class="reference external" href="http://www.osnews.com/story/19266/WTFs_m">true measure</a> of the
 <a class="reference external" href="http://blog.codinghorror.com/whos-your-coding-buddy/">quality of your code</a>.</p>
@@ -109,19 +110,19 @@ and naming things.</p>
 </div>
 <p>This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
-function <cite>quicksort</cite>...</p>
+function <cite>quicksort</cite>…</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
 <span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
 </pre></div>
 </div>
-<p>A quiz in less than 5 seconds: What does it mean in OpenERP&#8217;s ORM the
+<p>A quiz in less than 5 seconds: What does it mean in OpenERP’s ORM the
 following lines of code?</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">&#39;implied_ids&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
 </pre></div>
 </div>
-<p>This line of code has a CC of 1: as good as it gets, isn&#8217;t it?  But it&#8217;s so
-darn difficult to read that unless you have your brain wired up to see &#8220;forget
-the link between this group and the implied_group&#8221;...  To be fair there is
+<p>This line of code has a CC of 1: as good as it gets, isn’t it?  But it’s so
+darn difficult to read that unless you have your brain wired up to see “forget
+the link between this group and the implied_group”…  To be fair there is
 someone out there in the OpenERP universe that cared a bit about this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># file addons/base/ir/ir_fields.py</span>
 
@@ -135,7 +136,7 @@ someone out there in the OpenERP universe that cared a bit about this:</p>
 </pre></div>
 </div>
 <p>But no one else is using it!</p>
-<p>And, yes, it&#8217;s exhausting going over this.</p>
+<p>And, yes, it’s exhausting going over this.</p>
 </div>
 
     <div class="postmeta">

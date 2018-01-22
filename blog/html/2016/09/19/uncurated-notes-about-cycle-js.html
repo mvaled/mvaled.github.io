@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="Generating unique static URLs in Odoo" href="../02/generating-unique-static-urls-in-odoo.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -71,13 +72,13 @@
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="non-curated-notes-about-cycle-js">
 <h1>Non-curated notes about Cycle.js</h1>
 <p>In the past few days I have been reading about Reactive Programming.  Mostly
-about how it&#8217;s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
+about how it’s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
 post is by no means an account of well thought ideas, but my first ideas and
 notes while reading about it.</p>
 <p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my
 opinion:</p>
 <ul>
-<li><p class="first">There&#8217;s a single type of connector between the components: the streams.</p>
+<li><p class="first">There’s a single type of connector between the components: the streams.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Both <span class="docutils literal"><span class="pre">sources</span></span> and <span class="docutils literal"><span class="pre">sinks</span></span> return streams.</p>
@@ -95,11 +96,11 @@ structure of <span class="docutils literal"><span class="pre">main()</span></spa
 <p>This is appealing because the architecture is simple.  You may understand the
 main points of this architecture in about an hour.  You may recall this is
 actually an evolution (or instance) of the producer-consumer pattern.</p>
-<p>There&#8217;s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
-the &#8216;dialog abstraction&#8217;.  Actually, this is what caught my attention in the
+<p>There’s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
+the ‘dialog abstraction’.  Actually, this is what caught my attention in the
 first place.  It goes like: your program outputs are the input to an external
 (possibly human) entity which, in turn, may react and produce more events in
-your program&#8217;s source streams.</p>
+your program’s source streams.</p>
 <p>Architecturally this is simple and good.</p>
 <div class="section" id="components">
 <h2>Components</h2>
@@ -112,13 +113,13 @@ about the type of events your application may receive and the expected output
 events it may produce in response.</p>
 <p>The previous statement is only true in two cases:</p>
 <ul class="simple">
-<li>Your &#8216;smaller&#8217; Cycle.js application does not need to interact with other
-parts of your &#8216;larger&#8217; application.</li>
-<li>Your &#8216;smaller&#8217; Cycle.js exposes its model; or you have &#8220;model drivers&#8221;.</li>
+<li>Your ‘smaller’ Cycle.js application does not need to interact with other
+parts of your ‘larger’ application.</li>
+<li>Your ‘smaller’ Cycle.js exposes its model; or you have “model drivers”.</li>
 </ul>
-<p>I think this becomes rather obvious in the 16th part of the Egghead&#8217;s video
+<p>I think this becomes rather obvious in the 16th part of the Egghead’s video
 series on Cycle.js.  The one when they make the slider component and they need
-to expose the stream of &#8216;values&#8217; from the slider.</p>
+to expose the stream of ‘values’ from the slider.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Actually the documentation states that components expose, somehow,
@@ -126,10 +127,10 @@ its state.</p>
 </div>
 <div class="section" id="streams-to-the-extreme-and-localization">
 <h3>Streams to the extreme (and localization)</h3>
-<p>The Egghead&#8217;s series exposes how Cycle.js became to be and you can, therefore,
+<p>The Egghead’s series exposes how Cycle.js became to be and you can, therefore,
 see the evolution it is.  Is a short video series worth watching: right to the
 point without many detours.</p>
-<p>There&#8217;s a video when they needed to make a component out of the Height and
+<p>There’s a video when they needed to make a component out of the Height and
 Weight sliders, and they needed to pass parameters like the label, min value
 and max value. I thought they were going to use old plain closures:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
@@ -154,7 +155,7 @@ selector:</p>
 selector is a selection component and the expected behavior is that when I
 change the language the <em>entire application</em> changes to the new language.</p>
 <p>My first thought is that the language selector gets is value from a driver
-(which I don&#8217;t know if it already exists) that deals with localization.  Let&#8217;s
+(which I don’t know if it already exists) that deals with localization.  Let’s
 say you can obtain such a driver like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
    <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
@@ -171,7 +172,7 @@ stream remains almost unchanged:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
 </pre></div>
 </div>
-<p>However, after revisiting that last idea, I noticed that it doesn&#8217;t work.  A
+<p>However, after revisiting that last idea, I noticed that it doesn’t work.  A
 change in in the locale does not trigger any event in the <span class="docutils literal"><span class="pre">props$</span></span> stream.
 Assuming that <span class="docutils literal"><span class="pre">locale.current$</span></span> is a stream of localization object, this may
 work:</p>
@@ -180,7 +181,7 @@ work:</p>
 </pre></div>
 </div>
 <p>The thing gets a little bit more tricky when it comes to changing the units:
-feet vs meter, etc...  I&#8217;ve been thinking about it for a bit.  The most
+feet vs meter, etc…  I’ve been thinking about it for a bit.  The most
 problematic issue is that state is not clearly owned unless we introduce a
 kind of <em>quantity</em> for which the unit of measure is explicit:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
@@ -227,10 +228,7 @@ languages I need to think on advance about the problems I would face.</p>
     <div class="timestamp postmeta">
             <span>September 19, 2016</span>
         </div>
-    <ul class="related clearfix">
-            <li class="left"></li>
-            <li class="right"><a href="../02/generating-unique-static-urls-in-odoo.html">Generating unique static URLs in Odoo</a> &raquo; </li>
-        </ul></article>
+    </article>
     <div id="disqus_thread"></div>
     <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */

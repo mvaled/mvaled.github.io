@@ -27,12 +27,13 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="next" title="Memento: microservices" href="../../04/08/rememoring-microservices.html" /><link rel="prev" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Memento: microservices" href="../../04/08/rememoring-microservices.html" /><link rel="prev" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -84,7 +85,7 @@ several rounds of testing, finding bugs and incompatibilities in our own
 modules and fixing them.</p>
 <div class="section" id="a-summary-of-the-process">
 <h2>A summary of the process</h2>
-<p>The <a class="reference external" href="https://github.com/OpenUpgrade/OpenUpgrade">OpenUpgrade</a> project proved to be very complete for us &#8211;it had almost
+<p>The <a class="reference external" href="https://github.com/OpenUpgrade/OpenUpgrade">OpenUpgrade</a> project proved to be very complete for us –it had almost
 everything we needed:</p>
 <ul class="simple">
 <li>The Accounting and Project modules were done.</li>
@@ -92,7 +93,7 @@ everything we needed:</p>
 <a class="reference external" href="https://github.com/StefanRijnhart/OpenUpgrade">fork by Stefan Rijnhart</a> had a branch that proved very
 complete for our needs.</li>
 </ul>
-<p>We began by merging Stefan&#8217;s branch into our own clone of the repository.  We
+<p>We began by merging Stefan’s branch into our own clone of the repository.  We
 came into a small issue and <a class="reference external" href="https://github.com/mvaled/OpenUpgrade/commit/57cd439">fixed it</a>.  Afterwards, some of our
 recurrent events were missing the timezone and the migration failed.  For that
 we created the branch <a class="reference external" href="https://github.com/mvaled/OpenUpgrade/tree/8.0-valid-rrules">8.0-valid-rrules</a> and it did the job after a couple of
@@ -104,8 +105,8 @@ published them should anyone finds them useful.</p>
 </div>
 <div class="section" id="the-menu-decomposition">
 <h2>The menu decomposition</h2>
-<p>The biggest issue we&#8217;ve encountered so far is that after several hours of
-operation all the menus stopped working: You clicked the &#8220;Leads&#8221; menu item and
+<p>The biggest issue we’ve encountered so far is that after several hours of
+operation all the menus stopped working: You clicked the “Leads” menu item and
 you got, say, the list of Many2Many fields. (???!!!)</p>
 <p>A first inspection showed that all menu items in the HTML were <em>somehow</em>
 related to the same action id.  Quickly, we truncated the <span class="docutils literal"><span class="pre">ir_ui_menu</span></span> table
@@ -114,15 +115,15 @@ to life once more.</p>
 <p>The day after, the same problem happened.  Deeper inspection of both the code
 and the DB showed the problem lied in the <span class="docutils literal"><span class="pre">ir_values</span></span> table.  That table
 relates menu items with actions.  The rows containing this relation showed
-nonsense: almost all the menu items were related to &#8220;<span class="docutils literal"><span class="pre">res_partner,20</span></span>&#8221;.  And
+nonsense: almost all the menu items were related to “<span class="docutils literal"><span class="pre">res_partner,20</span></span>”.  And
 in the UI this was interpreted to be pointing to the action with id 20.</p>
 <p>Comparing the table before and after the upgrade showed no problem there.  So
 this issue had appeared after the migration itself.</p>
-<p>Our previous method of truncating <span class="docutils literal"><span class="pre">ir_ui_menu</span></span> didn&#8217;t fix this issue cause
+<p>Our previous method of truncating <span class="docutils literal"><span class="pre">ir_ui_menu</span></span> didn’t fix this issue cause
 the <span class="docutils literal"><span class="pre">ir_values</span></span> rows remained there crippling over and over again.  Besides,
 truncating <span class="docutils literal"><span class="pre">ir_ui_menu</span></span> had the unintentional, bad side-effect of removing
 every Mail list in our DB.</p>
-<p>We&#8217;re still on the track about how the <span class="docutils literal"><span class="pre">ir.values</span></span> were messed up in the
+<p>We’re still on the track about how the <span class="docutils literal"><span class="pre">ir.values</span></span> were messed up in the
 first place.</p>
 </div>
 <div class="section" id="the-magical-6-tabs">
@@ -130,9 +131,9 @@ first place.</p>
 <p>Our users started to report slowness after a couple of hours of working.
 First, we noticed that the call to <span class="docutils literal"><span class="pre">load_needaction</span></span> was taking too long and
 find out this call asked for too much it did not need, we <a class="reference external" href="https://github.com/odoo/odoo/pull/6772">provided a fix</a> and some loose benchmarks.  Though this patch needs
-to be completed, the slowness was solved... for a moment.</p>
+to be completed, the slowness was solved… for a moment.</p>
 <p>Some users kept reporting the Odoo interface was freezing all the time, even
-inviting them to go out and drink a cup of coffee...  But other users were
+inviting them to go out and drink a cup of coffee…  But other users were
 happy about it after the patch.  Closer inspection showed many of the AJAX
 calls were blocking waiting for a socket to be available.</p>
 <p>It turned out these users had created a habit of opening several tabs when
@@ -164,11 +165,11 @@ load.</p>
 </div>
 <div class="section" id="epilogue">
 <h2>Epilogue</h2>
-<p>That&#8217;s what our migration to Odoo story has gone so far.  A little bit
+<p>That’s what our migration to Odoo story has gone so far.  A little bit
 stressful at times, specially when the menus went south for the second time,
-but I think we have crossed the yellow line now.  Should anything comes I&#8217;ll
+but I think we have crossed the yellow line now.  Should anything comes I’ll
 report it.</p>
-<p>I&#8217;d love to hear (or read) about others, so I can learn from their experience.</p>
+<p>I’d love to hear (or read) about others, so I can learn from their experience.</p>
 </div>
 </div>
 

@@ -27,12 +27,13 @@
 <script src="_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="_static/plugins.js"></script>
 <script src="_static/main.js"></script>
-<link rel="next" title="Older" href="page2.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="search.html" /><link rel="next" title="Older" href="page2.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.5',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script>
@@ -68,146 +69,75 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2016/09/19/uncurated-notes-about-cycle-js.html">Non-curated notes about Cycle.js</a></h1>
-<p>In the past few days I have been reading about Reactive Programming.  Mostly
-about how it’s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
-post is by no means an account of well thought ideas, but my first ideas and
-notes while reading about it.</p>
-<p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my
-opinion:</p>
-<ul>
-<li><p class="first">There’s a single type of connector between the components: the streams.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Both <span class="docutils literal"><span class="pre">sources</span></span> and <span class="docutils literal"><span class="pre">sinks</span></span> return streams.</p>
-</div>
-</li>
-<li><p class="first">There are two distinct type of computational components: the drivers and the
-the <span class="docutils literal"><span class="pre">main(sources)</span></span> function.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Intent, view and model functions may be regarded as internal
-structure of <span class="docutils literal"><span class="pre">main()</span></span>.</p>
-</div>
-</li>
-</ul>
-<p>This is appealing because the architecture is simple.  You may understand the
-main points of this architecture in about an hour.  You may recall this is
-actually an evolution (or instance) of the producer-consumer pattern.</p>
-<p>There’s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
-the ‘dialog abstraction’.  Actually, this is what caught my attention in the
-first place.  It goes like: your program outputs are the input to an external
-(possibly human) entity which, in turn, may react and produce more events in
-your program’s source streams.</p>
-<p>Architecturally this is simple and good.</p>
-<div class="section" id="components">
-<h2>Components</h2>
-<blockquote>
-<div><p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
-<p class="attribution">—From the Cycle.js documentation</p>
-</div></blockquote>
-<p>When it comes to designing an application or component you have to decide
-about the type of events your application may receive and the expected output
-events it may produce in response.</p>
-<p>The previous statement is only true in two cases:</p>
-<ul class="simple">
-<li>Your ‘smaller’ Cycle.js application does not need to interact with other
-parts of your ‘larger’ application.</li>
-<li>Your ‘smaller’ Cycle.js exposes its model; or you have “model drivers”.</li>
-</ul>
-<p>I think this becomes rather obvious in the 16th part of the Egghead’s video
-series on Cycle.js.  The one when they make the slider component and they need
-to expose the stream of ‘values’ from the slider.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Actually the documentation states that components expose, somehow,
-its state.</p>
-</div>
-<div class="section" id="streams-to-the-extreme-and-localization">
-<h3>Streams to the extreme (and localization)</h3>
-<p>The Egghead’s series exposes how Cycle.js became to be and you can, therefore,
-see the evolution it is.  Is a short video series worth watching: right to the
-point without many detours.</p>
-<p>There’s a video when they needed to make a component out of the Height and
-Weight sliders, and they needed to pass parameters like the label, min value
-and max value. I thought they were going to use old plain closures:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">const</span> <span class="n">label</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">label</span><span class="p">;</span>
-    <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
-    <span class="k">return</span> <span class="n">main</span><span class="p">(</span><span class="n">sources</span><span class="p">);</span>
-<span class="p">}</span>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2018/01/22/foldl-in-terms-of-foldr.html">Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></a></h1>
+<p>The book ‘Real World Haskell’ provides an implementation of <span class="docutils literal"><span class="pre">foldl</span></span> in terms
+of <span class="docutils literal"><span class="pre">foldr</span></span>:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">myFoldl</span><span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">myFoldl</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
+   <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>It came as a surprise that they put those parameters into a <span class="docutils literal"><span class="pre">props</span></span>
-<strong>source</strong> to the <span class="docutils literal"><span class="pre">main()</span></span> function of the component.</p>
-<p>At first I thought that was really far fetched, but after thinking about it a
-bit more I think is can be really useful.</p>
-<p>I started to think about an application with just a slider and a language
-selector:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">Height</span><span class="p">:</span> <span class="mi">6</span> <span class="n">feet</span>   <span class="o">&lt;-----</span><span class="n">o</span><span class="o">--&gt;</span>
+<p>They ask the reader (me) to try to understand the implementation.  They warn
+it’s not trivial, but I found it interesting.  So, I just want to share my
+line of thought.</p>
+<p>The first thing I noticed is that <span class="docutils literal"><span class="pre">z</span></span> is not an argument to <span class="docutils literal"><span class="pre">foldr</span></span>; you
+can rewrite the first line as:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="p">(</span><span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span><span class="p">)</span> <span class="n">z</span>
+</pre></div>
+</div>
+<p>This makes visible that the result of the <span class="docutils literal"><span class="pre">foldr</span></span> is a function that takes
+<cite>z</cite> as an argument.  By looking a the case <span class="docutils literal"><span class="pre">foldr</span> <span class="pre">step</span> <span class="pre">id</span> <span class="pre">[]</span></span>, which equates
+to <span class="docutils literal"><span class="pre">id</span></span>, we can see that the type of the <span class="docutils literal"><span class="pre">foldr</span></span>’s result is <span class="docutils literal"><span class="pre">b</span> <span class="pre">-&gt;</span> <span class="pre">b</span></span>.</p>
+<p>This also implies that the type of <span class="docutils literal"><span class="pre">step</span></span> must be <span class="docutils literal"><span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span> <span class="pre">b)</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span>
+<span class="pre">b)</span></span>.  You can prove that by extracting <span class="docutils literal"><span class="pre">step</span></span>:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">step1</span> <span class="n">f</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 
-<span class="n">Choose</span> <span class="n">language</span><span class="p">:</span> <span class="p">[</span><span class="n">ENG</span><span class="p">]</span>
+<span class="nf">myFoldl1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">myFoldl1</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="n">step1</span> <span class="n">f</span><span class="p">)</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
 </pre></div>
 </div>
-<p>The slider component is the one we see in the video series.  The language
-selector is a selection component and the expected behavior is that when I
-change the language the <em>entire application</em> changes to the new language.</p>
-<p>My first thought is that the language selector gets is value from a driver
-(which I don’t know if it already exists) that deals with localization.  Let’s
-say you can obtain such a driver like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
-   <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
-   <span class="n">locale</span><span class="p">:</span> <span class="n">makeLocaleDriver</span><span class="p">({</span><span class="n">languages</span><span class="p">:</span> <span class="p">[</span><span class="s1">'en_US'</span><span class="p">,</span> <span class="s1">'es_ES'</span><span class="p">],</span> <span class="o">...</span><span class="p">})</span>
-<span class="p">})</span>
+<p>Use <cite>ghci</cite> to verify that.</p>
+<p>Now comes the <em>funny</em> part of the implementation: <span class="docutils literal"><span class="pre">step</span></span> is defined with
+three arguments</p>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The driver would let you respond to changes in translations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>const label$ = sources.locale.select('Height');
+<p>but <span class="docutils literal"><span class="pre">foldr</span></span> only passes the first two, and that’s totally fine; the result
+will be another function.</p>
+<p>You can make this explicit:</p>
+<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">myFoldl2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">myFoldl2</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
+   <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Or combining with another mapping from another stream so that the <span class="docutils literal"><span class="pre">props</span></span>
-stream remains almost unchanged:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
+<p>That’s a beautiful thing about Haskell both definitions of <span class="docutils literal"><span class="pre">step</span></span> are
+actually indistinguishable:</p>
+<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="o">=</span> \<span class="n">a</span> <span class="o">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>However, after revisiting that last idea, I noticed that it doesn’t work.  A
-change in in the locale does not trigger any event in the <span class="docutils literal"><span class="pre">props$</span></span> stream.
-Assuming that <span class="docutils literal"><span class="pre">locale.current$</span></span> is a stream of localization object, this may
-work:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>const label$ = props$.combine(sources.locale.current$)
-                     .map((label, locale) =&gt; locale.gettext(label));
+<p>The first one takes an <em>equation-like</em> outlook that I find very elegant in a
+programming language.</p>
+<p>Having all that we can easily follow how the expression <span class="docutils literal"><span class="pre">myFoldl</span> <span class="pre">(+)</span> <span class="pre">0</span> <span class="pre">[1,</span>
+<span class="pre">2]</span></span> would proceed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span/>myFoldl (+) 0 [1, 2]
+(foldr step id [1, 2]) 0                  -- by def. of myFoldl
+(step 1 (foldr step id [2])) 0            -- by def. of foldr
+(step 1 (step 2 (foldr step id []))) 0    -- by def. of foldr
+(step 1 (step 2 id)) 0                    -- by def. of foldr for []
+(step 1 (\a -&gt; id(a + 2))) 0              -- applying `step 2 id`
+
+(step 1 (\a -&gt; a + 2)) 0                  -- applying id, Haskell might not
+                                             do this right now
+
+(\x -&gt; (\a -&gt; a + 2)(x + 1)) 0            -- applying step
+(\x -&gt; (x + 1) + 2) 0                     -- applying the inner lambda
+(0 + 1) + 2                               -- applying the outer lambda
 </pre></div>
 </div>
-<p>The thing gets a little bit more tricky when it comes to changing the units:
-feet vs meter, etc...  I’ve been thinking about it for a bit.  The most
-problematic issue is that state is not clearly owned unless we introduce a
-kind of <em>quantity</em> for which the unit of measure is explicit:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
-    <span class="n">props</span><span class="p">:</span> <span class="n">xs</span><span class="o">.</span><span class="n">of</span><span class="p">({</span>
-       <span class="n">value</span><span class="p">:</span> <span class="n">new</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="n">Unit</span><span class="o">.</span><span class="n">Length</span><span class="o">.</span><span class="n">cm</span><span class="p">),</span>
-    <span class="p">})</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-<p>However this may seem a bit overreaching for a single <em>value</em> that only needs
-to be in between two boundaries (slider).</p>
-<p>This is, IMO the breaking point: If I really need to manage units on my
-application and those need to be fully localized, my components might be
-regarded as over-engineered for other apps.  My only hope is that a simple
-slider, without any knowledge of units, might be wrapped inside a
-<cite>FullyLocalizedSlider</cite> for that purpose.</p>
-</div>
-</div>
-<div class="section" id="open-questions">
-<h2>Open questions</h2>
-<p>Most of the ideas exposed above are not battle tested.  I happen to be
-evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
-that require almost real-times updates, and the stream interface is thus quite
-natural.</p>
-<p>There are challenges about integrating my components with the rest of the
-application, and being an application that must display at least three
-languages I need to think on advance about the problems I would face.</p>
-</div>
+<p>And that’s (more or less) how <span class="docutils literal"><span class="pre">myFoldl</span></span> works.</p>
 
         <div class="postmeta">
         
@@ -219,57 +149,11 @@ languages I need to think on advance about the problems I would face.</p>
         <div class="tags">
             <span>
                 Tags:
-                <a href="tags/ui.html">UI</a>, <a href="tags/thought.html">Thought</a></span>
+                <a href="tags/haskell.html">Haskell</a></span>
         </div>
         </div>
         <div class="timestamp postmeta">
-            <span>September 19, 2016</span>
-        </div><div class="separator post_separator"></div><h1><a href="2016/09/02/generating-unique-static-urls-in-odoo.html">Generating unique static URLs in Odoo</a></h1>
-<p>By default Odoo bundles static assets (JS and CSS) within a couple of
-files: All CSS files are bundled into a single big CSS file.  The same
-happens for JS files.</p>
-<p>The URLs of those bundles vary with any change within any of the
-included files.  But those files are big.  Therefore changing assets
-put some stress in the network and diminish the usefulness of caches.</p>
-<p>Since Sep 19th, 2015 we introduced a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/03741a2cb81907b4b67ca8437f260b073689d212">patch</a> in
-Odoo to avoid bundling of static assets when using a SPDY or HTTP/2
-proxy like Nginx.</p>
-<p>Reportedly, this has worked very well in our case where some users
-have slow connections.  However, measuring the logs of a week we see
-that about 21% of GET request are assets:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>$ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
-10554
-
-$ egrep 'GET .* HTTP' /var/log/nginx/o.access.log.1 | wc -l
-50216
-</pre></div>
-</div>
-<p>Odoo’s default cache expiration time is seven days.  This is
-considerably low taking into account that bundle’s URLs change when
-the content does.</p>
-<p>Another issue is that assets that change can be served staled from the
-caches for seven days.</p>
-<p>We’re taking the path to produce unique URLs for static assets.  Our
-current work can be seen in our <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-unique-static-urls">merchise-unique-static-urls</a>
-branch.  In our development/deployment scenarios these simple changes
-would suffice for JS and CSS.  There’s still work to do regarding
-invalidation of static images in our templates.</p>
-
-        <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="categories/programming.html">Programming</a></span>
-        </div>
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/odoo.html">Odoo</a></span>
-        </div>
-        </div>
-        <div class="timestamp postmeta">
-            <span>September 02, 2016</span>
+            <span>January 22, 2018</span>
         </div><div class="separator post_separator"></div><h1><a href="2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the Web</a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Delayed post.</p>
@@ -307,7 +191,7 @@ what was really happening.</p>
 <p>After restoring the threaded deployment the concurrency issues dropped again.
 They didn’t get to the same levels they were before, but, at the same time, we
 were introducing other modules (and the related staff), so there are more open
-tabs...  Afterwards we went back to the process model, and the issues spiked
+tabs…  Afterwards we went back to the process model, and the issues spiked
 again, however in a smaller amount.</p>
 <p>Several weeks later I deployed a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/2abfd5ba28e959dda4d6a127a19b3d939008bc1d">patch</a> to the Odoo bus
 implementation that simply reduced the frequency of polling when the <a class="reference external" href="http://www.w3.org/TR/page-visibility/">page is
@@ -354,7 +238,7 @@ done in our branch (in reverse topological order as in <span class="docutils lit
 <span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">"Reduce the presure on im_chat_presence table."</span>
 <span class="n">eda7638</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Don</span><span class="s1">'t notify if not in polling state.</span>
 <span class="mi">4</span><span class="n">d09ac6</span> <span class="o">*</span> <span class="n">web_celery</span><span class="p">:</span> <span class="n">Use</span> <span class="n">a</span> <span class="n">dedicated</span> <span class="n">bus</span> <span class="n">exchange</span> <span class="k">for</span> <span class="n">jobs</span><span class="o">.</span>
-<span class="mi">84239</span><span class="n">e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
+<span class="mf">84239e3</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Beep</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">master</span> <span class="n">tab</span><span class="o">.</span>
 <span class="mi">2</span><span class="n">cb27da</span> <span class="o">*</span> <span class="n">Improve</span> <span class="n">the</span> <span class="n">bus</span> <span class="n">to</span> <span class="n">allow</span> <span class="n">tab</span> <span class="n">synchronization</span><span class="o">.</span>
 </pre></div>
 </div>
@@ -405,7 +289,7 @@ tomorrow.  It’s this simple.  And that’s cumulative too; meaning that if you
 neglect your future productivity, it will be slowly diminishing until a point
 of negative competitive disadvantage where you’ll find yourself struggling to
 keep up instead of innovating.</p>
-<p>And it’s so damn exhausting to explain why...</p>
+<p>And it’s so damn exhausting to explain why…</p>
 <p>Software complexity does not come from the tools, but from the mental
 framework required (and imposed at times) to understand it.  So don’t ever
 think measuring Cyclomatic Complexity (CC) and other similar metrics will
@@ -431,7 +315,7 @@ and naming things.</p>
 </div>
 <p>This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
-function <cite>quicksort</cite>...</p>
+function <cite>quicksort</cite>…</p>
 <div class="highlight-default"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
 <span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
 </pre></div>
@@ -443,7 +327,7 @@ following lines of code?</p>
 </div>
 <p>This line of code has a CC of 1: as good as it gets, isn’t it?  But it’s so
 darn difficult to read that unless you have your brain wired up to see “forget
-the link between this group and the implied_group”...  To be fair there is
+the link between this group and the implied_group”…  To be fair there is
 someone out there in the OpenERP universe that cared a bit about this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span/><span class="c1"># file addons/base/ir/ir_fields.py</span>
 
@@ -531,9 +415,9 @@ first place.</p>
 <p>Our users started to report slowness after a couple of hours of working.
 First, we noticed that the call to <span class="docutils literal"><span class="pre">load_needaction</span></span> was taking too long and
 find out this call asked for too much it did not need, we <a class="reference external" href="https://github.com/odoo/odoo/pull/6772">provided a fix</a> and some loose benchmarks.  Though this patch needs
-to be completed, the slowness was solved... for a moment.</p>
+to be completed, the slowness was solved… for a moment.</p>
 <p>Some users kept reporting the Odoo interface was freezing all the time, even
-inviting them to go out and drink a cup of coffee...  But other users were
+inviting them to go out and drink a cup of coffee…  But other users were
 happy about it after the patch.  Closer inspection showed many of the AJAX
 calls were blocking waiting for a socket to be available.</p>
 <p>It turned out these users had created a habit of opening several tabs when
@@ -822,7 +706,7 @@ erases those that are no longer used.</p>
 be) the repr of the greenlet object.</p>
 <p>For the purposes of isolating different versions of the same code we can
 either use the timestamp of the files, the version of the distribution,
-etc...</p>
+etc…</p>
 <p>Running a <a class="reference external" href="http://diesel.io/">diesel</a> server will quickly eat all your RAM unless this is
 changed.</p>
 <p>When a <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlet</a> dies the only one informed is its parent.  But we certainly
@@ -916,12 +800,12 @@ a breakthrough.</p>
         <div class="timestamp postmeta">
             <span>December 27, 2014</span>
         </div><div class="separator post_separator"></div><h1><a href="2014/12/09/apples-and-oranges.html">Apples and Oranges.  How books can mislead our thinking process.</a></h1>
-<p>I’ve just began to read the book “Twisted Network Programming”... <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
+<p>I’ve just began to read the book “Twisted Network Programming”… <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
 a popular framework for networking programming.  However, I’d probably skim
-most of the Book.  I’m sorry... But as it happens, in the second page of the
+most of the Book.  I’m sorry… But as it happens, in the second page of the
 second chapter (the one that I began with) they show an illustration on
 “Comparing single-threaded, multithreaded, and event-driven program flow”.</p>
-<p>Hum... <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+<p>Hum… <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
 some impact on how events are dealt with, but are they truly comparable or the
 sole responsibles for the program flow?</p>
 <p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
@@ -938,10 +822,10 @@ that’s simply dishonest.</p>
 <p>Probably this is not what the authors meant, and I’m probably going prejudiced
 just because of this wrong picture. However, I go to a book like this not for
 pleasure but for information.  Finding a piece of data that is not trustworthy
-raises a flag and I start to read with a magnifying glass... And that’s not
+raises a flag and I start to read with a magnifying glass… And that’s not
 fun either.</p>
 <p>Don’t expect me to finish this book.</p>
-<p class="rubric">Update of a couple of hours later...</p>
+<p class="rubric">Update of a couple of hours later…</p>
 <p>A few lines below the illustration of matters, they actually say:</p>
 <blockquote>
 <div>“The event-driven version of the program interleaves the execution of the
@@ -1039,7 +923,7 @@ Exception: bus.Bus unavailable
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># threaded mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"</span><span class="si">%s</span><span class="s2">.Bus"</span> <span class="o">%</span> <span class="n">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"</span><span class="si">%s</span><span class="s2">.Bus"</span> <span class="o">%</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
         <span class="n">t</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span>
@@ -1105,12 +989,12 @@ is present in 7.0, but not in 8.0.  More digging:</p>
 </div>
 <p>Got you!  So, Antony removed the icon cause he thought it was the wall, but
 Amit had removed it from the wall cause because of the icon.  These things
-happen...</p>
+happen…</p>
 <p>After reverting this commit, the icon is reestablished.  But, then I realized
 that the feature, however hidden, is actually there: If you click on the
-“Share with ...” and instead of writing your message there, click on the
+“Share with …” and instead of writing your message there, click on the
 “expand” icon, then you get the same as pressing the (now missing) email icon.
-I think that the icon is required, though, since now the “Share...” box is not
+I think that the icon is required, though, since now the “Share…” box is not
 shown until HR is installed, and the email icon allows to send email to
 outsiders.  My current employer is willing to remove email in favor of this
 messaging module.  This may hold him back.</p>
@@ -1135,6 +1019,282 @@ Redundancy is not always bad when it comes to user interface.</p>
         </div>
         <div class="timestamp postmeta">
             <span>August 28, 2014</span>
+        </div><div class="separator post_separator"></div><h1><a href="2014/07/02/integration-v-automation.html">Integration v. Automation</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Editorial note</p>
+<p>I’m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation/">old blog</a>.  It’s published as it were
+when I first made it online with only minor changes.  I’m planning a follow
+up on the subject and more post about my experiences with <a class="reference external" href="http://www.odoo.com/">Odoo</a> (OpenERP).
+That’s I deem this repost needed.</p>
+<p class="last">Hope you’ll enjoy the reading.</p>
+</div>
+<p>Being an OpenERP bee these days has lead me to think a bit about integration,
+how does it happens inside OpenERP, its architecture, assumptions and other
+stuff.  In a first iteration I used to think about integration in terms of
+integrating two (or more) OpenERP addons, for instance, integrating Sales with
+Accounting.  At a very programming-oriented level this reduces, in the current
+state of OpenERP, to integrate their modules.  But later, I found out that
+this approach is fundamentally flawed and causes many quirks.</p>
+<p>This post starts with a tale about one of the many issues we have encounter
+when deploying OpenERP in an small enterprise.  Then I will argue about what
+integration means.  Lastly, I will turn to automation as a mean for
+integration and not the only way to do it.</p>
+<div class="section" id="the-integration-tale">
+<h2>The Integration tale</h2>
+<p>I want to start with a simple and very real <a class="footnote-reference" href="#accounting-last" id="id2">[1]</a> use case: Bob
+is a salesperson processing a <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management">CRM</a> lead.</p>
+<p>The story beings when Bob opens the lead and clicks on the Edit button and the
+first thing he tries to do is to fill the client’s contact info because it’s a
+new client.  He clicks on the edit button besides the “Client” field which
+opens a window.  He fills the data and clicks “save”, but suddenly it fails
+saying that Bob (a salesperson) should have filled the “Account payable” and
+“Account receivable” fields.  So Bob says:</p>
+<blockquote>
+<div><p>Oh, boy!  What did I do wrong?.  Let’s try again…  Nope…  Uh.  What
+should I do?</p>
+<p>Hey!  Peter.  Do you know what’s happening here?  This won’t let me enter
+this client’s contact data, it keeps telling me that these accounts are
+wrong?  What the heck are these accounts anyway?</p>
+</div></blockquote>
+<p>And Peter has no idea, so he calls Sally who’s a very pretty girl that
+probably does not have a clue either about what’s happening but it’s so nice
+to have a reason to approach her…  Surprisingly Sally seems to be only one
+who actually paid attention to the information meeting that morning and she
+says:</p>
+<blockquote>
+<div>Ah!  This probably has to do with the Accounting module being installed.
+They say they will do that today…  Let’s ask Stephanie.</div></blockquote>
+<p>And Stephanie realizes what’s happening and fix it somehow.  An hour later Bob
+can resume his work and finish processing his CRM lead.</p>
+<p>The end.</p>
+<p>So, what is wrong with this story?</p>
+<div class="figure" id="id11">
+<img alt="Computer problems." src="_images/computer_problems.png"/>
+<p class="caption"><span class="caption-text">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</span></p>
+</div>
+<div class="section" id="depiction-of-wrongness">
+<h3>Depiction of wrongness</h3>
+<p>In my opinion there are two things that are clearly wrong with this:</p>
+<ol class="loweralpha">
+<li><p class="first">Requiring data <em>when</em> it’s not required.  When you’re in a CRM use case
+requiring accounting-related seems really overstepping.</p>
+</li>
+<li><p class="first">Not being able to issue a request for completion.  Bob should have been
+able to keep working and after the new client was saved a completion
+request should have been sent to those being able to complete the data.</p>
+<p>That completion request might just get ignored, but other use cases (like
+submit an invoice to that client) would actually require the data and thus
+the cycle would be closed after all.</p>
+</li>
+</ol>
+<p>Some would think that this is just a “configuration problem” as we will
+<a class="reference internal" href="2014/07/02/integration-v-automation.html#on-using-properties">discuss below</a>.  But finding that solution took me several dives into the
+code and re-parsing of the documentation, so I’ll try to walk you through the
+process.</p>
+</div>
+<div class="section" id="the-issue-the-making-off">
+<h3>The issue.  The making off</h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Technical stuff ahead.  Wearing hardhats is mandatory.</p>
+</div>
+<p>By installing the “Accounting &amp; Finance” addon <a class="footnote-reference" href="#v-accountant" id="id4">[2]</a> you touch many
+parts of your system besides installing new stuff.  In fact, the module forces
+the installation of many other modules, including <span class="docutils literal"><span class="pre">product</span></span> <a class="footnote-reference" href="#no-gnucash" id="id5">[3]</a>.</p>
+<p>It also modifies the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model from the <span class="docutils literal"><span class="pre">base</span></span> addon.  You may
+think about the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model as an attempt to merge the contact
+information for both clients, suppliers and employees into a single
+entity <a class="footnote-reference" href="#v-contact-info" id="id6">[4]</a>.  It has many fields that comprise name, job
+position, contact information, etc…</p>
+<p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">"res.partner"</span></span> gets appended a
+whole bunch of other fields, including the said “account payable” and “account
+receivable” fields, which are also marked as mandatory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span/><span class="s1">'property_account_payable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+    <span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
+    <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">"Account Payable"</span><span class="p">,</span>
+    <span class="n">view_load</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">"[('type', '=', 'payable')]"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"This account will be used instead of the default one as the payable account for the current partner"</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+<span class="s1">'property_account_receivable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+    <span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
+    <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">"Account Receivable"</span><span class="p">,</span>
+    <span class="n">view_load</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">"[('type', '=', 'receivable')]"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"This account will be used instead of the default one as the receivable account for the current partner"</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+</pre></div>
+</div>
+<p>This are not actual fields of the model <span class="docutils literal"><span class="pre">"res.partner"</span></span>, but properties, which
+are “special”.</p>
+<div class="section" id="on-using-properties">
+<h4>On using properties</h4>
+<p>Properties are of course related to the “solution” for the problem described
+above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup/">Database setup</a>
+in the OpenERP Book.  That’s the reason I’m using this case to open the
+<cite>OpenERP corner</cite>.  If you deploy CRM before accounting <a class="footnote-reference" href="#accounting-last" id="id7">[1]</a>
+you’d probably find no interest in reading a topic called “Database setup”…
+you have set your database up already, haven’t you?</p>
+<p>You should notice that both <cite>Account receivable</cite> and <cite>Account payable</cite> are, in
+fact, properties (i.e defined via <span class="docutils literal"><span class="pre">fields.property</span></span>).  This actually means
+that those fields take their default values from a global configuration.</p>
+<p>Those values were not properly set in our case cause there were no localized
+account chart that applied to our enterprise.  We have to create all the
+accounts by hand, and yes, we missed (didn’t know) that we have to create
+those properties.</p>
+<p>Our problem is solved by defining those properties in the configuration menu.</p>
+<p>However this workaround is very unsatisfying:</p>
+<ul class="simple">
+<li>It involves the administrator of the system because he’s the one that has
+access to the “Configuration Parameters”.  AFAIK, the accountant
+himself/herself cannot change the defaults, unless you bestow all the powers
+on him/her.</li>
+<li>It does not resolve the integration problem others might present in the
+future.  Integration is harder that having some default values.  For
+instance, Cuban accounting norms establish more than 10 accounts for
+receivables with empty slots for more if needed.  They require to have
+different accounts (receivable and/or payable) for bills to/from people
+(B2C) separated from those bills to/from other enterprises (B2B), and also
+different accounts for long-term and short-terms bills.  The last case
+cannot be decided by just looking at the client or supplier, more
+information about the <cite>economic fact</cite> is needed.</li>
+<li>It does not actually resolve the current integration problem since the
+accountant needs to make sure the “Account Receivable” is the correct one
+for the client and he’s not notified when salesman Bob creates a new
+partner.  So, what really happens is that the accountant needs to review
+journal entries and before posting them, and change the account if needed.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Integration v. Automation</h2>
+<p>An ERP should simplify things by <em>integrating business areas</em>, shouldn’t it?
+That’s the main driver behind the feature of automatically generating journal
+entries.  Under this principle when an invoice is sent to a client a journal
+entry should be made recording we should get paid for that, ie.  the client’s
+account receivable gets increased <a class="footnote-reference" href="#account-normal-balance" id="id9">[5]</a>.  Likewise when
+we get a supplier invoice, an entry should record that we must pay that bill,
+ie.  the supplier’s account payable gets increased.</p>
+<p>You see now how the “Account Receivable” and “Account Payable” fields for the
+partner play their part in the <em>automation</em> of the accounting processes.  This
+is deeply weaved into the <span class="docutils literal"><span class="pre">account</span></span> module’s source code.  Meaning that
+there’s the assumption that partners have those properties we’re talking
+about.  And that’s true because you have injected them and, if you configured
+everything as expected, they have their default values.</p>
+<p>Notice the difference between the expectation of <em>integration</em> of business
+areas and how the integration happens in this case via a very specific kind of
+<em>automation</em>.</p>
+<p>I’ll argue that the current state of this design is flawed.  When standards
+change and/or are not applicable this kind of automation does more harm that
+it helps.</p>
+<p>This is the reason the module that controls the “Anglo-Saxon
+accounting” <a class="footnote-reference" href="#basis" id="id10">[6]</a> is very difficult to understand and the result
+artificial: they need an “interim” account to keep track the different stages.
+In the standard (for OpenERP) accounting the event to produce journal items in
+the debtor/creditor account is the creation of the invoice.  In the
+anglo-saxon scheme the journal should be created at shipping time.</p>
+<p>I argue that given another framework that clearly separates every actor and
+function will improve how this pattern could be implemented.  I think that
+this framework must have:</p>
+<ol class="loweralpha simple">
+<li>Signals and events.</li>
+<li>Actors like the accountant, and probably an automated agent for the
+accountant that could do the same the models do right now.  But being
+responsive (ie. they respond to signals) they could be easily bypassed.</li>
+</ol>
+<p>Of course there are more things needed. I’m thinking about those two plus the
+ones OpenERP already has.</p>
+<p>I think that recognizing actors is the major improvement.  Actors are
+abstractions about intelligence. If a person should be doing some kind of
+intelligent decision (like accountants), then you should encode (in your
+design) that decision as being taken by an actor.</p>
+<p>Having artificial agents that could take over when the task is standard or
+programmable is also an option in this case.  Anywhere in you design an actor
+does something, and agent could be replacing the human.  The agents could be
+as dumb as the couple of rules we have now: create a journal entry each time
+an invoice goes to the valid state, and do it this way.  But agents could be
+also provided of machine learning techniques and they could observe the how
+the human accountant proceeds when something happened.  Of course this would
+require the human to proceed in case-by-case fashion and that’s not always
+true.</p>
+<p>No matter if the machine learning is never done, I argue that designing with
+actors and agents will lead to better a implementation, easier to understand,
+maintain and evolve.</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<table class="docutils footnote" frame="void" id="accounting-last" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id7">2</a>)</em> <p>This is no hypothetical at all.  We’re actually
+deploying Accounting after having deployed Project Management and <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management">CRM</a>.</p>
+<p class="last">This has come with many surprises but that’s what this post is about.</p>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="v-accountant" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[2]</a></td><td>The word addon in here is important.  There are actually
+two OpenERP addons named “Accounting &amp; Finance”: the <span class="docutils literal"><span class="pre">account</span></span> addon and
+the <span class="docutils literal"><span class="pre">account_accountant</span></span>.  The second one is flagged as an <cite>application</cite>
+and, thus, it takes a more prominent place in the listing of available
+applications.  Installing the application forces the installation of the
+<span class="docutils literal"><span class="pre">account</span></span> module anyway.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="no-gnucash" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>That is why I still do my personal (home) accounting with
+<a class="reference external" href="http://www.gnucash.org/">GNU Cash</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="v-contact-info" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td>This merge has problems of its own, but that’s a matter
+for another post.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="account-normal-balance" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[5]</a></td><td>Though an account either gets credited or
+debited, I will avoid that accounting-related terms cause it’s not needed
+for the argument in this post.  If you need to know, start by knowing that
+receivables have a debit <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_balance">normal balance</a> and go from there.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="basis" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[6]</a></td><td>I’m not quite sure if this “anglo-saxon accounting” refers to
+different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis_of_accounting">basis of accounting</a>.</td></tr>
+</tbody>
+</table>
+</div>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/openerp.html">OpenERP</a>, <a href="categories/odoo.html">Odoo</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/integration.html">integration</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>July 02, 2014</span>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
