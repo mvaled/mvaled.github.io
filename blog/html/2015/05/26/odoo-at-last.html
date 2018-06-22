@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Memento: microservices" href="../../04/08/rememoring-microservices.html" /><link rel="prev" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="odoo-at-last">
-<span id="id1"></span><h1>Odoo at last!</h1>
+<span id="id1"></span><h1>Odoo at last!<a class="headerlink" href="#odoo-at-last" title="Permalink to this headline">¶</a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Updated 2015-06-03</p>
 <p><a class="reference internal" href="#the-menu-decomposition">The menu decomposition</a> described below was actually an error in a custom
@@ -84,7 +84,7 @@ messed things up.</p>
 several rounds of testing, finding bugs and incompatibilities in our own
 modules and fixing them.</p>
 <div class="section" id="a-summary-of-the-process">
-<h2>A summary of the process</h2>
+<h2>A summary of the process<a class="headerlink" href="#a-summary-of-the-process" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://github.com/OpenUpgrade/OpenUpgrade">OpenUpgrade</a> project proved to be very complete for us –it had almost
 everything we needed:</p>
 <ul class="simple">
@@ -104,7 +104,7 @@ are probably too local to be merged back into the upstream.  However, we have
 published them should anyone finds them useful.</p>
 </div>
 <div class="section" id="the-menu-decomposition">
-<h2>The menu decomposition</h2>
+<h2>The menu decomposition<a class="headerlink" href="#the-menu-decomposition" title="Permalink to this headline">¶</a></h2>
 <p>The biggest issue we’ve encountered so far is that after several hours of
 operation all the menus stopped working: You clicked the “Leads” menu item and
 you got, say, the list of Many2Many fields. (???!!!)</p>
@@ -127,7 +127,7 @@ every Mail list in our DB.</p>
 first place.</p>
 </div>
 <div class="section" id="the-magical-6-tabs">
-<h2>The magical 6 tabs</h2>
+<h2>The magical 6 tabs<a class="headerlink" href="#the-magical-6-tabs" title="Permalink to this headline">¶</a></h2>
 <p>Our users started to report slowness after a couple of hours of working.
 First, we noticed that the call to <span class="docutils literal"><span class="pre">load_needaction</span></span> was taking too long and
 find out this call asked for too much it did not need, we <a class="reference external" href="https://github.com/odoo/odoo/pull/6772">provided a fix</a> and some loose benchmarks.  Though this patch needs
@@ -164,7 +164,7 @@ user base is small enough and the server has yet to achieve any noticeable
 load.</p>
 </div>
 <div class="section" id="epilogue">
-<h2>Epilogue</h2>
+<h2>Epilogue<a class="headerlink" href="#epilogue" title="Permalink to this headline">¶</a></h2>
 <p>That’s what our migration to Odoo story has gone so far.  A little bit
 stressful at times, specially when the menus went south for the second time,
 but I think we have crossed the yellow line now.  Should anything comes I’ll

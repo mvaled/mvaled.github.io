@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="search.html" /><link rel="prev" title="Newer" href="index.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -69,7 +69,283 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2014/06/05/odoo.html">Odoo… I mean OpenERP</a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2014/07/02/integration-v-automation.html">Integration v. Automation<a class="headerlink" href="#integration-v-automation" title="Permalink to this headline">¶</a></a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Editorial note</p>
+<p>I’m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation/">old blog</a>.  It’s published as it were
+when I first made it online with only minor changes.  I’m planning a follow
+up on the subject and more post about my experiences with <a class="reference external" href="http://www.odoo.com/">Odoo</a> (OpenERP).
+That’s I deem this repost needed.</p>
+<p class="last">Hope you’ll enjoy the reading.</p>
+</div>
+<p>Being an OpenERP bee these days has lead me to think a bit about integration,
+how does it happens inside OpenERP, its architecture, assumptions and other
+stuff.  In a first iteration I used to think about integration in terms of
+integrating two (or more) OpenERP addons, for instance, integrating Sales with
+Accounting.  At a very programming-oriented level this reduces, in the current
+state of OpenERP, to integrate their modules.  But later, I found out that
+this approach is fundamentally flawed and causes many quirks.</p>
+<p>This post starts with a tale about one of the many issues we have encounter
+when deploying OpenERP in an small enterprise.  Then I will argue about what
+integration means.  Lastly, I will turn to automation as a mean for
+integration and not the only way to do it.</p>
+<div class="section" id="the-integration-tale">
+<h2>The Integration tale<a class="headerlink" href="#the-integration-tale" title="Permalink to this headline">¶</a></h2>
+<p>I want to start with a simple and very real <a class="footnote-reference" href="#accounting-last" id="id2">[1]</a> use case: Bob
+is a salesperson processing a <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management">CRM</a> lead.</p>
+<p>The story beings when Bob opens the lead and clicks on the Edit button and the
+first thing he tries to do is to fill the client’s contact info because it’s a
+new client.  He clicks on the edit button besides the “Client” field which
+opens a window.  He fills the data and clicks “save”, but suddenly it fails
+saying that Bob (a salesperson) should have filled the “Account payable” and
+“Account receivable” fields.  So Bob says:</p>
+<blockquote>
+<div><p>Oh, boy!  What did I do wrong?.  Let’s try again…  Nope…  Uh.  What
+should I do?</p>
+<p>Hey!  Peter.  Do you know what’s happening here?  This won’t let me enter
+this client’s contact data, it keeps telling me that these accounts are
+wrong?  What the heck are these accounts anyway?</p>
+</div></blockquote>
+<p>And Peter has no idea, so he calls Sally who’s a very pretty girl that
+probably does not have a clue either about what’s happening but it’s so nice
+to have a reason to approach her…  Surprisingly Sally seems to be only one
+who actually paid attention to the information meeting that morning and she
+says:</p>
+<blockquote>
+<div>Ah!  This probably has to do with the Accounting module being installed.
+They say they will do that today…  Let’s ask Stephanie.</div></blockquote>
+<p>And Stephanie realizes what’s happening and fix it somehow.  An hour later Bob
+can resume his work and finish processing his CRM lead.</p>
+<p>The end.</p>
+<p>So, what is wrong with this story?</p>
+<div class="figure" id="id11">
+<img alt="Computer problems." src="_images/computer_problems.png"/>
+<p class="caption"><span class="caption-text">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</span></p>
+</div>
+<div class="section" id="depiction-of-wrongness">
+<h3>Depiction of wrongness<a class="headerlink" href="#depiction-of-wrongness" title="Permalink to this headline">¶</a></h3>
+<p>In my opinion there are two things that are clearly wrong with this:</p>
+<ol class="loweralpha">
+<li><p class="first">Requiring data <em>when</em> it’s not required.  When you’re in a CRM use case
+requiring accounting-related seems really overstepping.</p>
+</li>
+<li><p class="first">Not being able to issue a request for completion.  Bob should have been
+able to keep working and after the new client was saved a completion
+request should have been sent to those being able to complete the data.</p>
+<p>That completion request might just get ignored, but other use cases (like
+submit an invoice to that client) would actually require the data and thus
+the cycle would be closed after all.</p>
+</li>
+</ol>
+<p>Some would think that this is just a “configuration problem” as we will
+<a class="reference internal" href="2014/07/02/integration-v-automation.html#on-using-properties">discuss below</a>.  But finding that solution took me several dives into the
+code and re-parsing of the documentation, so I’ll try to walk you through the
+process.</p>
+</div>
+<div class="section" id="the-issue-the-making-off">
+<h3>The issue.  The making off<a class="headerlink" href="#the-issue-the-making-off" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Technical stuff ahead.  Wearing hardhats is mandatory.</p>
+</div>
+<p>By installing the “Accounting &amp; Finance” addon <a class="footnote-reference" href="#v-accountant" id="id4">[2]</a> you touch many
+parts of your system besides installing new stuff.  In fact, the module forces
+the installation of many other modules, including <span class="docutils literal"><span class="pre">product</span></span> <a class="footnote-reference" href="#no-gnucash" id="id5">[3]</a>.</p>
+<p>It also modifies the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model from the <span class="docutils literal"><span class="pre">base</span></span> addon.  You may
+think about the <span class="docutils literal"><span class="pre">"res.partner"</span></span> model as an attempt to merge the contact
+information for both clients, suppliers and employees into a single
+entity <a class="footnote-reference" href="#v-contact-info" id="id6">[4]</a>.  It has many fields that comprise name, job
+position, contact information, etc…</p>
+<p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">"res.partner"</span></span> gets appended a
+whole bunch of other fields, including the said “account payable” and “account
+receivable” fields, which are also marked as mandatory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="s1">'property_account_payable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+    <span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
+    <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">"Account Payable"</span><span class="p">,</span>
+    <span class="n">view_load</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">"[('type', '=', 'payable')]"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"This account will be used instead of the default one as the payable account for the current partner"</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+<span class="s1">'property_account_receivable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+    <span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
+    <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>
+    <span class="n">string</span><span class="o">=</span><span class="s2">"Account Receivable"</span><span class="p">,</span>
+    <span class="n">view_load</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">"[('type', '=', 'receivable')]"</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"This account will be used instead of the default one as the receivable account for the current partner"</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+</pre></div>
+</div>
+<p>This are not actual fields of the model <span class="docutils literal"><span class="pre">"res.partner"</span></span>, but properties, which
+are “special”.</p>
+<div class="section" id="on-using-properties">
+<h4>On using properties<a class="headerlink" href="#on-using-properties" title="Permalink to this headline">¶</a></h4>
+<p>Properties are of course related to the “solution” for the problem described
+above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup/">Database setup</a>
+in the OpenERP Book.  That’s the reason I’m using this case to open the
+<cite>OpenERP corner</cite>.  If you deploy CRM before accounting <a class="footnote-reference" href="#accounting-last" id="id7">[1]</a>
+you’d probably find no interest in reading a topic called “Database setup”…
+you have set your database up already, haven’t you?</p>
+<p>You should notice that both <cite>Account receivable</cite> and <cite>Account payable</cite> are, in
+fact, properties (i.e defined via <span class="docutils literal"><span class="pre">fields.property</span></span>).  This actually means
+that those fields take their default values from a global configuration.</p>
+<p>Those values were not properly set in our case cause there were no localized
+account chart that applied to our enterprise.  We have to create all the
+accounts by hand, and yes, we missed (didn’t know) that we have to create
+those properties.</p>
+<p>Our problem is solved by defining those properties in the configuration menu.</p>
+<p>However this workaround is very unsatisfying:</p>
+<ul class="simple">
+<li>It involves the administrator of the system because he’s the one that has
+access to the “Configuration Parameters”.  AFAIK, the accountant
+himself/herself cannot change the defaults, unless you bestow all the powers
+on him/her.</li>
+<li>It does not resolve the integration problem others might present in the
+future.  Integration is harder that having some default values.  For
+instance, Cuban accounting norms establish more than 10 accounts for
+receivables with empty slots for more if needed.  They require to have
+different accounts (receivable and/or payable) for bills to/from people
+(B2C) separated from those bills to/from other enterprises (B2B), and also
+different accounts for long-term and short-terms bills.  The last case
+cannot be decided by just looking at the client or supplier, more
+information about the <cite>economic fact</cite> is needed.</li>
+<li>It does not actually resolve the current integration problem since the
+accountant needs to make sure the “Account Receivable” is the correct one
+for the client and he’s not notified when salesman Bob creates a new
+partner.  So, what really happens is that the accountant needs to review
+journal entries and before posting them, and change the account if needed.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Integration v. Automation<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>An ERP should simplify things by <em>integrating business areas</em>, shouldn’t it?
+That’s the main driver behind the feature of automatically generating journal
+entries.  Under this principle when an invoice is sent to a client a journal
+entry should be made recording we should get paid for that, ie.  the client’s
+account receivable gets increased <a class="footnote-reference" href="#account-normal-balance" id="id9">[5]</a>.  Likewise when
+we get a supplier invoice, an entry should record that we must pay that bill,
+ie.  the supplier’s account payable gets increased.</p>
+<p>You see now how the “Account Receivable” and “Account Payable” fields for the
+partner play their part in the <em>automation</em> of the accounting processes.  This
+is deeply weaved into the <span class="docutils literal"><span class="pre">account</span></span> module’s source code.  Meaning that
+there’s the assumption that partners have those properties we’re talking
+about.  And that’s true because you have injected them and, if you configured
+everything as expected, they have their default values.</p>
+<p>Notice the difference between the expectation of <em>integration</em> of business
+areas and how the integration happens in this case via a very specific kind of
+<em>automation</em>.</p>
+<p>I’ll argue that the current state of this design is flawed.  When standards
+change and/or are not applicable this kind of automation does more harm that
+it helps.</p>
+<p>This is the reason the module that controls the “Anglo-Saxon
+accounting” <a class="footnote-reference" href="#basis" id="id10">[6]</a> is very difficult to understand and the result
+artificial: they need an “interim” account to keep track the different stages.
+In the standard (for OpenERP) accounting the event to produce journal items in
+the debtor/creditor account is the creation of the invoice.  In the
+anglo-saxon scheme the journal should be created at shipping time.</p>
+<p>I argue that given another framework that clearly separates every actor and
+function will improve how this pattern could be implemented.  I think that
+this framework must have:</p>
+<ol class="loweralpha simple">
+<li>Signals and events.</li>
+<li>Actors like the accountant, and probably an automated agent for the
+accountant that could do the same the models do right now.  But being
+responsive (ie. they respond to signals) they could be easily bypassed.</li>
+</ol>
+<p>Of course there are more things needed. I’m thinking about those two plus the
+ones OpenERP already has.</p>
+<p>I think that recognizing actors is the major improvement.  Actors are
+abstractions about intelligence. If a person should be doing some kind of
+intelligent decision (like accountants), then you should encode (in your
+design) that decision as being taken by an actor.</p>
+<p>Having artificial agents that could take over when the task is standard or
+programmable is also an option in this case.  Anywhere in you design an actor
+does something, and agent could be replacing the human.  The agents could be
+as dumb as the couple of rules we have now: create a journal entry each time
+an invoice goes to the valid state, and do it this way.  But agents could be
+also provided of machine learning techniques and they could observe the how
+the human accountant proceeds when something happened.  Of course this would
+require the human to proceed in case-by-case fashion and that’s not always
+true.</p>
+<p>No matter if the machine learning is never done, I argue that designing with
+actors and agents will lead to better a implementation, easier to understand,
+maintain and evolve.</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="accounting-last" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id7">2</a>)</em> <p>This is no hypothetical at all.  We’re actually
+deploying Accounting after having deployed Project Management and <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management">CRM</a>.</p>
+<p class="last">This has come with many surprises but that’s what this post is about.</p>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="v-accountant" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[2]</a></td><td>The word addon in here is important.  There are actually
+two OpenERP addons named “Accounting &amp; Finance”: the <span class="docutils literal"><span class="pre">account</span></span> addon and
+the <span class="docutils literal"><span class="pre">account_accountant</span></span>.  The second one is flagged as an <cite>application</cite>
+and, thus, it takes a more prominent place in the listing of available
+applications.  Installing the application forces the installation of the
+<span class="docutils literal"><span class="pre">account</span></span> module anyway.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="no-gnucash" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>That is why I still do my personal (home) accounting with
+<a class="reference external" href="http://www.gnucash.org/">GNU Cash</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="v-contact-info" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td>This merge has problems of its own, but that’s a matter
+for another post.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="account-normal-balance" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[5]</a></td><td>Though an account either gets credited or
+debited, I will avoid that accounting-related terms cause it’s not needed
+for the argument in this post.  If you need to know, start by knowing that
+receivables have a debit <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_balance">normal balance</a> and go from there.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="basis" rules="none">
+<colgroup><col class="label"/><col/></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[6]</a></td><td>I’m not quite sure if this “anglo-saxon accounting” refers to
+different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis_of_accounting">basis of accounting</a>.</td></tr>
+</tbody>
+</table>
+</div>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/openerp.html">OpenERP</a>, <a href="categories/odoo.html">Odoo</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/integration.html">integration</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>July 02, 2014</span>
+        </div><div class="separator post_separator"></div><h1><a href="2014/06/05/odoo.html">Odoo… I mean OpenERP<a class="headerlink" href="#odoo-i-mean-openerp" title="Permalink to this headline">¶</a></a></h1>
 <p>This is old news: OpenERP has changed its name and now becomes Odoo.  I don’t
 care much about the change in the name.  It’s the processes I’m interested in.</p>
 <p>The rename was synchronized with a move from <a class="reference external" href="https://launchpad.net/">Launchpad</a> to <a class="reference external" href="https://github.com/">Github</a>.  This, I
@@ -97,7 +373,7 @@ know.</p>
 <li>Send as many PRs as I’m able to fix/improve something and hope for the best.</li>
 </ul>
 <div class="section" id="postdata">
-<h2>Postdata</h2>
+<h2>Postdata<a class="headerlink" href="#postdata" title="Permalink to this headline">¶</a></h2>
 <p>My long-planned “<a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/03/25/announcing-the-openerp-corner/">OpenERP corner</a>” will simply be renamed accordingly.</p>
 <p>This reminds me I have broken my promise to keep my old blog in-sync with this
 new one.  Apologies.  But it’s sooo comfortable to work with this blog-model
@@ -121,7 +397,7 @@ it.</p>
         </div>
         <div class="timestamp postmeta">
             <span>June 05, 2014</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/05/27/tdd-is-dead-rally.html">TDD is dead rally</a></h1>
+        </div><div class="separator post_separator"></div><h1><a href="2014/05/27/tdd-is-dead-rally.html">TDD is dead rally<a class="headerlink" href="#tdd-is-dead-rally" title="Permalink to this headline">¶</a></a></h1>
 <p>These days there’s a kind of a rally about “TDD being dead”.</p>
 <p>Most TDD fan supporters are true that you must have a way to proof your code
 works.  Many computer <a class="reference external" href="http://en.wikipedia.org/wiki/Tony_Hoare">scientists</a> have done several attempts into
@@ -146,7 +422,7 @@ issues.  Some regression tests fall into this category.</p>
 </ol>
 <p>How do you do tests?</p>
 <div class="section" id="update-amplification-and-support-to-david-s-arguments">
-<h2>Update: Amplification and support to <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">David’s arguments</a></h2>
+<h2>Update: Amplification and support to <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">David’s arguments</a><a class="headerlink" href="#update-amplification-and-support-to-david-s-arguments" title="Permalink to this headline">¶</a></h2>
 <p>The previous words were written just after skimming over several tweets.  I
 had read <a class="reference external" href="http://david.heinemeierhansson.com/2014/test-induced-design-damage.html">David’s test-induced design damage</a> but I had missed the previous
 post <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">TDD is dead.  Long live testing</a>.  So this update is my one cent to
@@ -196,7 +472,7 @@ against unintentional API-breaking changes.</p>
 </ol>
 </div>
 <div class="section" id="footnotes">
-<h2>Footnotes</h2>
+<h2>Footnotes<a class="headerlink" href="#footnotes" title="Permalink to this headline">¶</a></h2>
 <table class="docutils footnote" frame="void" id="some-are" rules="none">
 <colgroup><col class="label"/><col/></colgroup>
 <tbody valign="top">
@@ -222,7 +498,7 @@ allow “proof-by-instances”.</td></tr>
         </div>
         <div class="timestamp postmeta">
             <span>May 27, 2014</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/05/26/progress-in-the-move.html">Progress moving to github.io</a></h1>
+        </div><div class="separator post_separator"></div><h1><a href="2014/05/26/progress-in-the-move.html">Progress moving to github.io<a class="headerlink" href="#progress-moving-to-github-io" title="Permalink to this headline">¶</a></a></h1>
 <p>As you may see, I have made some progress.  Basically, I have partially ported
 my past look and feel, so that if looks like the old blog.  I still a work in
 progress and the “responsive” stuff is not entirely done.</p>
@@ -243,7 +519,7 @@ on.</p>
         </div>
         <div class="timestamp postmeta">
             <span>May 26, 2014</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/05/13/welcome.html">Welcome</a></h1>
+        </div><div class="separator post_separator"></div><h1><a href="2014/05/13/welcome.html">Welcome<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></a></h1>
 <p>This post intends to be one to welcome my previous readers from <a class="reference external" href="http://manuelonsoftware.wordpress.com/">Wordpress</a>.  I
 still have much to do to make this blog actually <strong>my</strong> blog:</p>
 <ol class="loweralpha simple">

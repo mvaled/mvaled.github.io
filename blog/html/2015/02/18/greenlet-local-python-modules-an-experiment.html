@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="What I’ve been doing lately" href="../../../2014/12/27/lately.html" /><link rel="prev" title="Memento: microservices" href="../../04/08/rememoring-microservices.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="hot-swapping-python-modules-an-experiment">
-<h1>Hot-swapping Python modules. An experiment.</h1>
+<h1>Hot-swapping Python modules. An experiment.<a class="headerlink" href="#hot-swapping-python-modules-an-experiment" title="Permalink to this headline">¶</a></h1>
 <p>A new project I’m involved with will <em>probably</em> require dozens of servers
 running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlets</a> each.  Top-level greenlets represent jobs
 and their children will be individual tasks those greenlets are
@@ -81,12 +81,12 @@ greenlet may be either a supervisor or a worker.</p>
 might yield huge benefits.  You can change your Erlang code while the program
 is running.</p>
 <div class="section" id="modulets-the-idea">
-<h2>Modulets.  The idea</h2>
+<h2>Modulets.  The idea<a class="headerlink" href="#modulets-the-idea" title="Permalink to this headline">¶</a></h2>
 <p>I asked myself if I could devise an <em>import mechanism</em> that would allow to
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.</p>
 <p>To exemplify, let’s say a typical tasks is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
    <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">send_email</span>
    <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">wait_reply</span>
    <span class="c1"># Assume both send_email and wait_reply switch away from the current</span>
@@ -106,7 +106,7 @@ users have entered a wrong email address.  A change is in order.</p>
 <cite>job</cite> that involves receiving confirmation email when a new user registers.</p>
 <p>We’d love to simply update our <span class="docutils literal"><span class="pre">jobs.util</span></span> package and be done with it like
 this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ source server-virtual-env/bin/activate
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source server-virtual-env/bin/activate
 $ pip install -U jobs.util -i https://my.private.server/
 </pre></div>
 </div>
@@ -119,7 +119,7 @@ implementation of such a mechanism in our <a class="reference external" href="ht
 xoutil.</p>
 </div>
 <div class="section" id="modulets-in-xoutil">
-<h2>Modulets in xoutil</h2>
+<h2>Modulets in xoutil<a class="headerlink" href="#modulets-in-xoutil" title="Permalink to this headline">¶</a></h2>
 <p>The current implementation is a very early proof of concept and not something
 you’d like to put outside your playground.</p>
 <p>The file <a class="reference external" href="https://github.com/merchise-autrement/xoutil/blob/experimental-modulets/xoutil/modules/test_modulet.py"><span class="docutils literal"><span class="pre">test_modulet.py</span></span></a> is a simple script you may run to see it working.
@@ -130,7 +130,7 @@ and asserts it returns the “right” magic value.  Between launches the module
 gets updated to return a different magic value, which is passed as an argument
 to the newly created greenlet.</p>
 <p>A single run will print something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python test_modulet.py
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python test_modulet.py
 Beginning with 3 in /tmp/tmp1d4rK5
 Isolating &#39;magic_module&#39; as &#39;&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module&#39;
 Isolating &#39;magic_module&#39; as &#39;&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module&#39;
@@ -141,7 +141,7 @@ Passed. I have the right magic number 1000
 </pre></div>
 </div>
 <p>If you comment the bootstrapping of modulets, then you’ll get something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python test_modulet.py
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python test_modulet.py
 Beginning with 3 in /tmp/tmpeI1oYA
 Wrong magic number
 Traceback (most recent call last):
@@ -162,7 +162,7 @@ Passed. I have the right magic number 1000
 </div>
 </div>
 <div class="section" id="future-work">
-<h2>Future work</h2>
+<h2>Future work<a class="headerlink" href="#future-work" title="Permalink to this headline">¶</a></h2>
 <p>Since we are at the very early stages of this project is not easy to predict
 if we’ll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest/">celery</a> based solution be
 enough.</p>

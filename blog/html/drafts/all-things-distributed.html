@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,16 +70,16 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="all-things-distributed">
-<h1>All things distributed</h1>
+<h1>All things distributed<a class="headerlink" href="#all-things-distributed" title="Permalink to this headline">¶</a></h1>
 <p>In the <a href="#id1"><span class="problematic" id="id2">`Riak Handbook by Mathias Meyer &lt;riak-handbook_&gt;`__</span></a> there a
 first definition of a distributed system:</p>
 <blockquote>
 <div>“By distributed systems I’m referring to systems that use more
 than one computer, a node, to get a job done”</div></blockquote>
-<p>By this definition even a simple website may simply be distributed
-by having a computer for the DB, another for the web application
-itself, and (if needed) another computer for the SMTP server that
-sends emails on behalf of the site.</p>
+<p>By this definition even a simple website may be considered a
+distributed system by having a computer for the DB, another for the
+web application itself, and (if needed) another computer for the
+SMTP server that sends emails on behalf of the site.</p>
 <p>Of course, all of that software (the DB, the web app and the mail
 server) could be stuffed into a single box and now the system is not
 distributed… Not quite right, isn’t it?</p>
@@ -88,14 +88,29 @@ distributed system is.  By it everything is.</p>
 <p>When does my system is a distributed system?  Put it differently:
 when do I need to make my system a distributed one?  Is it only when
 the capacity of a single node is depleted and another node is
-required?  Does my DB and application boxes count as separate nodes?</p>
+required?  Does my DB and application boxes count as separate nodes?
+Does the users’ machines count as well?</p>
 <p>The answer to that question requires a clear definition of what a
 distributed system is, or the benefits to design your system as a
 distributed system.</p>
+<div class="section" id="distribution-and-capacity">
+<h2>Distribution and Capacity<a class="headerlink" href="#distribution-and-capacity" title="Permalink to this headline">¶</a></h2>
+<p>It seems that distribution is a way to overcome with some sort of
+capacity limit; either fundamental or not.  I will call a
+fundamental capacity limit to the limit imposed by nature’s laws and
+not technological limits.  But technological limits are, sometimes,
+high enough to resemble the fundamental ones.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To my understanding there are no purely theoretical limits
+to capacity, you can always imagine an infinitely fast
+with infinity memory Turing machine.</p>
+</div>
 <p>Though I don’t pretend to give a definition in this post, I will
-argue that many information system should follow distributed
+argue that many <em>information systems</em> should follow distributed
 patterns.  In fact, I will argue that ERP systems are going to
 collapse unless integration is done with distribution in mind.</p>
+</div>
 </div>
 
     <div class="postmeta">

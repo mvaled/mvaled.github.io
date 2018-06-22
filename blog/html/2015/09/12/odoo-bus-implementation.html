@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="The productivity of tomorrow trumps that of today" href="../../08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html" /><link rel="prev" title="Dissecting foldl in terms of foldr" href="../../../2018/01/22/foldl-in-terms-of-foldr.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="the-bus-implementation-in-odoo-and-notification-systems-in-the-web">
-<h1>The bus <em>implementation</em> in Odoo and notification systems in the Web</h1>
+<h1>The bus <em>implementation</em> in Odoo and notification systems in the Web<a class="headerlink" href="#the-bus-implementation-in-odoo-and-notification-systems-in-the-web" title="Permalink to this headline">¶</a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Delayed post.</p>
 <p>This post has been delayed for a very, very long time.  If I trust the logs
@@ -136,7 +136,7 @@ collisions happen is ‘im_chat_presence’.</p>
 <p>As a workaround we simply <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/555b5699b96178d5c87f36c0f692dbe8dcf0facb">reduced</a> the update rate for that table.  But a
 better solutions needed to be found.</p>
 <div class="section" id="cross-tab-polling">
-<h2>Cross-tab polling</h2>
+<h2>Cross-tab polling<a class="headerlink" href="#cross-tab-polling" title="Permalink to this headline">¶</a></h2>
 <p>By looking better our users’ usage pattern, we discovered that users switch
 from tab to tab regularly and thus the polling is still high.  So we went down
 the path of figuring out a way to have a single polling connection even when
@@ -148,7 +148,7 @@ for “cross-tab communication” and found the <a class="reference external" hr
 <p>After that, replacing the implementation of the bus for a new one that was
 based on a exchanged between tabs was not very hard.  These are the commits
 done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0555434</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Clarify</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">polls</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0555434</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Clarify</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">polls</span><span class="o">.</span>
 <span class="n">d10a1b5</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Checks</span> <span class="k">for</span> <span class="n">the</span> <span class="n">right</span> <span class="n">state</span><span class="o">.</span>
 <span class="n">af4a6dc</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Add</span> <span class="n">language</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="o">.</span>
 <span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">&quot;Reduce the presure on im_chat_presence table.&quot;</span>
@@ -165,7 +165,7 @@ the a cross-tab communication feature.</p>
 <p>So probably I end up backporting their implementation into 8.0.</p>
 </div>
 <div class="section" id="notes">
-<h2>Notes</h2>
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <table class="docutils footnote" frame="void" id="notify" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">

@@ -5,8 +5,70 @@
         <link>http://mvaled.github.io/blog/html/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Mon, 22 Jan 2018 00:00:00 -0500</pubDate>
+        <pubDate>Fri, 22 Jun 2018 00:00:00 -0400</pubDate>
         
+        <item>
+            <link>http://mvaled.github.io/blog/html/2018/06/22/a-failing-fail-in-the-monad-list.html</link>
+            <guid>http://mvaled.github.io/blog/html/2018/06/22/a-failing-fail-in-the-monad-list.html</guid>
+            <title><![CDATA[A failing fail in the monad list]]></title>
+            <description><![CDATA[<h1>A failing fail in the monad list</h1>
+<p>I’m following the Real World Haskell book.  In the chapter about Monads, they
+create simple example using the list monad compute all pairs of numbers <span class="docutils literal"><span class="pre">(x,</span>
+<span class="pre">y)</span></span> that such that <span class="docutils literal"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">y</span> <span class="pre">==</span> <span class="pre">n</span></span> for a given <span class="docutils literal"><span class="pre">n</span></span>.</p>
+<p>Their solution is:</p>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">multiplyTo</span> <span class="ow">::</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="p">[(</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)]</span>
+<span class="nf">multiplyTo</span> <span class="n">n</span> <span class="ow">=</span> <span class="kr">do</span>
+      <span class="n">x</span> <span class="ow">&lt;-</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="n">n</span><span class="p">]</span>
+      <span class="n">y</span> <span class="ow">&lt;-</span> <span class="p">[</span><span class="n">x</span><span class="o">..</span><span class="n">n</span><span class="p">]</span>
+      <span class="n">guarded</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span> <span class="o">$</span>
+        <span class="n">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nf">guarded</span> <span class="ow">::</span> <span class="kt">Bool</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="nf">guarded</span> <span class="kt">True</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">xs</span>
+<span class="nf">guarded</span> <span class="kt">False</span> <span class="kr">_</span> <span class="ow">=</span> <span class="kt">[]</span>
+</pre></div>
+</div>
+<p>But I was wondering if I could restate <span class="docutils literal"><span class="pre">guarded</span></span> for any monad.  Since
+<span class="docutils literal"><span class="pre">fail</span></span> in the list monad is <span class="docutils literal"><span class="pre">fail</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">[]</span></span>, I though I could do:</p>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">guarded</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">Bool</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+<span class="nf">guarded</span> <span class="kt">True</span> <span class="ow">=</span> <span class="n">id</span>
+<span class="nf">guarded</span> <span class="kt">False</span> <span class="ow">=</span> <span class="n">fail</span> <span class="s">"skipped"</span>
+</pre></div>
+</div>
+<p>However this actually fails in ghci:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="o">*</span><span class="n">Main</span><span class="o">&gt;</span> <span class="n">multiplyTo</span> <span class="mi">24</span>
+<span class="o">***</span> <span class="ne">Exception</span><span class="p">:</span> <span class="n">skipped</span>
+</pre></div>
+</div>
+<p>I let myself sleep, and this morning I figured there’s actually a
+small/important difference between <span class="docutils literal"><span class="pre">guarded</span> <span class="pre">False</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">[]</span></span> and <span class="docutils literal"><span class="pre">guarded</span>
+<span class="pre">False</span> <span class="pre">=</span> <span class="pre">fail</span> <span class="pre">"..."</span></span></p>
+<p>The type of <span class="docutils literal"><span class="pre">guarded</span> <span class="pre">False</span></span> is <span class="docutils literal"><span class="pre">Monad</span> <span class="pre">m</span> <span class="pre">=&gt;</span> <span class="pre">m</span> <span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">m</span> <span class="pre">a</span></span>.  However the type
+of <span class="docutils literal"><span class="pre">fail</span> <span class="pre">'skipped'</span></span> is just <span class="docutils literal"><span class="pre">Monad</span> <span class="pre">m</span> <span class="pre">=&gt;</span> <span class="pre">m</span> <span class="pre">a</span></span>.</p>
+<p>Why does <span class="docutils literal"><span class="pre">guarded</span> <span class="pre">False</span> <span class="pre">=</span> <span class="pre">fail</span> <span class="pre">"skipped"</span></span> type-checks?  That’s an <a class="reference external" href="stackoverflow-50989541">open
+question</a> (as of the time of writing).</p>
+<p>If I define <span class="docutils literal"><span class="pre">guarded</span></span> as:</p>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">guarded</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">Bool</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+<span class="nf">guarded</span> <span class="kt">True</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">xs</span>
+<span class="nf">guarded</span> <span class="kt">False</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">fail</span> <span class="s">"skipped"</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">guarded</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">Bool</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+<span class="nf">guarded</span> <span class="kt">True</span> <span class="ow">=</span> <span class="n">id</span>
+<span class="nf">guarded</span> <span class="kt">False</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">fail</span> <span class="s">"skipped"</span>
+</pre></div>
+</div>
+<p>Both work correctly.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><cite>fail</cite> is strongly discouraged to use in real world haskell code.</p>
+</div>
+]]></description>
+            <category><![CDATA[ Programming ]]></category>
+             <pubDate>Fri, 22 Jun 2018 00:00:00 -0400</pubDate>
+        </item>
+    
         <item>
             <link>http://mvaled.github.io/blog/html/2018/01/22/foldl-in-terms-of-foldr.html</link>
             <guid>http://mvaled.github.io/blog/html/2018/01/22/foldl-in-terms-of-foldr.html</guid>
@@ -14,7 +76,7 @@
             <description><![CDATA[<h1>Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></h1>
 <p>The book ‘Real World Haskell’ provides an implementation of <span class="docutils literal"><span class="pre">foldl</span></span> in terms
 of <span class="docutils literal"><span class="pre">foldr</span></span>:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">myFoldl</span><span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">myFoldl</span><span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
 <span class="nf">myFoldl</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
    <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -24,7 +86,7 @@ it’s not trivial, but I found it interesting.  So, I just want to share my
 line of thought.</p>
 <p>The first thing I noticed is that <span class="docutils literal"><span class="pre">z</span></span> is not an argument to <span class="docutils literal"><span class="pre">foldr</span></span>; you
 can rewrite the first line as:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="p">(</span><span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span><span class="p">)</span> <span class="n">z</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="p">(</span><span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span><span class="p">)</span> <span class="n">z</span>
 </pre></div>
 </div>
 <p>This makes visible that the result of the <span class="docutils literal"><span class="pre">foldr</span></span> is a function that takes
@@ -32,7 +94,7 @@ can rewrite the first line as:</p>
 to <span class="docutils literal"><span class="pre">id</span></span>, we can see that the type of the <span class="docutils literal"><span class="pre">foldr</span></span>’s result is <span class="docutils literal"><span class="pre">b</span> <span class="pre">-&gt;</span> <span class="pre">b</span></span>.</p>
 <p>This also implies that the type of <span class="docutils literal"><span class="pre">step</span></span> must be <span class="docutils literal"><span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span> <span class="pre">b)</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span>
 <span class="pre">b)</span></span>.  You can prove that by extracting <span class="docutils literal"><span class="pre">step</span></span>:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span>
 <span class="nf">step1</span> <span class="n">f</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="nf">myFoldl1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
@@ -42,20 +104,20 @@ to <span class="docutils literal"><span class="pre">id</span></span>, we can see
 <p>Use <cite>ghci</cite> to verify that.</p>
 <p>Now comes the <em>funny</em> part of the implementation: <span class="docutils literal"><span class="pre">step</span></span> is defined with
 three arguments</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>but <span class="docutils literal"><span class="pre">foldr</span></span> only passes the first two, and that’s totally fine; the result
 will be another function.</p>
 <p>You can make this explicit:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span/><span class="nf">myFoldl2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">myFoldl2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
 <span class="nf">myFoldl2</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
    <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That’s a beautiful thing about Haskell both definitions of <span class="docutils literal"><span class="pre">step</span></span> are
 actually indistinguishable:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="o">=</span> \<span class="n">a</span> <span class="o">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -64,7 +126,7 @@ actually indistinguishable:</p>
 programming language.</p>
 <p>Having all that we can easily follow how the expression <span class="docutils literal"><span class="pre">myFoldl</span> <span class="pre">(+)</span> <span class="pre">0</span> <span class="pre">[1,</span>
 <span class="pre">2]</span></span> would proceed:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>myFoldl (+) 0 [1, 2]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>myFoldl (+) 0 [1, 2]
 (foldr step id [1, 2]) 0                  -- by def. of myFoldl
 (step 1 (foldr step id [2])) 0            -- by def. of foldr
 (step 1 (step 2 (foldr step id []))) 0    -- by def. of foldr
@@ -167,7 +229,7 @@ for “cross-tab communication” and found the <a class="reference external" hr
 <p>After that, replacing the implementation of the bus for a new one that was
 based on a exchanged between tabs was not very hard.  These are the commits
 done in our branch (in reverse topological order as in <span class="docutils literal"><span class="pre">git</span> <span class="pre">log</span></span>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="mi">0555434</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Clarify</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">polls</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="mi">0555434</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Clarify</span> <span class="n">the</span> <span class="n">channel</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">polls</span><span class="o">.</span>
 <span class="n">d10a1b5</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Checks</span> <span class="k">for</span> <span class="n">the</span> <span class="n">right</span> <span class="n">state</span><span class="o">.</span>
 <span class="n">af4a6dc</span> <span class="o">*</span> <span class="n">bus</span><span class="p">:</span> <span class="n">Add</span> <span class="n">language</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="o">.</span>
 <span class="mi">636490</span><span class="n">b</span> <span class="o">*</span> <span class="n">im_chat</span><span class="p">:</span> <span class="n">Revert</span> <span class="s2">"Reduce the presure on im_chat_presence table."</span>
@@ -229,7 +291,7 @@ yield something close to the <a class="reference external" href="http://www.osne
 and naming things.</p>
 <p class="attribution">—Phil Karlton</p>
 </div></blockquote>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
        <span class="k">return</span> <span class="n">l</span>
     <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -245,20 +307,20 @@ and naming things.</p>
 <p>This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
 function <cite>quicksort</cite>…</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="n">_check</span><span class="p">([</span><span class="mi">84</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
 <span class="go">[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]</span>
 </pre></div>
 </div>
 <p>A quiz in less than 5 seconds: What does it mean in OpenERP’s ORM the
 following lines of code?</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'implied_ids'</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">group</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'implied_ids'</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="n">implied_group</span><span class="o">.</span><span class="n">id</span><span class="p">)]})</span>
 </pre></div>
 </div>
 <p>This line of code has a CC of 1: as good as it gets, isn’t it?  But it’s so
 darn difficult to read that unless you have your brain wired up to see “forget
 the link between this group and the implied_group”…  To be fair there is
 someone out there in the OpenERP universe that cared a bit about this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="c1"># file addons/base/ir/ir_fields.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="c1"># file addons/base/ir/ir_fields.py</span>
 
 <span class="n">CREATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
 <span class="n">UPDATE</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
@@ -469,7 +531,7 @@ to have the prototype working as soon as possible.</p>
 poorly.  And though our first tests were positive there was some slowness.</p>
 <p>To accommodate for a possible replacement of Pyro we chose to provide our own
 “idiom” (in Python) to connect and communicate with services:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="k">with</span> <span class="n">service</span><span class="p">(</span><span class="s1">'pyxel.queue'</span><span class="p">)</span> <span class="k">as</span> <span class="n">queue</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="k">with</span> <span class="n">service</span><span class="p">(</span><span class="s1">'pyxel.queue'</span><span class="p">)</span> <span class="k">as</span> <span class="n">queue</span>
     <span class="n">queue</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -528,7 +590,7 @@ is running.</p>
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.</p>
 <p>To exemplify, let’s say a typical tasks is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">receive_confirmation</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
    <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">send_email</span>
    <span class="kn">from</span> <span class="nn">jobs.util.email</span> <span class="k">import</span> <span class="n">wait_reply</span>
    <span class="c1"># Assume both send_email and wait_reply switch away from the current</span>
@@ -548,7 +610,7 @@ users have entered a wrong email address.  A change is in order.</p>
 <cite>job</cite> that involves receiving confirmation email when a new user registers.</p>
 <p>We’d love to simply update our <span class="docutils literal"><span class="pre">jobs.util</span></span> package and be done with it like
 this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>$ source server-virtual-env/bin/activate
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>$ source server-virtual-env/bin/activate
 $ pip install -U jobs.util -i https://my.private.server/
 </pre></div>
 </div>
@@ -572,7 +634,7 @@ and asserts it returns the “right” magic value.  Between launches the module
 gets updated to return a different magic value, which is passed as an argument
 to the newly created greenlet.</p>
 <p>A single run will print something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>$ python test_modulet.py
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>$ python test_modulet.py
 Beginning with 3 in /tmp/tmp1d4rK5
 Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module'
 Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module'
@@ -583,7 +645,7 @@ Passed. I have the right magic number 1000
 </pre></div>
 </div>
 <p>If you comment the bootstrapping of modulets, then you’ll get something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>$ python test_modulet.py
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>$ python test_modulet.py
 Beginning with 3 in /tmp/tmpeI1oYA
 Wrong magic number
 Traceback (most recent call last):
@@ -760,7 +822,7 @@ install it.</p>
 <p>I’m working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
 Of course I’m using the branch “8.0” for this review.</p>
 <p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/>$ python setup.py develop
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>$ python setup.py develop
 </pre></div>
 </div>
 <p>The first I noticed is that several new requirements are in place, and the
@@ -792,7 +854,7 @@ at the same time I was writing this post) I realized that the <em>current</em>
 multi-process deployments would still need this IPC to properly work.  So I
 ran <span class="docutils literal"><span class="pre">./openerp-server</span> <span class="pre">--workers=2</span></span> and tested it again.  The chat stopped to
 work and the following error was logged from time to time:</p>
-<div class="highlight-traceback"><div class="highlight"><pre><span/>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
+<div class="highlight-traceback notranslate"><div class="highlight"><pre><span/>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
 Traceback (most recent call last):
   File "/&lt;..&gt;/odoo/openerp/http.py", line 476, in _handle_exception
     return super(JsonRequest, self)._handle_exception(exception)
@@ -815,7 +877,7 @@ Exception: bus.Bus unavailable
 </div>
 <p>The code explains it all.  This is the method <span class="docutils literal"><span class="pre">ImDispatch.start()</span></span> in file
 <span class="docutils literal"><span class="pre">addons/bus/bus.py</span></span>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">evented</span><span class="p">:</span>
         <span class="c1"># gevent mode</span>
         <span class="kn">import</span> <span class="nn">gevent</span>
@@ -854,7 +916,7 @@ me show you a picture (7.0 on the right, 8.0 on the left):</p>
 <p class="caption"><span class="caption-text">Odoo is missing the “Compose new message” button.</span></p>
 </div>
 <p>This commit has some explanation:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="mi">0714</span><span class="n">b231646bb439b121a6aaa43df32fedcb5e6e</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="mi">0714</span><span class="n">b231646bb439b121a6aaa43df32fedcb5e6e</span>
 <span class="n">Author</span><span class="p">:</span> <span class="n">Thibault</span> <span class="n">Delavallée</span> <span class="o">&lt;</span><span class="n">tde</span><span class="nd">@openerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="n">Date</span><span class="p">:</span>   <span class="n">Wed</span> <span class="n">Aug</span> <span class="mi">13</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mi">25</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
@@ -867,7 +929,7 @@ me show you a picture (7.0 on the right, 8.0 on the left):</p>
 <p>I then installed the “Employee directory” addon and the “Share with my
 followers” box appeared.</p>
 <p>More digging in the logs reveals the following:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="n">e6f8666b521fe8c2522d6e94c0c3def54a5f73ed</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="n">e6f8666b521fe8c2522d6e94c0c3def54a5f73ed</span>
 <span class="n">Merge</span><span class="p">:</span> <span class="n">d57a97d</span> <span class="n">bf3d4a7</span>
 <span class="n">Author</span><span class="p">:</span> <span class="n">Amit</span> <span class="n">Vora</span> <span class="o">&lt;</span><span class="n">avo</span><span class="nd">@tinyerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="n">Date</span><span class="p">:</span>   <span class="n">Thu</span> <span class="n">Apr</span> <span class="mi">17</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">33</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
@@ -882,7 +944,7 @@ followers” box appeared.</p>
 </div>
 <p>However I don’t see the mentioned “top-right email icon”.  In fact, that icon
 is present in 7.0, but not in 8.0.  More digging:</p>
-<div class="highlight-default"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="mi">5209</span><span class="n">fbc7ed9fcad966ab064654a8a8697142be42</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">commit</span> <span class="mi">5209</span><span class="n">fbc7ed9fcad966ab064654a8a8697142be42</span>
 <span class="n">Author</span><span class="p">:</span> <span class="n">Antony</span> <span class="n">Lesuisse</span> <span class="o">&lt;</span><span class="n">al</span><span class="nd">@openerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="n">Date</span><span class="p">:</span>   <span class="n">Mon</span> <span class="n">Jun</span> <span class="mi">30</span> <span class="mi">01</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">40</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
@@ -1007,7 +1069,7 @@ position, contact information, etc…</p>
 <p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">"res.partner"</span></span> gets appended a
 whole bunch of other fields, including the said “account payable” and “account
 receivable” fields, which are also marked as mandatory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span/><span class="s1">'property_account_payable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="s1">'property_account_payable'</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
     <span class="s1">'account.account'</span><span class="p">,</span>
     <span class="nb">type</span><span class="o">=</span><span class="s1">'many2one'</span><span class="p">,</span>
     <span class="n">relation</span><span class="o">=</span><span class="s1">'account.account'</span><span class="p">,</span>

@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2018/06/22/a-failing-fail-in-the-monad-list
    2018/01/22/foldl-in-terms-of-foldr
    2015/09/12/odoo-bus-implementation
    2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today

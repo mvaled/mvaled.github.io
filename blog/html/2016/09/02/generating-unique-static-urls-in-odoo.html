@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="generating-unique-static-urls-in-odoo">
-<h1>Generating unique static URLs in Odoo</h1>
+<h1>Generating unique static URLs in Odoo<a class="headerlink" href="#generating-unique-static-urls-in-odoo" title="Permalink to this headline">¶</a></h1>
 <p>By default Odoo bundles static assets (JS and CSS) within a couple of
 files: All CSS files are bundled into a single big CSS file.  The same
 happens for JS files.</p>
@@ -83,7 +83,7 @@ proxy like Nginx.</p>
 <p>Reportedly, this has worked very well in our case where some users
 have slow connections.  However, measuring the logs of a week we see
 that about 21% of GET request are assets:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ egrep &#39;GET .*(\.|/)(css|js).* HTTP/&#39; /var/log/nginx/o.access.log.1 | wc -l
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ egrep &#39;GET .*(\.|/)(css|js).* HTTP/&#39; /var/log/nginx/o.access.log.1 | wc -l
 10554
 
 $ egrep &#39;GET .* HTTP&#39; /var/log/nginx/o.access.log.1 | wc -l

@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Hot-swapping Python modules. An experiment." href="../../02/18/greenlet-local-python-modules-an-experiment.html" /><link rel="prev" title="Odoo at last!" href="../../05/26/odoo-at-last.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="memento-microservices">
-<h1>Memento: microservices</h1>
+<h1>Memento: microservices<a class="headerlink" href="#memento-microservices" title="Permalink to this headline">¶</a></h1>
 <p>Lately there’s been a raise of the debate about Microservices architectures.
 Reading about the stuff I realized I did once architect an application called
 Pyxel based on the same principles, though different.</p>
@@ -82,7 +82,7 @@ have meet its stated requirements <a class="footnote-reference" href="#disagreem
 architecture was published in several public events, so I can freely describe
 it here.</p>
 <div class="section" id="pyxel">
-<h2>Pyxel</h2>
+<h2>Pyxel<a class="headerlink" href="#pyxel" title="Permalink to this headline">¶</a></h2>
 <p>Pyxel’s goal was simple:</p>
 <blockquote>
 <div>Be a shared repository of photographs for the news media that wish to
@@ -128,7 +128,7 @@ web application would not be able to perform a search if the catalog was down,
 or to upload new images if the queue was out of reach.</p>
 </div>
 <div class="section" id="the-principles-stand">
-<h2>The principles stand</h2>
+<h2>The principles stand<a class="headerlink" href="#the-principles-stand" title="Permalink to this headline">¶</a></h2>
 <p>Microservices are “a take” on the same old issue about software composition.
 Conceptually <a class="reference external" href="https://www.cs.umd.edu/class/spring2003/cmsc838p/Design/criteria.pdf">Parnas</a> still rules: must do modules.  Names have changed and
 several rules to build better modules (components, services, etc) have been
@@ -137,7 +137,7 @@ provided.</p>
 <p>In the web, the modules have drifted away from the server into the client.</p>
 </div>
 <div class="section" id="microservices-and-pyxel">
-<h2>Microservices and Pyxel</h2>
+<h2>Microservices and Pyxel<a class="headerlink" href="#microservices-and-pyxel" title="Permalink to this headline">¶</a></h2>
 <p>Pyxel was not actually a microservice architecture as it is understood now.
 Deep down it used a central name-server that matched services names to network
 endpoints.  We used <a class="reference external" href="https://pypi.python.org/Pyro">Pyro</a> for this prototype.</p>
@@ -147,7 +147,7 @@ to have the prototype working as soon as possible.</p>
 poorly.  And though our first tests were positive there was some slowness.</p>
 <p>To accommodate for a possible replacement of Pyro we chose to provide our own
 “idiom” (in Python) to connect and communicate with services:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">service</span><span class="p">(</span><span class="s1">&#39;pyxel.queue&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">queue</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">service</span><span class="p">(</span><span class="s1">&#39;pyxel.queue&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">queue</span>
     <span class="n">queue</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -164,7 +164,7 @@ service.</li>
 </div>
 </div>
 <div class="section" id="notes">
-<h1>Notes</h1>
+<h1>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h1>
 <table class="docutils footnote" frame="void" id="disagreement" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">

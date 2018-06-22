@@ -27,10 +27,10 @@
 <script src="../../../_static/vendor/jquery-1.8.2.min.js"></script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="The bus implementation in Odoo and notification systems in the Web" href="../../../2015/09/12/odoo-bus-implementation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="The bus implementation in Odoo and notification systems in the Web" href="../../../2015/09/12/odoo-bus-implementation.html" /><link rel="prev" title="A failing fail in the monad list" href="../../06/22/a-failing-fail-in-the-monad-list.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,10 +70,10 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="dissecting-foldl-in-terms-of-foldr">
-<h1>Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></h1>
+<h1>Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite><a class="headerlink" href="#dissecting-foldl-in-terms-of-foldr" title="Permalink to this headline">¶</a></h1>
 <p>The book ‘Real World Haskell’ provides an implementation of <span class="docutils literal"><span class="pre">foldl</span></span> in terms
 of <span class="docutils literal"><span class="pre">foldr</span></span>:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span></span><span class="nf">myFoldl</span><span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span></span><span class="nf">myFoldl</span><span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
 <span class="nf">myFoldl</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
    <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -83,7 +83,7 @@ it’s not trivial, but I found it interesting.  So, I just want to share my
 line of thought.</p>
 <p>The first thing I noticed is that <span class="docutils literal"><span class="pre">z</span></span> is not an argument to <span class="docutils literal"><span class="pre">foldr</span></span>; you
 can rewrite the first line as:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span><span class="p">)</span> <span class="n">z</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span><span class="p">)</span> <span class="n">z</span>
 </pre></div>
 </div>
 <p>This makes visible that the result of the <span class="docutils literal"><span class="pre">foldr</span></span> is a function that takes
@@ -91,7 +91,7 @@ can rewrite the first line as:</p>
 to <span class="docutils literal"><span class="pre">id</span></span>, we can see that the type of the <span class="docutils literal"><span class="pre">foldr</span></span>’s result is <span class="docutils literal"><span class="pre">b</span> <span class="pre">-&gt;</span> <span class="pre">b</span></span>.</p>
 <p>This also implies that the type of <span class="docutils literal"><span class="pre">step</span></span> must be <span class="docutils literal"><span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span> <span class="pre">b)</span> <span class="pre">-&gt;</span> <span class="pre">(b</span> <span class="pre">-&gt;</span>
 <span class="pre">b)</span></span>.  You can prove that by extracting <span class="docutils literal"><span class="pre">step</span></span>:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span></span><span class="nf">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span></span><span class="nf">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span>
 <span class="nf">step1</span> <span class="n">f</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="nf">myFoldl1</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
@@ -101,20 +101,20 @@ to <span class="docutils literal"><span class="pre">id</span></span>, we can see
 <p>Use <cite>ghci</cite> to verify that.</p>
 <p>Now comes the <em>funny</em> part of the implementation: <span class="docutils literal"><span class="pre">step</span></span> is defined with
 three arguments</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>but <span class="docutils literal"><span class="pre">foldr</span></span> only passes the first two, and that’s totally fine; the result
 will be another function.</p>
 <p>You can make this explicit:</p>
-<div class="highlight-haskell"><div class="highlight"><pre><span></span><span class="nf">myFoldl2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<div class="highlight-haskell notranslate"><div class="highlight"><pre><span></span><span class="nf">myFoldl2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
 <span class="nf">myFoldl2</span> <span class="n">f</span> <span class="n">z</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="n">step</span> <span class="n">id</span> <span class="n">xs</span> <span class="n">z</span>
    <span class="kr">where</span> <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That’s a beautiful thing about Haskell both definitions of <span class="docutils literal"><span class="pre">step</span></span> are
 actually indistinguishable:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="n">step</span> <span class="n">x</span> <span class="n">g</span> <span class="o">=</span> \<span class="n">a</span> <span class="o">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -123,7 +123,7 @@ actually indistinguishable:</p>
 programming language.</p>
 <p>Having all that we can easily follow how the expression <span class="docutils literal"><span class="pre">myFoldl</span> <span class="pre">(+)</span> <span class="pre">0</span> <span class="pre">[1,</span>
 <span class="pre">2]</span></span> would proceed:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>myFoldl (+) 0 [1, 2]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>myFoldl (+) 0 [1, 2]
 (foldr step id [1, 2]) 0                  -- by def. of myFoldl
 (step 1 (foldr step id [2])) 0            -- by def. of foldr
 (step 1 (step 2 (foldr step id []))) 0    -- by def. of foldr
@@ -158,7 +158,7 @@ programming language.</p>
             <span>January 22, 2018</span>
         </div>
     <ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../../06/22/a-failing-fail-in-the-monad-list.html">A failing fail in the monad list</a></li>
             <li class="right"><a href="../../../2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the Web</a> &raquo; </li>
         </ul></article>
     <div id="disqus_thread"></div>

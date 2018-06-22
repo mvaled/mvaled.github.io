@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="non-curated-notes-about-cycle-js">
-<h1>Non-curated notes about Cycle.js</h1>
+<h1>Non-curated notes about Cycle.js<a class="headerlink" href="#non-curated-notes-about-cycle-js" title="Permalink to this headline">¶</a></h1>
 <p>In the past few days I have been reading about Reactive Programming.  Mostly
 about how it’s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
 post is by no means an account of well thought ideas, but my first ideas and
@@ -103,7 +103,7 @@ first place.  It goes like: your program outputs are the input to an external
 your program’s source streams.</p>
 <p>Architecturally this is simple and good.</p>
 <div class="section" id="components">
-<h2>Components</h2>
+<h2>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
 <p class="attribution">&mdash;From the Cycle.js documentation</p>
@@ -127,14 +127,14 @@ to expose the stream of ‘values’ from the slider.</p>
 its state.</p>
 </div>
 <div class="section" id="streams-to-the-extreme-and-localization">
-<h3>Streams to the extreme (and localization)</h3>
+<h3>Streams to the extreme (and localization)<a class="headerlink" href="#streams-to-the-extreme-and-localization" title="Permalink to this headline">¶</a></h3>
 <p>The Egghead’s series exposes how Cycle.js became to be and you can, therefore,
 see the evolution it is.  Is a short video series worth watching: right to the
 point without many detours.</p>
 <p>There’s a video when they needed to make a component out of the Height and
 Weight sliders, and they needed to pass parameters like the label, min value
 and max value. I thought they were going to use old plain closures:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">const</span> <span class="n">label</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">label</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
     <span class="k">return</span> <span class="n">main</span><span class="p">(</span><span class="n">sources</span><span class="p">);</span>
@@ -147,7 +147,7 @@ and max value. I thought they were going to use old plain closures:</p>
 bit more I think is can be really useful.</p>
 <p>I started to think about an application with just a slider and a language
 selector:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Height</span><span class="p">:</span> <span class="mi">6</span> <span class="n">feet</span>   <span class="o">&lt;-----</span><span class="n">o</span><span class="o">--&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Height</span><span class="p">:</span> <span class="mi">6</span> <span class="n">feet</span>   <span class="o">&lt;-----</span><span class="n">o</span><span class="o">--&gt;</span>
 
 <span class="n">Choose</span> <span class="n">language</span><span class="p">:</span> <span class="p">[</span><span class="n">ENG</span><span class="p">]</span>
 </pre></div>
@@ -158,26 +158,26 @@ change the language the <em>entire application</em> changes to the new language.
 <p>My first thought is that the language selector gets is value from a driver
 (which I don’t know if it already exists) that deals with localization.  Let’s
 say you can obtain such a driver like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
    <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
    <span class="n">locale</span><span class="p">:</span> <span class="n">makeLocaleDriver</span><span class="p">({</span><span class="n">languages</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;en_US&#39;</span><span class="p">,</span> <span class="s1">&#39;es_ES&#39;</span><span class="p">],</span> <span class="o">...</span><span class="p">})</span>
 <span class="p">})</span>
 </pre></div>
 </div>
 <p>The driver would let you respond to changes in translations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = sources.locale.select(&#39;Height&#39;);
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const label$ = sources.locale.select(&#39;Height&#39;);
 </pre></div>
 </div>
 <p>Or combining with another mapping from another stream so that the <span class="docutils literal"><span class="pre">props</span></span>
 stream remains almost unchanged:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
 </pre></div>
 </div>
 <p>However, after revisiting that last idea, I noticed that it doesn’t work.  A
 change in in the locale does not trigger any event in the <span class="docutils literal"><span class="pre">props$</span></span> stream.
 Assuming that <span class="docutils literal"><span class="pre">locale.current$</span></span> is a stream of localization object, this may
 work:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>const label$ = props$.combine(sources.locale.current$)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const label$ = props$.combine(sources.locale.current$)
                      .map((label, locale) =&gt; locale.gettext(label));
 </pre></div>
 </div>
@@ -185,7 +185,7 @@ work:</p>
 feet vs meter, etc…  I’ve been thinking about it for a bit.  The most
 problematic issue is that state is not clearly owned unless we introduce a
 kind of <em>quantity</em> for which the unit of measure is explicit:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
     <span class="n">props</span><span class="p">:</span> <span class="n">xs</span><span class="o">.</span><span class="n">of</span><span class="p">({</span>
        <span class="n">value</span><span class="p">:</span> <span class="n">new</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="n">Unit</span><span class="o">.</span><span class="n">Length</span><span class="o">.</span><span class="n">cm</span><span class="p">),</span>
     <span class="p">})</span>
@@ -202,7 +202,7 @@ slider, without any knowledge of units, might be wrapped inside a
 </div>
 </div>
 <div class="section" id="open-questions">
-<h2>Open questions</h2>
+<h2>Open questions<a class="headerlink" href="#open-questions" title="Permalink to this headline">¶</a></h2>
 <p>Most of the ideas exposed above are not battle tested.  I happen to be
 evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
 that require almost real-times updates, and the stream interface is thus quite

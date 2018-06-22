@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Odoo… I mean OpenERP" href="../../06/05/odoo.html" /><link rel="prev" title="Reviewing Odoo 8.0" href="../../08/28/reviewing-openerp-8-0.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="integration-v-automation">
-<h1>Integration v. Automation</h1>
+<h1>Integration v. Automation<a class="headerlink" href="#integration-v-automation" title="Permalink to this headline">¶</a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Editorial note</p>
 <p>I’m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation/">old blog</a>.  It’s published as it were
@@ -91,7 +91,7 @@ when deploying OpenERP in an small enterprise.  Then I will argue about what
 integration means.  Lastly, I will turn to automation as a mean for
 integration and not the only way to do it.</p>
 <div class="section" id="the-integration-tale">
-<h2>The Integration tale</h2>
+<h2>The Integration tale<a class="headerlink" href="#the-integration-tale" title="Permalink to this headline">¶</a></h2>
 <p>I want to start with a simple and very real&nbsp;<a class="footnote-reference" href="#accounting-last" id="id2">[1]</a> use case: Bob
 is a salesperson processing a <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management">CRM</a> lead.</p>
 <p>The story beings when Bob opens the lead and clicks on the Edit button and the
@@ -124,7 +124,7 @@ can resume his work and finish processing his CRM lead.</p>
 <p class="caption"><span class="caption-text">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</span></p>
 </div>
 <div class="section" id="depiction-of-wrongness">
-<h3>Depiction of wrongness</h3>
+<h3>Depiction of wrongness<a class="headerlink" href="#depiction-of-wrongness" title="Permalink to this headline">¶</a></h3>
 <p>In my opinion there are two things that are clearly wrong with this:</p>
 <ol class="loweralpha">
 <li><p class="first">Requiring data <em>when</em> it’s not required.  When you’re in a CRM use case
@@ -144,7 +144,7 @@ code and re-parsing of the documentation, so I’ll try to walk you through the
 process.</p>
 </div>
 <div class="section" id="the-issue-the-making-off">
-<h3>The issue.  The making off</h3>
+<h3>The issue.  The making off<a class="headerlink" href="#the-issue-the-making-off" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Technical stuff ahead.  Wearing hardhats is mandatory.</p>
@@ -160,7 +160,7 @@ position, contact information, etc…</p>
 <p>When you install the <span class="docutils literal"><span class="pre">account</span></span> addon, the <span class="docutils literal"><span class="pre">&quot;res.partner&quot;</span></span> gets appended a
 whole bunch of other fields, including the said “account payable” and “account
 receivable” fields, which are also marked as mandatory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;property_account_payable&#39;</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;property_account_payable&#39;</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
     <span class="s1">&#39;account.account&#39;</span><span class="p">,</span>
     <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;many2one&#39;</span><span class="p">,</span>
     <span class="n">relation</span><span class="o">=</span><span class="s1">&#39;account.account&#39;</span><span class="p">,</span>
@@ -183,7 +183,7 @@ receivable” fields, which are also marked as mandatory:</p>
 <p>This are not actual fields of the model <span class="docutils literal"><span class="pre">&quot;res.partner&quot;</span></span>, but properties, which
 are “special”.</p>
 <div class="section" id="on-using-properties">
-<h4>On using properties</h4>
+<h4>On using properties<a class="headerlink" href="#on-using-properties" title="Permalink to this headline">¶</a></h4>
 <p>Properties are of course related to the “solution” for the problem described
 above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup/">Database setup</a>
 in the OpenERP Book.  That’s the reason I’m using this case to open the
@@ -223,7 +223,7 @@ journal entries and before posting them, and change the account if needed.</li>
 </div>
 </div>
 <div class="section" id="id8">
-<h2>Integration v. Automation</h2>
+<h2>Integration v. Automation<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <p>An ERP should simplify things by <em>integrating business areas</em>, shouldn’t it?
 That’s the main driver behind the feature of automatically generating journal
 entries.  Under this principle when an invoice is sent to a client a journal
@@ -278,7 +278,7 @@ actors and agents will lead to better a implementation, easier to understand,
 maintain and evolve.</p>
 </div>
 <div class="section" id="notes">
-<h2>Notes</h2>
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <table class="docutils footnote" frame="void" id="accounting-last" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">

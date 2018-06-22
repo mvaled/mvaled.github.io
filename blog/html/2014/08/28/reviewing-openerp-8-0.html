@@ -30,7 +30,7 @@
 <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Integration v. Automation" href="../../07/02/integration-v-automation.html" /><link rel="prev" title="Apples and Oranges. How books can mislead our thinking process." href="../../12/09/apples-and-oranges.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
@@ -70,7 +70,7 @@
         </li>
         </ul>
     </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="section" id="reviewing-odoo-8-0">
-<h1>Reviewing Odoo 8.0</h1>
+<h1>Reviewing Odoo 8.0<a class="headerlink" href="#reviewing-odoo-8-0" title="Permalink to this headline">¶</a></h1>
 <p>This is the first of a series of blog posts related to the next OpenERP 8.0
 (or should I say Odoo 8.0).  This first post will be very “seeking for
 orientation” on major new features and changes.  Don’t expect anything to be
@@ -79,11 +79,11 @@ deeply commented or analyzed.</p>
 one I’ll just write about things that can be immediately seen when you first
 install it.</p>
 <div class="section" id="installing-odoo-8-0">
-<h2>Installing Odoo 8.0</h2>
+<h2>Installing Odoo 8.0<a class="headerlink" href="#installing-odoo-8-0" title="Permalink to this headline">¶</a></h2>
 <p>I’m working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
 Of course I’m using the branch “8.0” for this review.</p>
 <p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py develop
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python setup.py develop
 </pre></div>
 </div>
 <p>The first I noticed is that several new requirements are in place, and the
@@ -97,9 +97,9 @@ this yet, but I will, cause that was for sure something missing in 7.0.  It’s
 quite suspicious that the tarball is too small (around 13MB) though.</p>
 </div>
 <div class="section" id="new-addons">
-<h2>New addons</h2>
+<h2>New addons<a class="headerlink" href="#new-addons" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="instant-messaging">
-<h3>Instant Messaging</h3>
+<h3>Instant Messaging<a class="headerlink" href="#instant-messaging" title="Permalink to this headline">¶</a></h3>
 <p>Once I ran the server I installed a demo DB to see what’s new.  The first
 thing that captured my attention was an “Instant Messaging” module.  I gave it
 a try and it seemed to work out-of-box.</p>
@@ -115,7 +115,7 @@ at the same time I was writing this post) I realized that the <em>current</em>
 multi-process deployments would still need this IPC to properly work.  So I
 ran <span class="docutils literal"><span class="pre">./openerp-server</span> <span class="pre">--workers=2</span></span> and tested it again.  The chat stopped to
 work and the following error was logged from time to time:</p>
-<div class="highlight-traceback"><div class="highlight"><pre><span></span>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
+<div class="highlight-traceback notranslate"><div class="highlight"><pre><span></span>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
 Traceback (most recent call last):
   File &quot;/&lt;..&gt;/odoo/openerp/http.py&quot;, line 476, in _handle_exception
     return super(JsonRequest, self)._handle_exception(exception)
@@ -138,7 +138,7 @@ Exception: bus.Bus unavailable
 </div>
 <p>The code explains it all.  This is the method <span class="docutils literal"><span class="pre">ImDispatch.start()</span></span> in file
 <span class="docutils literal"><span class="pre">addons/bus/bus.py</span></span>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">evented</span><span class="p">:</span>
         <span class="c1"># gevent mode</span>
         <span class="kn">import</span> <span class="nn">gevent</span>
@@ -167,7 +167,7 @@ for desktop-like notifications, updating your message inbox, and many other
 features that would benefit from this.</p>
 </div>
 <div class="section" id="messaging-has-gone-a-bit-different">
-<h3>Messaging has gone a bit different</h3>
+<h3>Messaging has gone a bit different<a class="headerlink" href="#messaging-has-gone-a-bit-different" title="Permalink to this headline">¶</a></h3>
 <p>At this point I tried to send a message from a user to another (to test if the
 inbox was updated real-time) and realized that the Messaging addons has lost
 the “compose a new message” that was previously accessible from the inbox, let
@@ -177,7 +177,7 @@ me show you a picture (7.0 on the right, 8.0 on the left):</p>
 <p class="caption"><span class="caption-text">Odoo is missing the “Compose new message” button.</span></p>
 </div>
 <p>This commit has some explanation:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">commit</span> <span class="mi">0714</span><span class="n">b231646bb439b121a6aaa43df32fedcb5e6e</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">commit</span> <span class="mi">0714</span><span class="n">b231646bb439b121a6aaa43df32fedcb5e6e</span>
 <span class="n">Author</span><span class="p">:</span> <span class="n">Thibault</span> <span class="n">Delavallée</span> <span class="o">&lt;</span><span class="n">tde</span><span class="nd">@openerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="n">Date</span><span class="p">:</span>   <span class="n">Wed</span> <span class="n">Aug</span> <span class="mi">13</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mi">25</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
@@ -190,7 +190,7 @@ me show you a picture (7.0 on the right, 8.0 on the left):</p>
 <p>I then installed the “Employee directory” addon and the “Share with my
 followers” box appeared.</p>
 <p>More digging in the logs reveals the following:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">commit</span> <span class="n">e6f8666b521fe8c2522d6e94c0c3def54a5f73ed</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">commit</span> <span class="n">e6f8666b521fe8c2522d6e94c0c3def54a5f73ed</span>
 <span class="n">Merge</span><span class="p">:</span> <span class="n">d57a97d</span> <span class="n">bf3d4a7</span>
 <span class="n">Author</span><span class="p">:</span> <span class="n">Amit</span> <span class="n">Vora</span> <span class="o">&lt;</span><span class="n">avo</span><span class="nd">@tinyerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="n">Date</span><span class="p">:</span>   <span class="n">Thu</span> <span class="n">Apr</span> <span class="mi">17</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">33</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
@@ -205,7 +205,7 @@ followers” box appeared.</p>
 </div>
 <p>However I don’t see the mentioned “top-right email icon”.  In fact, that icon
 is present in 7.0, but not in 8.0.  More digging:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">commit</span> <span class="mi">5209</span><span class="n">fbc7ed9fcad966ab064654a8a8697142be42</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">commit</span> <span class="mi">5209</span><span class="n">fbc7ed9fcad966ab064654a8a8697142be42</span>
 <span class="n">Author</span><span class="p">:</span> <span class="n">Antony</span> <span class="n">Lesuisse</span> <span class="o">&lt;</span><span class="n">al</span><span class="nd">@openerp</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="n">Date</span><span class="p">:</span>   <span class="n">Mon</span> <span class="n">Jun</span> <span class="mi">30</span> <span class="mi">01</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">40</span> <span class="mi">2014</span> <span class="o">+</span><span class="mi">0200</span>
 
