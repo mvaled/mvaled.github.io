@@ -92,9 +92,10 @@ html_sidebars = {
 
 
 intersphinx_mapping = {
-    'py': ('http://docs.python.org/3.4/', None),
-    'sphinx': ('http://sphinx-doc.org/', None),
+    'py': ('https://docs.python.org/3.6/', None),
+    'sphinx': ('https://sphinx-doc.org/', None),
     'xotlql': ('http://xotl-ql.readthedocs.org/en/latest/', None),
+    'xoutil': ('https://xoutil.readthedocs.org/en/latest/', None),
 }
 
 
