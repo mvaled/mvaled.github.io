@@ -176,7 +176,7 @@ actually).
 
    def iter_compose(*fs):
        if len(fs) == 2:
-	       # optimize the 'lambda x: [x]' for the *usual* case of 2-args.
+           # optimize the 'lambda x: [x]' for the *usual* case of 2-args.
            return _compose(*fs)
        else:
            return reduce(_compose, fs, lambda x: [x])
