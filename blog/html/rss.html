@@ -14,19 +14,20 @@
             <description><![CDATA[<h1>Composing iterator-returning functions</h1>
 <p>A few days ago I was reviewing a piece of Python code.  I was looking for a
 bug, but in the process I found a very interesting function.</p>
-<p>The system allows it’s user to “extend” the structure of Products, by
-providing more attributes which can be used later on when create Sale (or
-Purchase) Orders.  The Product object is like a class defining the structure,
-and the items in Orders are the instances of such classes.</p>
-<p>When trying to export a full catalog, each attribute may implied a new row in
-the spreadsheet file.  But to avoid too much coupling, this process was
-modeled by a kind of seeded generation of every possible row.  The algorithm
-created a seed instance of a product without any attribute, then it generated
-every possible attribute-complete instance by <em>composing</em> several functions
-that took a instance and returned a iterator of instances.  Each function deal
-with a specific type of attribute, and simply injected those attributes in
-the instances being generated.</p>
-<p>The function doing this was more or less like this:</p>
+<p>The system allows the user to “extend” the structure of Products by providing
+more attributes which can be used later on when creating Sale (or Purchase)
+Orders.  The Product object is like a class defining the structure, and the
+items in Orders are the instances of such classes.</p>
+<p>When trying to export a full catalog, each attribute implies a new row in the
+spreadsheet file.  To avoid too much coupling, this process was modeled by a
+kind of seeded generation of every possible row.  The algorithm started with a
+seed instance of a product without any attribute, and then it generated every
+possible attribute-complete instance by <em>composing</em> several functions that
+took a instance and returned a iterator of instances.  Each function deals
+with a specific type of attribute, and simply copies those attributes in the
+instances being generated.</p>
+<p>The function doing the generation of all possible instance was more or less
+like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">iter_product</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="o">*</span><span class="n">funcs</span><span class="p">):</span>
    <span class="k">if</span> <span class="ow">not</span> <span class="n">funcs</span><span class="p">:</span>
       <span class="k">yield</span> <span class="n">initial</span>
@@ -103,16 +104,14 @@ equivalent to <span class="docutils literal"><span class="pre">m</span></span>:<
 <span class="nf">g</span> <span class="o">&gt;&gt;.</span> <span class="n">f</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="n">g</span>
 </pre></div>
 </div>
-<p>This is as good as I was able to get.  Since we’re using <span class="docutils literal"><span class="pre">&gt;&gt;=</span></span>, I thinks
-this is the best we can get (i.e. we can’t generalize to <a class="reference external" href="https://wiki.haskell.org/Applicative_functor">Applicative</a>).</p>
+<p>This is as good as I was able to get.  Since we’re using <span class="docutils literal"><span class="pre">&gt;&gt;=</span></span>, I think this
+is the best we can get (i.e. we can’t generalize to <a class="reference external" href="https://wiki.haskell.org/Applicative_functor">Applicative</a>).</p>
 </div>
 <div class="section" id="chaining-several-iterator-returning-functions">
 <h2>Chaining several iterator-returning functions</h2>
-<p>Now, I can define a <span class="docutils literal"><span class="pre">chain</span></span> function.  It takes a list of several</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">Monad</span> <span class="n">m</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
-</pre></div>
-</div>
-<p>functions and compose them together (from right to left, as expected):</p>
+<p>Now, I can define a <span class="docutils literal"><span class="pre">chain</span></span> function.  It takes a list of several
+<span class="docutils literal"><span class="pre">a -&gt; m a</span></span> functions and compose them together (from right to left, as
+expected):</p>
 <div class="highlight-Haskell notranslate"><div class="highlight"><pre><span/><span class="nf">chain</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">[</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
 </pre></div>
 </div>
@@ -127,11 +126,11 @@ this is the best we can get (i.e. we can’t generalize to <a class="reference e
 <span class="nf">chain</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">&gt;&gt;.</span><span class="p">)</span> <span class="n">return</span>
 </pre></div>
 </div>
-<p>And completes our incursion in Haskell.</p>
+<p>And that completes our incursion in Haskell.</p>
 </div>
 <div class="section" id="doing-the-same-in-python">
 <h2>Doing the same in Python</h2>
-<p>Going from our Haskell definition of <span class="docutils literal"><span class="pre">chain</span></span> to Python is quite easy.  But
+<p>Going from this Haskell definition of <span class="docutils literal"><span class="pre">chain</span></span> to Python is quite easy.  But
 we’re not going to work with any possible monad, just lists (iterators,
 actually).</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span/><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>

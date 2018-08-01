@@ -7,21 +7,22 @@ Composing iterator-returning functions
 A few days ago I was reviewing a piece of Python code.  I was looking for a
 bug, but in the process I found a very interesting function.
 
-The system allows it's user to "extend" the structure of Products, by
-providing more attributes which can be used later on when create Sale (or
-Purchase) Orders.  The Product object is like a class defining the structure,
-and the items in Orders are the instances of such classes.
+The system allows the user to "extend" the structure of Products by providing
+more attributes which can be used later on when creating Sale (or Purchase)
+Orders.  The Product object is like a class defining the structure, and the
+items in Orders are the instances of such classes.
 
-When trying to export a full catalog, each attribute may implied a new row in
-the spreadsheet file.  But to avoid too much coupling, this process was
-modeled by a kind of seeded generation of every possible row.  The algorithm
-created a seed instance of a product without any attribute, then it generated
-every possible attribute-complete instance by *composing* several functions
-that took a instance and returned a iterator of instances.  Each function deal
-with a specific type of attribute, and simply injected those attributes in
-the instances being generated.
+When trying to export a full catalog, each attribute implies a new row in the
+spreadsheet file.  To avoid too much coupling, this process was modeled by a
+kind of seeded generation of every possible row.  The algorithm started with a
+seed instance of a product without any attribute, and then it generated every
+possible attribute-complete instance by *composing* several functions that
+took a instance and returned a iterator of instances.  Each function deals
+with a specific type of attribute, and simply copies those attributes in the
+instances being generated.
 
-The function doing this was more or less like this:
+The function doing the generation of all possible instance was more or less
+like this:
 
 .. code-block:: python
 
@@ -124,20 +125,16 @@ And, once more, the eta-conversion help us to remove the `let`, because
    (>>.)  :: Monad m => (b -> m c) -> (a -> m b) -> a -> m c
    g >>. f = \x -> f x >>= g
 
-This is as good as I was able to get.  Since we're using ``>>=``, I thinks
-this is the best we can get (i.e. we can't generalize to Applicative_).
+This is as good as I was able to get.  Since we're using ``>>=``, I think this
+is the best we can get (i.e. we can't generalize to Applicative_).
 
 
 Chaining several iterator-returning functions
 ---------------------------------------------
 
 Now, I can define a ``chain`` function.  It takes a list of several
-
-::
-
-   Monad m => a -> m a
-
-functions and compose them together (from right to left, as expected):
+``a -> m a`` functions and compose them together (from right to left, as
+expected):
 
 
 .. code-block:: Haskell
@@ -160,13 +157,13 @@ But, then I realized that's a fold:
   chain :: (Foldable l, Monad m) => l (a -> m a) -> a -> m a
   chain = foldr (>>.) return
 
-And completes our incursion in Haskell.
+And that completes our incursion in Haskell.
 
 
 Doing the same in Python
 ------------------------
 
-Going from our Haskell definition of ``chain`` to Python is quite easy.  But
+Going from this Haskell definition of ``chain`` to Python is quite easy.  But
 we're not going to work with any possible monad, just lists (iterators,
 actually).
 
