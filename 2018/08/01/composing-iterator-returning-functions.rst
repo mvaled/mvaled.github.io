@@ -148,7 +148,7 @@ My first attempt was:
 
   chain :: Monad m => [a -> m a] -> a -> m a
   chain []  = return
-  chain (f:fs) = (chain fs) >>. f
+  chain (f:fs) = f >>. (chain fs)
 
 But, then I realized that's a fold:
 
