@@ -55,7 +55,7 @@ The type of ``guarded False`` is ``Monad m => m a -> m a``.  However the type
 of ``fail 'skipped'`` is just ``Monad m => m a``.
 
 Why does ``guarded False = fail "skipped"`` type-checks?  That's an `open
-question <stackoverflow-50989541>`_ (as of the time of writing).
+question <stackoverflow-50989541_>`__ (as of the time of writing).
 
 If I define ``guarded`` as:
 

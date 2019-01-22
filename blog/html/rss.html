@@ -146,7 +146,7 @@ actually).</p>
    <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">z</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>We have included <a class="reference external" href="https://xoutil.readthedocs.io/en/latest/xoutil/fp/iterators.html#xoutil.fp.iterators.iter_compose" title="(in xoutil v1.9)"><span class="xref py py-func docutils literal"><span class="pre">iter_compose()</span></span></a> in <a class="reference external" href="https://github.com/merchise/xoutil">xoutil</a> 1.9.6
+<p>We have included <span class="xref py py-func docutils literal"><span class="pre">iter_compose()</span></span> in <a class="reference external" href="https://github.com/merchise/xoutil">xoutil</a> 1.9.6
 and 2.0.6.</p>
 </div>
 ]]></description>
@@ -197,7 +197,7 @@ small/important difference between <span class="docutils literal"><span class="p
 <span class="pre">False</span> <span class="pre">=</span> <span class="pre">fail</span> <span class="pre">"..."</span></span></p>
 <p>The type of <span class="docutils literal"><span class="pre">guarded</span> <span class="pre">False</span></span> is <span class="docutils literal"><span class="pre">Monad</span> <span class="pre">m</span> <span class="pre">=&gt;</span> <span class="pre">m</span> <span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">m</span> <span class="pre">a</span></span>.  However the type
 of <span class="docutils literal"><span class="pre">fail</span> <span class="pre">'skipped'</span></span> is just <span class="docutils literal"><span class="pre">Monad</span> <span class="pre">m</span> <span class="pre">=&gt;</span> <span class="pre">m</span> <span class="pre">a</span></span>.</p>
-<p>Why does <span class="docutils literal"><span class="pre">guarded</span> <span class="pre">False</span> <span class="pre">=</span> <span class="pre">fail</span> <span class="pre">"skipped"</span></span> type-checks?  That’s an <a class="reference external" href="stackoverflow-50989541">open
+<p>Why does <span class="docutils literal"><span class="pre">guarded</span> <span class="pre">False</span> <span class="pre">=</span> <span class="pre">fail</span> <span class="pre">"skipped"</span></span> type-checks?  That’s an <a class="reference external" href="https://stackoverflow.com/q/50989541/211280">open
 question</a> (as of the time of writing).</p>
 <p>If I define <span class="docutils literal"><span class="pre">guarded</span></span> as:</p>
 <div class="highlight-haskell notranslate"><div class="highlight"><pre><span/><span class="nf">guarded</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">Bool</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
@@ -1486,30 +1486,30 @@ in <a class="reference external" href="https://github.com/merchise-autrement/xot
 <li><p class="first">The beginnings.  Slightly TDD, but the tests were not always written before
 code.  Since <cite>xotl.ql</cite> is just a language we were not sure about what to
 test.</p>
-<p>The idea of having a <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query object</span></a> that stands for the expression
+<p>The idea of having a <a class="reference external" href="https://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query object</span></a> that stands for the expression
 was not totally consolidated.  The components of the query were not
 defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
 <p>In this case the “literate” spirit dominated the design process, not the
 testing.  Simply we didn’t have a full-stack: ie. the language and the
-<a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">translators</span></a> so that a query could actually be
+<a class="reference external" href="https://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-translator" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">translators</span></a> so that a query could actually be
 executed.</p>
 </li>
 <li><p class="first">Consolidation of the design.  In this stage several devices were invented
-to cope with implementation difficulties, i.e. the <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/_revenge/index.html#inner-workings" title="(in xotl.ql v0.3.1)"><span class="xref std std-ref">lack of clear
+to cope with implementation difficulties, i.e. the <a class="reference external" href="https://xotl-ql.readthedocs.io/en/latest/_revenge/index.html#inner-workings" title="(in xotl.ql v0.3.1)"><span class="xref std std-ref">lack of clear
 boundaries</span></a> between several sub-expressions in a
-single <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query</span></a>.</p>
+single <a class="reference external" href="https://xotl-ql.readthedocs.io/en/latest/terms.html#term-query" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query</span></a>.</p>
 <p>This was the hardest stage.  Testing was employed to keep track of several
 design decisions.  In this stage made appearance our “Particle Bubble” and
 this was complex enough to deserve a handful of tests.  Although several
 tests did influence the design, they hardly drove it.</p>
 </li>
-<li><p class="first">Then the core was done and we turned to <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/api/translation/py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.3.1)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
+<li><p class="first">Then the core was done and we turned to <a class="reference external" href="https://xotl-ql.readthedocs.io/en/latest/api/translation/py.html#module-xotl.ql.translation.py" title="(in xotl.ql v0.3.1)"><span class="xref py py-mod docutils literal"><span class="pre">translation</span></span></a>.  This stage was mainly TDD cause we
 actually were testing a very TDD friendly layer:  Given this state of the
 world, the following query should return these objects.</p>
 </li>
 <li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
 our entire design and do reverse engineering of python byte-code to extract
-build the <a class="reference external" href="http://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query object</span></a>.</p>
+build the <a class="reference external" href="https://xotl-ql.readthedocs.io/en/latest/terms.html#term-query-object" title="(in xotl.ql v0.3.1)"><span class="xref std std-term">query object</span></a>.</p>
 <p>What is foreseeable is that again a kind of literate driven design is going
 to be king: The core structure of the language (the query AST) is what’s
 being designed so, what’s the point of asking if the result of calling a
