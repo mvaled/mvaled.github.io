@@ -17,7 +17,7 @@ experiment with the following message and code:
 
 List comprehensions as an argument to *reduce-like* functions are usually less
 efficient than using the generation expression itself.  The reason is that
-Python creates the list just to (afterwards) discard it::
+Python creates the list just to discard it afterwards::
 
 	>>> def fib(n):
 	...     a, b = 1, 1
@@ -32,7 +32,7 @@ Python creates the list just to (afterwards) discard it::
 	>>> %timeit sum(x for x in fib(100))
 	3.13 µs ± 18.6 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
 
-As was surprised to see that the list comprehension was a little bit faster
+I was surprised to see that the list comprehension was a little bit faster
 than the generator expression.  So it seems that for short-enough lists, the
 implementation of `sum`:func: is quite fast.
 

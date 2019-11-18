@@ -12,7 +12,7 @@
             <guid>http://mvaled.github.io/blog/html/2019/11/18/performance-of-python-list-comprehensions.html</guid>
             <title><![CDATA[Why does creating a list comprehension is faster?]]></title>
             <description><![CDATA[<h1>Why does creating a list comprehension is faster?</h1>
-<p>Yesterday, I was removing a list-comprehension as an argument to <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#sum" title="(in Python v3.6)"><span class="xref py py-func docutils literal"><span class="pre">sum()</span></span></a>.
+<p>Yesterday, I was removing a list-comprehension as an argument to <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#sum" title="(in Python v3.7)"><span class="xref py py-func docutils literal"><span class="pre">sum()</span></span></a>.
 This is the diff:</p>
 <div class="highlight-diff notranslate"><div class="highlight"><pre><span/><span class="gd">- sum([p.price for p in self.products])</span>
 <span class="gi">+ sum(p.price for p in self.products)</span>
@@ -22,7 +22,7 @@ This is the diff:</p>
 experiment with the following message and code:</p>
 <p>List comprehensions as an argument to <em>reduce-like</em> functions are usually less
 efficient than using the generation expression itself.  The reason is that
-Python creates the list just to (afterwards) discard it:</p>
+Python creates the list just to discard it afterwards:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
 <span class="gp">... </span>    <span class="k">while</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
@@ -37,9 +37,9 @@ Python creates the list just to (afterwards) discard it:</p>
 <span class="go">3.13 µs ± 18.6 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
 </pre></div>
 </div>
-<p>As was surprised to see that the list comprehension was a little bit faster
+<p>I was surprised to see that the list comprehension was a little bit faster
 than the generator expression.  So it seems that for short-enough lists, the
-implementation of <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#sum" title="(in Python v3.6)"><span class="xref py py-func docutils literal"><span class="pre">sum()</span></span></a> is quite fast.</p>
+implementation of <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#sum" title="(in Python v3.7)"><span class="xref py py-func docutils literal"><span class="pre">sum()</span></span></a> is quite fast.</p>
 <p>I had to change the implementation of <cite>fib</cite> to control the amount of items to
 show my point:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
