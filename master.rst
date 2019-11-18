@@ -4,9 +4,11 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2019/11/18/performance-of-python-list-comprehensions
    2018/08/01/composing-iterator-returning-functions
    2018/06/22/a-failing-fail-in-the-monad-list
    2018/01/22/foldl-in-terms-of-foldr
+   2016/09/19/uncurated-notes-about-cycle-js
    2015/09/12/odoo-bus-implementation
    2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today
    2015/05/26/odoo-at-last
