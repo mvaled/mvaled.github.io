@@ -69,7 +69,101 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2014/08/28/reviewing-openerp-8-0.html">Reviewing Odoo 8.0<a class="headerlink" href="#reviewing-odoo-8-0" title="Permalink to this headline">¶</a></a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2014/12/27/lately.html">What I’ve been doing lately<a class="headerlink" href="#what-i-ve-been-doing-lately" title="Permalink to this headline">¶</a></a></h1>
+<p>Lately my work has been mainly driven by the need to efficiently and smoothly
+deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
+the same time I’m responsible of several development and deployments in the
+enterprise.</p>
+<p>The accounting-related tasks have made me to study the accounting module, but
+also accounting in general from fundamental principles to advanced topics.  I
+currently own a collection of 9 books about accounting.  I still have more
+studying to do, but now I’m versed enough to the point of being a (very
+junior) accounting consultant to the CEO.  This, of course, should yield
+future benefits since I’m planning to start a business.</p>
+<p>On the technical side, the last week I was doing a final verification of the
+module so that the (true) accountant of the enterprise finally migrates to
+OpenERP: Taking our QuickBooks files and, with Pentaho <a class="reference external" href="http://community.pentaho.com/projects/data-integration/">Kettle</a>, migrating the
+accounting information to OpenERP, and comparing the legal reports.  This has
+finally yielded good results and we’re doing an opening entry to continue
+accounting in OpenERP (the enterprise has an accounting period the starts on
+Oct, 1st each year).</p>
+<p>At the same time a new server for OpenERP and a deployment based on <a class="reference external" href="https://pypi.python.org/pypi/zc.buildout/">Buildout</a>
+was another one of my tasks.  There’s still much to be done and I’m wondering
+if <a class="reference external" href="https://github.com/ansible/ansible">Ansible</a> would be a good choice to actually manage the deployment since it
+involve setting up <a class="reference external" href="http://www.postfix.org/">Postfix</a> as the Mail Transfer Agent interfacing OpenERP for
+emails.  This means that besides the accounting books I have reviewed several
+email related RFCs (<a class="reference external" href="http://tools.ietf.org/html/rfc2822">2822</a>, <a class="reference external" href="http://tools.ietf.org/html/rfc2821">2821</a> and <a class="reference external" href="http://tools.ietf.org/html/rfc2476">2476</a> being those I’ve read the most) and
+the Postfix documentation.</p>
+<p>To fill the gaps, or more precisely: to take breaks from these topics I’m
+reading a couple of books and articles:</p>
+<ul class="simple">
+<li>High Performance Browser Networking by Ilya Grigorik.</li>
+<li><a class="reference external" href="http://book.mixu.net/distsys/ebook.html">Distributed Systems</a></li>
+<li>The <a class="reference external" href="https://hal.inria.fr/inria-00555588">report about Convergent and Commutative Replicated Data Types</a> of
+Marc Shapiro and others.  RR-7506, pp. 50 &lt;inria-00555588&gt;.</li>
+<li>And for fun, the last book of the Rama saga of Arthur Clark and Gentry Lee.
+Which BTW I’ve only truly enjoyed the first book.</li>
+</ul>
+<div class="section" id="things-left-in-the-attic">
+<h2>Things left in the attic<a class="headerlink" href="#things-left-in-the-attic" title="Permalink to this headline">¶</a></h2>
+<p>At the beginning of 2014 I expected I could dedicate myself to finish
+<a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">xotl.ql</a> by August.  This was, however, not possible.  I still keep my eye
+on the topic from time to time, but this needs a lot of time to actually make
+a breakthrough.</p>
+</div>
+
+        <div class="postmeta">
+        
+        
+        
+        </div>
+        <div class="timestamp postmeta">
+            <span>December 27, 2014</span>
+        </div><div class="separator post_separator"></div><h1><a href="2014/12/09/apples-and-oranges.html">Apples and Oranges.  How books can mislead our thinking process.<a class="headerlink" href="#apples-and-oranges-how-books-can-mislead-our-thinking-process" title="Permalink to this headline">¶</a></a></h1>
+<p>I’ve just began to read the book “Twisted Network Programming”… <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
+a popular framework for networking programming.  However, I’d probably skim
+most of the Book.  I’m sorry… But as it happens, in the second page of the
+second chapter (the one that I began with) they show an illustration on
+“Comparing single-threaded, multithreaded, and event-driven program flow”.</p>
+<p>Hum… <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+some impact on how events are dealt with, but are they truly comparable or the
+sole responsibles for the program flow?</p>
+<p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
+course, run programs written with them in multiple processes (or threads) to
+avoid contention when the volume of clients (events) is too high.</p>
+<p>Even with a single thread most of the time the system is waiting for the IO
+buffers to have data, so they can be classified as event-driven: They actually
+response to events.</p>
+<p>But what really bothers about this illustration is not that it compare two
+thing that could be (and should be made) complementary.  What bothers me is
+that the picture tries to fool me by showing that event-driven programs don’t
+have any “gaps” of idle time between tasks, while the threaded models do.  And
+that’s simply dishonest.</p>
+<p>Probably this is not what the authors meant, and I’m probably going prejudiced
+just because of this wrong picture. However, I go to a book like this not for
+pleasure but for information.  Finding a piece of data that is not trustworthy
+raises a flag and I start to read with a magnifying glass… And that’s not
+fun either.</p>
+<p>Don’t expect me to finish this book.</p>
+<p class="rubric">Update of a couple of hours later…</p>
+<p>A few lines below the illustration of matters, they actually say:</p>
+<blockquote>
+<div>“The event-driven version of the program interleaves the execution of the
+three tasks, but in a single thread of control.”</div></blockquote>
+<p>So, let’s give it another try.</p>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/book-reviews.html">Book Reviews</a></span>
+        </div>
+        
+        </div>
+        <div class="timestamp postmeta">
+            <span>December 09, 2014</span>
+        </div><div class="separator post_separator"></div><h1><a href="2014/08/28/reviewing-openerp-8-0.html">Reviewing Odoo 8.0<a class="headerlink" href="#reviewing-odoo-8-0" title="Permalink to this headline">¶</a></a></h1>
 <p>This is the first of a series of blog posts related to the next OpenERP 8.0
 (or should I say Odoo 8.0).  This first post will be very “seeking for
 orientation” on major new features and changes.  Don’t expect anything to be

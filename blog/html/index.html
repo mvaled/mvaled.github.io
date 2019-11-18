@@ -69,7 +69,85 @@
           <a href="pages/about-this.html">About this</a>
         </li>
         </ul>
-    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2018/08/01/composing-iterator-returning-functions.html">Composing iterator-returning functions<a class="headerlink" href="#composing-iterator-returning-functions" title="Permalink to this headline">¶</a></a></h1>
+    </nav> --><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><h1><a href="2019/11/18/performance-of-python-list-comprehensions.html">Why does creating a list comprehension is faster?<a class="headerlink" href="#why-does-creating-a-list-comprehension-is-faster" title="Permalink to this headline">¶</a></a></h1>
+<p>Yesterday, I was removing a list-comprehension as an argument to <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#sum" title="(in Python v3.6)"><span class="xref py py-func docutils literal"><span class="pre">sum()</span></span></a>.
+This is the diff:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span/><span class="gd">- sum([p.price for p in self.products])</span>
+<span class="gi">+ sum(p.price for p in self.products)</span>
+</pre></div>
+</div>
+<p>To show the original programmer my line of though I performed a little
+experiment with the following message and code:</p>
+<p>List comprehensions as an argument to <em>reduce-like</em> functions are usually less
+efficient than using the generation expression itself.  The reason is that
+Python creates the list just to (afterwards) discard it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="k">while</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">yield</span> <span class="n">a</span>
+<span class="gp">... </span>        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+<span class="go">2.61 µs ± 33 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="go">3.13 µs ± 18.6 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
+</pre></div>
+</div>
+<p>As was surprised to see that the list comprehension was a little bit faster
+than the generator expression.  So it seems that for short-enough lists, the
+implementation of <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#sum" title="(in Python v3.6)"><span class="xref py py-func docutils literal"><span class="pre">sum()</span></span></a> is quite fast.</p>
+<p>I had to change the implementation of <cite>fib</cite> to control the amount of items to
+show my point:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">yield</span> <span class="n">a</span>
+<span class="gp">... </span>        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>An still with 100 items, passing a list is faster:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">(</span><span class="n">fib</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="go">14.2 µs ± 212 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">fib</span><span class="p">(</span><span class="mi">100</span><span class="p">)))</span>
+<span class="go">16.4 µs ± 247 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+<span class="go">18 µs ± 160 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)</span>
+</pre></div>
+</div>
+<p>Of course the differences are too small to draw final conclusions.  And, of
+course, as the list grows larger it becomes slower:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="p">)])</span>
+<span class="go">497 ms ± 84.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">timeit</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="p">))</span>
+<span class="go">329 ms ± 17.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</span>
+</pre></div>
+</div>
+<p>So I think I still prefer the version using the generation expression just to
+cover my self from the case where there are too many items to be held in
+memory.</p>
+<p>(I didn’t push the commit, though.)</p>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/programming.html">Programming</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/performance.html">Performance</a>, <a href="tags/python.html">Python</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>November 18, 2019</span>
+        </div><div class="separator post_separator"></div><h1><a href="2018/08/01/composing-iterator-returning-functions.html">Composing iterator-returning functions<a class="headerlink" href="#composing-iterator-returning-functions" title="Permalink to this headline">¶</a></a></h1>
 <p>A few days ago I was reviewing a piece of Python code.  I was looking for a
 bug, but in the process I found a very interesting function.</p>
 <p>The system allows the user to “extend” the structure of Products by providing
@@ -382,6 +460,162 @@ programming language.</p>
         </div>
         <div class="timestamp postmeta">
             <span>January 22, 2018</span>
+        </div><div class="separator post_separator"></div><h1><a href="2016/09/19/uncurated-notes-about-cycle-js.html">Non-curated notes about Cycle.js<a class="headerlink" href="#non-curated-notes-about-cycle-js" title="Permalink to this headline">¶</a></a></h1>
+<p>In the past few days I have been reading about Reactive Programming.  Mostly
+about how it’s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
+post is by no means an account of well thought ideas, but my first ideas and
+notes while reading about it.</p>
+<p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my
+opinion:</p>
+<ul>
+<li><p class="first">There’s a single type of connector between the components: the streams.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Both <span class="docutils literal"><span class="pre">sources</span></span> and <span class="docutils literal"><span class="pre">sinks</span></span> return streams.</p>
+</div>
+</li>
+<li><p class="first">There are two distinct type of computational components: the drivers and the
+the <span class="docutils literal"><span class="pre">main(sources)</span></span> function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Intent, view and model functions may be regarded as internal
+structure of <span class="docutils literal"><span class="pre">main()</span></span>.</p>
+</div>
+</li>
+</ul>
+<p>This is appealing because the architecture is simple.  You may understand the
+main points of this architecture in about an hour.  You may recall this is
+actually an evolution (or instance) of the producer-consumer pattern.</p>
+<p>There’s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
+the ‘dialog abstraction’.  Actually, this is what caught my attention in the
+first place.  It goes like: your program outputs are the input to an external
+(possibly human) entity which, in turn, may react and produce more events in
+your program’s source streams.</p>
+<p>Architecturally this is simple and good.</p>
+<div class="section" id="components">
+<h2>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
+<p class="attribution">—From the Cycle.js documentation</p>
+</div></blockquote>
+<p>When it comes to designing an application or component you have to decide
+about the type of events your application may receive and the expected output
+events it may produce in response.</p>
+<p>The previous statement is only true in two cases:</p>
+<ul class="simple">
+<li>Your ‘smaller’ Cycle.js application does not need to interact with other
+parts of your ‘larger’ application.</li>
+<li>Your ‘smaller’ Cycle.js exposes its model; or you have “model drivers”.</li>
+</ul>
+<p>I think this becomes rather obvious in the 16th part of the Egghead’s video
+series on Cycle.js.  The one when they make the slider component and they need
+to expose the stream of ‘values’ from the slider.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Actually the documentation states that components expose, somehow,
+its state.</p>
+</div>
+<div class="section" id="streams-to-the-extreme-and-localization">
+<h3>Streams to the extreme (and localization)<a class="headerlink" href="#streams-to-the-extreme-and-localization" title="Permalink to this headline">¶</a></h3>
+<p>The Egghead’s series exposes how Cycle.js became to be and you can, therefore,
+see the evolution it is.  Is a short video series worth watching: right to the
+point without many detours.</p>
+<p>There’s a video when they needed to make a component out of the Height and
+Weight sliders, and they needed to pass parameters like the label, min value
+and max value. I thought they were going to use old plain closures:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">function</span> <span class="n">Slider</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">const</span> <span class="n">label</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">label</span><span class="p">;</span>
+    <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
+    <span class="k">return</span> <span class="n">main</span><span class="p">(</span><span class="n">sources</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It came as a surprise that they put those parameters into a <span class="docutils literal"><span class="pre">props</span></span>
+<strong>source</strong> to the <span class="docutils literal"><span class="pre">main()</span></span> function of the component.</p>
+<p>At first I thought that was really far fetched, but after thinking about it a
+bit more I think is can be really useful.</p>
+<p>I started to think about an application with just a slider and a language
+selector:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">Height</span><span class="p">:</span> <span class="mi">6</span> <span class="n">feet</span>   <span class="o">&lt;-----</span><span class="n">o</span><span class="o">--&gt;</span>
+
+<span class="n">Choose</span> <span class="n">language</span><span class="p">:</span> <span class="p">[</span><span class="n">ENG</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The slider component is the one we see in the video series.  The language
+selector is a selection component and the expected behavior is that when I
+change the language the <em>entire application</em> changes to the new language.</p>
+<p>My first thought is that the language selector gets is value from a driver
+(which I don’t know if it already exists) that deals with localization.  Let’s
+say you can obtain such a driver like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">cycle</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
+   <span class="o">//</span> <span class="n">etc</span><span class="o">...</span>
+   <span class="n">locale</span><span class="p">:</span> <span class="n">makeLocaleDriver</span><span class="p">({</span><span class="n">languages</span><span class="p">:</span> <span class="p">[</span><span class="s1">'en_US'</span><span class="p">,</span> <span class="s1">'es_ES'</span><span class="p">],</span> <span class="o">...</span><span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>The driver would let you respond to changes in translations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>const label$ = sources.locale.select('Height');
+</pre></div>
+</div>
+<p>Or combining with another mapping from another stream so that the <span class="docutils literal"><span class="pre">props</span></span>
+stream remains almost unchanged:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>const label$ = props$.map(p =&gt; sources.locale.select(p.label));
+</pre></div>
+</div>
+<p>However, after revisiting that last idea, I noticed that it doesn’t work.  A
+change in in the locale does not trigger any event in the <span class="docutils literal"><span class="pre">props$</span></span> stream.
+Assuming that <span class="docutils literal"><span class="pre">locale.current$</span></span> is a stream of localization object, this may
+work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/>const label$ = props$.combine(sources.locale.current$)
+                     .map((label, locale) =&gt; locale.gettext(label));
+</pre></div>
+</div>
+<p>The thing gets a little bit more tricky when it comes to changing the units:
+feet vs meter, etc…  I’ve been thinking about it for a bit.  The most
+problematic issue is that state is not clearly owned unless we introduce a
+kind of <em>quantity</em> for which the unit of measure is explicit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="p">{</span>
+    <span class="n">props</span><span class="p">:</span> <span class="n">xs</span><span class="o">.</span><span class="n">of</span><span class="p">({</span>
+       <span class="n">value</span><span class="p">:</span> <span class="n">new</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="n">Unit</span><span class="o">.</span><span class="n">Length</span><span class="o">.</span><span class="n">cm</span><span class="p">),</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>However this may seem a bit overreaching for a single <em>value</em> that only needs
+to be in between two boundaries (slider).</p>
+<p>This is, IMO the breaking point: If I really need to manage units on my
+application and those need to be fully localized, my components might be
+regarded as over-engineered for other apps.  My only hope is that a simple
+slider, without any knowledge of units, might be wrapped inside a
+<cite>FullyLocalizedSlider</cite> for that purpose.</p>
+</div>
+</div>
+<div class="section" id="open-questions">
+<h2>Open questions<a class="headerlink" href="#open-questions" title="Permalink to this headline">¶</a></h2>
+<p>Most of the ideas exposed above are not battle tested.  I happen to be
+evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
+that require almost real-times updates, and the stream interface is thus quite
+natural.</p>
+<p>There are challenges about integrating my components with the rest of the
+application, and being an application that must display at least three
+languages I need to think on advance about the problems I would face.</p>
+</div>
+
+        <div class="postmeta">
+        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/programming.html">Programming</a></span>
+        </div>
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ui.html">UI</a>, <a href="tags/thought.html">Thought</a></span>
+        </div>
+        </div>
+        <div class="timestamp postmeta">
+            <span>September 19, 2016</span>
         </div><div class="separator post_separator"></div><h1><a href="2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the Web<a class="headerlink" href="#the-bus-implementation-in-odoo-and-notification-systems-in-the-web" title="Permalink to this headline">¶</a></a></h1>
 <div class="sidebar">
 <p class="first sidebar-title">Delayed post.</p>
@@ -977,100 +1211,6 @@ in the box.</p>
         </div>
         <div class="timestamp postmeta">
             <span>February 18, 2015</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/12/27/lately.html">What I’ve been doing lately<a class="headerlink" href="#what-i-ve-been-doing-lately" title="Permalink to this headline">¶</a></a></h1>
-<p>Lately my work has been mainly driven by the need to efficiently and smoothly
-deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
-the same time I’m responsible of several development and deployments in the
-enterprise.</p>
-<p>The accounting-related tasks have made me to study the accounting module, but
-also accounting in general from fundamental principles to advanced topics.  I
-currently own a collection of 9 books about accounting.  I still have more
-studying to do, but now I’m versed enough to the point of being a (very
-junior) accounting consultant to the CEO.  This, of course, should yield
-future benefits since I’m planning to start a business.</p>
-<p>On the technical side, the last week I was doing a final verification of the
-module so that the (true) accountant of the enterprise finally migrates to
-OpenERP: Taking our QuickBooks files and, with Pentaho <a class="reference external" href="http://community.pentaho.com/projects/data-integration/">Kettle</a>, migrating the
-accounting information to OpenERP, and comparing the legal reports.  This has
-finally yielded good results and we’re doing an opening entry to continue
-accounting in OpenERP (the enterprise has an accounting period the starts on
-Oct, 1st each year).</p>
-<p>At the same time a new server for OpenERP and a deployment based on <a class="reference external" href="https://pypi.python.org/pypi/zc.buildout/">Buildout</a>
-was another one of my tasks.  There’s still much to be done and I’m wondering
-if <a class="reference external" href="https://github.com/ansible/ansible">Ansible</a> would be a good choice to actually manage the deployment since it
-involve setting up <a class="reference external" href="http://www.postfix.org/">Postfix</a> as the Mail Transfer Agent interfacing OpenERP for
-emails.  This means that besides the accounting books I have reviewed several
-email related RFCs (<a class="reference external" href="http://tools.ietf.org/html/rfc2822">2822</a>, <a class="reference external" href="http://tools.ietf.org/html/rfc2821">2821</a> and <a class="reference external" href="http://tools.ietf.org/html/rfc2476">2476</a> being those I’ve read the most) and
-the Postfix documentation.</p>
-<p>To fill the gaps, or more precisely: to take breaks from these topics I’m
-reading a couple of books and articles:</p>
-<ul class="simple">
-<li>High Performance Browser Networking by Ilya Grigorik.</li>
-<li><a class="reference external" href="http://book.mixu.net/distsys/ebook.html">Distributed Systems</a></li>
-<li>The <a class="reference external" href="https://hal.inria.fr/inria-00555588">report about Convergent and Commutative Replicated Data Types</a> of
-Marc Shapiro and others.  RR-7506, pp. 50 &lt;inria-00555588&gt;.</li>
-<li>And for fun, the last book of the Rama saga of Arthur Clark and Gentry Lee.
-Which BTW I’ve only truly enjoyed the first book.</li>
-</ul>
-<div class="section" id="things-left-in-the-attic">
-<h2>Things left in the attic<a class="headerlink" href="#things-left-in-the-attic" title="Permalink to this headline">¶</a></h2>
-<p>At the beginning of 2014 I expected I could dedicate myself to finish
-<a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">xotl.ql</a> by August.  This was, however, not possible.  I still keep my eye
-on the topic from time to time, but this needs a lot of time to actually make
-a breakthrough.</p>
-</div>
-
-        <div class="postmeta">
-        
-        
-        
-        </div>
-        <div class="timestamp postmeta">
-            <span>December 27, 2014</span>
-        </div><div class="separator post_separator"></div><h1><a href="2014/12/09/apples-and-oranges.html">Apples and Oranges.  How books can mislead our thinking process.<a class="headerlink" href="#apples-and-oranges-how-books-can-mislead-our-thinking-process" title="Permalink to this headline">¶</a></a></h1>
-<p>I’ve just began to read the book “Twisted Network Programming”… <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
-a popular framework for networking programming.  However, I’d probably skim
-most of the Book.  I’m sorry… But as it happens, in the second page of the
-second chapter (the one that I began with) they show an illustration on
-“Comparing single-threaded, multithreaded, and event-driven program flow”.</p>
-<p>Hum… <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
-some impact on how events are dealt with, but are they truly comparable or the
-sole responsibles for the program flow?</p>
-<p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
-course, run programs written with them in multiple processes (or threads) to
-avoid contention when the volume of clients (events) is too high.</p>
-<p>Even with a single thread most of the time the system is waiting for the IO
-buffers to have data, so they can be classified as event-driven: They actually
-response to events.</p>
-<p>But what really bothers about this illustration is not that it compare two
-thing that could be (and should be made) complementary.  What bothers me is
-that the picture tries to fool me by showing that event-driven programs don’t
-have any “gaps” of idle time between tasks, while the threaded models do.  And
-that’s simply dishonest.</p>
-<p>Probably this is not what the authors meant, and I’m probably going prejudiced
-just because of this wrong picture. However, I go to a book like this not for
-pleasure but for information.  Finding a piece of data that is not trustworthy
-raises a flag and I start to read with a magnifying glass… And that’s not
-fun either.</p>
-<p>Don’t expect me to finish this book.</p>
-<p class="rubric">Update of a couple of hours later…</p>
-<p>A few lines below the illustration of matters, they actually say:</p>
-<blockquote>
-<div>“The event-driven version of the program interleaves the execution of the
-three tasks, but in a single thread of control.”</div></blockquote>
-<p>So, let’s give it another try.</p>
-
-        <div class="postmeta">
-        
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="categories/book-reviews.html">Book Reviews</a></span>
-        </div>
-        
-        </div>
-        <div class="timestamp postmeta">
-            <span>December 09, 2014</span>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
