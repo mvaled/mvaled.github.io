@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <title>Manuel on Software - Reloaded - Memento: microservices</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+    <meta name="tags" content="memento" />
+
+  </head>
+
+  <body>
+      <header>
+          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
+          <nav><ul>
+                <li><a href="/category/architecture.html"  aria-current="page" >architecture</a></li>
+                <li><a href="/category/blogroll.html" >Blogroll</a></li>
+                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
+                <li><a href="/category/misc.html" >misc</a></li>
+                <li><a href="/category/openerp.html" >OpenERP</a></li>
+                <li><a href="/category/programming.html" >Programming</a></li>
+                <li><a href="/category/python.html" >Python</a></li>
+          </ul></nav>
+      </header>
+      <main>
+  <article>
+    <header>
+      <h2>
+        <a href="/2015/04/08/rememoring-microservices.html" rel="bookmark"
+           title="Permalink to Memento: microservices">Memento: microservices</a></h2>
+      
+    </header>
+    <p>Lately there's been a raise of the debate about Microservices architectures.
+Reading about the stuff I realized I did once architect an application called
+Pyxel based on the same principles, though different.</p>
+<p>Pyxel reached only its first prototype and was never actually deployed.  I'd
+say it wasn't given the chance to prove itself.  So I argue it was technically
+sound and, although only a prototype and thus needing improvements, it would
+have meet its stated requirements <a class="footnote-reference" href="#disagreement" id="footnote-reference-1">[1]</a>.</p>
+<p>I haven't been given permission to freely distribute the source code.  But the
+architecture was published in several public events, so I can freely describe
+it here.</p>
+<p>Pyxel</p>
+<p>Pyxel's goal was simple:</p>
+<blockquote>
+Be a shared repository of photographs for the news media that wish to
+collaborate.</blockquote>
+<p>Pyxel required that images were tagged with IPTC metadata before uploading.
+Upon upload, the image went through several processes for extracting the
+metadata, and for producing web-friendly versions <a class="footnote-reference" href="#retina" id="footnote-reference-2">[2]</a> for several
+standard dimensions before being published.</p>
+<p>On the technical side we have also very hard constraints:</p>
+<ul class="simple">
+<li>the system would have to be highly accessible.</li>
+<li>it should run on spare machines; introducing a new machine to replace an old
+one should be possible with minimal interruption.</li>
+</ul>
+<p>This constraints were the main driver that lead us to design what we called a
+distributed system.  Each major component was designed to run in isolation of
+the rest.</p>
+<p>Pyxel was split in several processes:</p>
+<ul class="simple">
+<li>An image queue holding new images.  This was kind of a FIFO queue over the
+network.</li>
+<li>A catalog holding indexes for retrieving images based of queries.  Queries
+were defined a syntax allowing from very simple queries aided with pattern
+recognition (PR) of names and dates, to very specific queries that make the
+PR mostly unused.</li>
+<li>A &quot;feature&quot; index.  This basically allowed to find similar images.  There
+were two indexes, one based on Hu moments and the other based on wavelets.</li>
+<li>Several image processing nodes, that take images from the queue and:<ul>
+<li>Extract IPTC metadata and put it the catalog</li>
+<li>Extract image features to allow detection of similar images.</li>
+<li>Produce &quot;web versions&quot; for the image.  We always kept the original file,
+but to keep the design of the prototype simple there was an &quot;as-is web
+version&quot; that simply returned the same file as the input.</li>
+</ul>
+</li>
+<li>A web application that communicates with the index and the catalogs.</li>
+<li>An FTP server that injects images to the queue using a FUSE mount point
+(drag-and-drop to the browser wasn't common yet).</li>
+</ul>
+<p>That were the main components and all of them ran independently.  Of course
+for some services to perform at 100%, they required others to be working.  The
+web application would not be able to perform a search if the catalog was down,
+or to upload new images if the queue was out of reach.</p>
+<p>The principles stand</p>
+<p>Microservices are &quot;a take&quot; on the same old issue about software composition.
+Conceptually <a class="reference external" href="https://www.cs.umd.edu/class/spring2003/cmsc838p/Design/criteria.pdf">Parnas</a> still rules: must do modules.  Names have changed and
+several rules to build better modules (components, services, etc) have been
+provided.</p>
+<p>Exposition of the modules as services have also been promoted.</p>
+<p>In the web, the modules have drifted away from the server into the client.</p>
+<p>Microservices and Pyxel</p>
+<p>Pyxel was not actually a microservice architecture as it is understood now.
+Deep down it used a central name-server that matched services names to network
+endpoints.  We used <a class="reference external" href="https://pypi.python.org/Pyro">Pyro</a> for this prototype.</p>
+<p>We did recognize that this was an <em>accidental</em> choice, a matter of convenience
+to have the prototype working as soon as possible.</p>
+<p>We chose Pyro to test our prototype not to keep it forever if it performed
+poorly.  And though our first tests were positive there was some slowness.</p>
+<p>To accommodate for a possible replacement of Pyro we chose to provide our own
+&quot;idiom&quot; (in Python) to connect and communicate with services:</p>
+<pre class="literal-block">
+with service('pyxel.queue') as queue
+    queue.method(*arguments)
+</pre>
+<p>That pattern was designed to have an appearance as simple as RPC.  Later we
+found that <a class="reference external" href="http://steve.vinoski.net/pdf/IEEE-RPC_Under_Fire.pdf">RPC was under fire</a>, but the project was being shut down, so we
+didn't fix that.</p>
+<p>Under current views Pyxel needs several changes.  I can think of a couple:</p>
+<ul class="simple">
+<li>Probably exposing the queue to the client-side of the web application
+instead sending the images first to the server-side of the web application.</li>
+<li>Extract the user registration, authentication and authorization into a
+service.</li>
+</ul>
+<p>Notes</p>
+<table class="docutils footnote" frame="void" id="disagreement" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>Actually one of the main causes of Pyxel being a failure
+was I could not make all participants agreed on the requirements.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="retina" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-2">[2]</a></td><td>Current retina displays would make that thumbnails look like
+icons and bandwidth is also more likely to allow very big pictures to be
+friendly.</td></tr>
+</tbody>
+</table>
+
+    <footer>
+      <p>Published: <time datetime="2015-04-08T00:00:00+00:00">
+        Mi 08 April 2015
+      </time></p>
+        <address>
+          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
+        </address>
+        <p>
+          Category: <a href="/category/architecture.html">architecture</a>
+        </p>
+        <p>
+          Tags:
+            <a href="/tag/memento.html">memento</a>
+        </p>
+    </footer>
+  </article>
+      </main>
+      <footer>
+          <address>
+            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+          </address>
+      </footer>
+  </body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <title>Manuel on Software - Reloaded - Composing iterator-returning functions</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+    <meta name="tags" content="Haskell" />
+    <meta name="tags" content="Python" />
+
+  </head>
+
+  <body>
+      <header>
+          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
+          <nav><ul>
+                <li><a href="/category/architecture.html" >architecture</a></li>
+                <li><a href="/category/blogroll.html" >Blogroll</a></li>
+                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
+                <li><a href="/category/misc.html" >misc</a></li>
+                <li><a href="/category/openerp.html" >OpenERP</a></li>
+                <li><a href="/category/programming.html"  aria-current="page" >Programming</a></li>
+                <li><a href="/category/python.html" >Python</a></li>
+          </ul></nav>
+      </header>
+      <main>
+  <article>
+    <header>
+      <h2>
+        <a href="/2018/08/01/composing-iterator-returning-functions.html" rel="bookmark"
+           title="Permalink to Composing iterator-returning functions">Composing iterator-returning functions</a></h2>
+      
+    </header>
+    <p>A few days ago I was reviewing a piece of Python code.  I was looking for a
+bug, but in the process I found a very interesting function.</p>
+<p>The system allows the user to &quot;extend&quot; the structure of Products by providing
+more attributes which can be used later on when creating Sale (or Purchase)
+Orders.  The Product object is like a class defining the structure, and the
+items in Orders are the instances of such classes.</p>
+<p>When trying to export a full catalog, each attribute implies a new row in the
+spreadsheet file.  To avoid too much coupling, this process was modeled by a
+kind of seeded generation of every possible row.  The algorithm started with a
+seed instance of a product without any attribute, and then it generated every
+possible attribute-complete instance by <em>composing</em> several functions that
+took a instance and returned a iterator of instances.  Each function deals
+with a specific type of attribute, and simply copies those attributes in the
+instances being generated.</p>
+<p>The function doing the generation of all possible instance was more or less
+like this:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">iter_product</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="o">*</span><span class="n">funcs</span><span class="p">):</span>
+   <span class="k">if</span> <span class="ow">not</span> <span class="n">funcs</span><span class="p">:</span>
+      <span class="k">yield</span> <span class="n">initial</span>
+   <span class="k">else</span><span class="p">:</span>
+      <span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">fs</span> <span class="o">=</span> <span class="n">funcs</span>
+      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="n">initial</span><span class="p">):</span>
+         <span class="k">yield from</span> <span class="n">iter_product</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">fs</span><span class="p">)</span>
+</pre></div>
+<p>That definition was OK, but I wondered if I could build just the <em>composition</em>
+of several functions returning iterators, so that I can reuse it with several
+initial objects.</p>
+<p>A little incursion in Haskell</p>
+<p>In order to test my Haskell, I did first a Haskell version.  I started by
+trying to create a <em>composition</em> operator much like the <tt class="docutils literal">(.)</tt> operator,
+which has type:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">.</span><span class="p">)</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">c</span>
+</pre></div>
+<p>The type of our composition of iterator-returning functions would be:</p>
+<div class="highlight"><pre><span></span><span class="kr">infixr</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="o">&gt;&gt;.</span>
+<span class="p">(</span><span class="o">&gt;&gt;.</span><span class="p">)</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">c</span><span class="p">])</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">b</span><span class="p">])</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+</pre></div>
+<p>The choice of <tt class="docutils literal"><span class="pre">(&gt;&gt;.)</span></tt> as the operator will become (I hope) evident.  The
+most straightforward implementation and easy to understand is using the
+list-comprehension syntax:</p>
+<div class="highlight"><pre><span></span><span class="nf">g</span><span class="w"> </span><span class="o">&gt;&gt;.</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="n">x</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">z</span><span class="o">|</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="n">y</span><span class="p">]</span>
+</pre></div>
+<p>Can we generalize this?  Yes! The list is an instance of a <a class="reference external" href="http://book.realworldhaskell.org/read/monads.html">Monad</a>, defined as:</p>
+<div class="highlight"><pre><span></span><span class="kr">instance</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="kr">where</span>
+<span class="w">    </span><span class="n">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+<span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="o">&gt;&gt;=</span><span class="w"> </span><span class="n">f</span><span class="w">  </span><span class="ow">=</span><span class="w"> </span><span class="n">concat</span><span class="w"> </span><span class="p">(</span><span class="n">map</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+<p>And list comprehensions can be easily rewritten using the <tt class="docutils literal">do</tt> notation:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">&gt;&gt;.</span><span class="p">)</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">c</span>
+<span class="nf">g</span><span class="w"> </span><span class="o">&gt;&gt;.</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="n">x</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kr">do</span><span class="p">{</span><span class="n">y</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="n">return</span><span class="w"> </span><span class="n">z</span><span class="p">}</span>
+</pre></div>
+<p>The monadic <tt class="docutils literal">&gt;&gt;=</tt> operator is usually called the <em>bind</em>.  It's type is</p>
+<pre class="literal-block">
+Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</pre>
+<p>So, I think there's a compact way to write our <tt class="docutils literal">&gt;&gt;.</tt> operator.  And, now you
+may start to see why I chose <tt class="docutils literal">&gt;&gt;.</tt>.</p>
+<p>The do notation is just syntax-sugar over using <tt class="docutils literal">&gt;&gt;=</tt> (or its brother
+<tt class="docutils literal">&gt;&gt;</tt>).  The rules are given <a class="reference external" href="http://book.realworldhaskell.org/read/monads.html#monads.do">here</a>.  So let's transform our implementation.
+We start we our current definition:</p>
+<pre class="literal-block">
+\x -&gt; do {y &lt;- f x; z &lt;- g y; return z}
+</pre>
+<p>And rewrite the <tt class="docutils literal">do</tt> two times until there are no more:</p>
+<pre class="literal-block">
+\x -&gt; let s1 y = do {z &lt;- g y; return z} in f x &gt;&gt;= s1
+
+\x -&gt; let s1 y = (let s2 z = return z in g y &gt;&gt;= s2) in f x &gt;&gt;= s1
+</pre>
+<p>Now, we can recall the <a class="reference external" href="https://wiki.haskell.org/Eta_conversion">eta-conversion rule</a> and see that <tt class="docutils literal">s2 = return</tt>,
+so:</p>
+<pre class="literal-block">
+\x -&gt; let s1 y = (g y &gt;&gt;= return) in f x &gt;&gt;= s1
+</pre>
+<p>Now we can use the monadic &quot;law&quot; that states the <tt class="docutils literal">m &gt;&gt;= return</tt> must be
+equivalent to <tt class="docutils literal">m</tt>:</p>
+<pre class="literal-block">
+\x -&gt; let s1 y = g y in f x &gt;&gt;= s1
+</pre>
+<p>And, once more, the eta-conversion help us to remove the <cite>let</cite>, because
+<tt class="docutils literal"><span class="pre">s1&nbsp;==</span> g</tt>.  Thus we get:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">&gt;&gt;.</span><span class="p">)</span><span class="w">  </span><span class="ow">::</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">c</span>
+<span class="nf">g</span><span class="w"> </span><span class="o">&gt;&gt;.</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="n">x</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;=</span><span class="w"> </span><span class="n">g</span>
+</pre></div>
+<p>This is as good as I was able to get.  Since we're using <tt class="docutils literal">&gt;&gt;=</tt>, I think this
+is the best we can get (i.e. we can't generalize to <a class="reference external" href="https://wiki.haskell.org/Applicative_functor">Applicative</a>).</p>
+<p>Chaining several iterator-returning functions</p>
+<p>Now, I can define a <tt class="docutils literal">chain</tt> function.  It takes a list of several
+<tt class="docutils literal"><span class="pre">a&nbsp;-&gt;&nbsp;m&nbsp;a</span></tt> functions and compose them together (from right to left, as
+expected):</p>
+<div class="highlight"><pre><span></span><span class="nf">chain</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
+</pre></div>
+<p>My first attempt was:</p>
+<div class="highlight"><pre><span></span><span class="nf">chain</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
+<span class="nf">chain</span><span class="w"> </span><span class="kt">[]</span><span class="w">  </span><span class="ow">=</span><span class="w"> </span><span class="n">return</span>
+<span class="nf">chain</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="kt">:</span><span class="n">fs</span><span class="p">)</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">&gt;&gt;.</span><span class="w"> </span><span class="p">(</span><span class="n">chain</span><span class="w"> </span><span class="n">fs</span><span class="p">)</span>
+</pre></div>
+<p>But, then I realized that's a fold:</p>
+<div class="highlight"><pre><span></span><span class="nf">chain</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="kt">Foldable</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
+<span class="nf">chain</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">foldr</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;&gt;.</span><span class="p">)</span><span class="w"> </span><span class="n">return</span>
+</pre></div>
+<p>And that completes our incursion in Haskell.</p>
+<p>Doing the same in Python</p>
+<p>Going from this Haskell definition of <tt class="docutils literal">chain</tt> to Python is quite easy.  But
+we're not going to work with any possible monad, just lists (iterators,
+actually).</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+
+<span class="k">def</span> <span class="nf">iter_compose</span><span class="p">(</span><span class="o">*</span><span class="n">fs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># optimize the &#39;lambda x: [x]&#39; for the *usual* case of 2-args.</span>
+        <span class="k">return</span> <span class="n">_compose</span><span class="p">(</span><span class="o">*</span><span class="n">fs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">_compose</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">_compose</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+   <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">z</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+<p>We have included <tt class="docutils literal">~xoutil.fp.iterators.iter_compose</tt> in <a class="reference external" href="https://github.com/merchise/xoutil">xoutil</a> 1.9.6
+and 2.0.6.</p>
+
+    <footer>
+      <p>Published: <time datetime="2018-08-01T00:00:00+00:00">
+        Mi 01 August 2018
+      </time></p>
+        <address>
+          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
+        </address>
+        <p>
+          Category: <a href="/category/programming.html">Programming</a>
+        </p>
+        <p>
+          Tags:
+            <a href="/tag/haskell.html">Haskell</a>
+            <a href="/tag/python.html">Python</a>
+        </p>
+    </footer>
+  </article>
+      </main>
+      <footer>
+          <address>
+            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+          </address>
+      </footer>
+  </body>
+</html>

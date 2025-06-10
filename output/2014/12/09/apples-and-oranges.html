@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <title>Manuel on Software - Reloaded - Apples and Oranges. How books can mislead our thinking process.</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+  </head>
+
+  <body>
+      <header>
+          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
+          <nav><ul>
+                <li><a href="/category/architecture.html" >architecture</a></li>
+                <li><a href="/category/blogroll.html" >Blogroll</a></li>
+                <li><a href="/category/book-reviews.html"  aria-current="page" >Book Reviews</a></li>
+                <li><a href="/category/misc.html" >misc</a></li>
+                <li><a href="/category/openerp.html" >OpenERP</a></li>
+                <li><a href="/category/programming.html" >Programming</a></li>
+                <li><a href="/category/python.html" >Python</a></li>
+          </ul></nav>
+      </header>
+      <main>
+  <article>
+    <header>
+      <h2>
+        <a href="/2014/12/09/apples-and-oranges.html" rel="bookmark"
+           title="Permalink to Apples and Oranges. How books can mislead our thinking process.">Apples and Oranges.  How books can mislead our thinking process.</a></h2>
+      
+    </header>
+    <p>I've just began to read the book &quot;Twisted Network Programming&quot;... <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
+a popular framework for networking programming.  However, I'd probably skim
+most of the Book.  I'm sorry... But as it happens, in the second page of the
+second chapter (the one that I began with) they show an illustration on
+&quot;Comparing single-threaded, multithreaded, and event-driven program flow&quot;.</p>
+<p>Hum... <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+some impact on how events are dealt with, but are they truly comparable or the
+sole responsibles for the program flow?</p>
+<p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
+course, run programs written with them in multiple processes (or threads) to
+avoid contention when the volume of clients (events) is too high.</p>
+<p>Even with a single thread most of the time the system is waiting for the IO
+buffers to have data, so they can be classified as event-driven: They actually
+response to events.</p>
+<p>But what really bothers about this illustration is not that it compare two
+thing that could be (and should be made) complementary.  What bothers me is
+that the picture tries to fool me by showing that event-driven programs don't
+have any &quot;gaps&quot; of idle time between tasks, while the threaded models do.  And
+that's simply dishonest.</p>
+<p>Probably this is not what the authors meant, and I'm probably going prejudiced
+just because of this wrong picture. However, I go to a book like this not for
+pleasure but for information.  Finding a piece of data that is not trustworthy
+raises a flag and I start to read with a magnifying glass... And that's not
+fun either.</p>
+<p>Don't expect me to finish this book.</p>
+<p class="rubric">Update of a couple of hours later...</p>
+<p>A few lines below the illustration of matters, they actually say:</p>
+<blockquote>
+&quot;The event-driven version of the program interleaves the execution of the
+three tasks, but in a single thread of control.&quot;</blockquote>
+<p>So, let's give it another try.</p>
+<!-- Local Variables:
+ispell-dictionary: "en"
+End: -->
+
+    <footer>
+      <p>Published: <time datetime="2014-12-09T00:00:00+00:00">
+        Di 09 Dezember 2014
+      </time></p>
+        <address>
+          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
+        </address>
+        <p>
+          Category: <a href="/category/book-reviews.html">Book Reviews</a>
+        </p>
+    </footer>
+  </article>
+      </main>
+      <footer>
+          <address>
+            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+          </address>
+      </footer>
+  </body>
+</html>

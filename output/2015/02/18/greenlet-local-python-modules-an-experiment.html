@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <title>Manuel on Software - Reloaded - Hot-swapping Python modules. An experiment.</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+    <meta name="tags" content="isolation" />
+    <meta name="tags" content="erlang" />
+
+  </head>
+
+  <body>
+      <header>
+          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
+          <nav><ul>
+                <li><a href="/category/architecture.html" >architecture</a></li>
+                <li><a href="/category/blogroll.html" >Blogroll</a></li>
+                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
+                <li><a href="/category/misc.html" >misc</a></li>
+                <li><a href="/category/openerp.html" >OpenERP</a></li>
+                <li><a href="/category/programming.html" >Programming</a></li>
+                <li><a href="/category/python.html"  aria-current="page" >Python</a></li>
+          </ul></nav>
+      </header>
+      <main>
+  <article>
+    <header>
+      <h2>
+        <a href="/2015/02/18/greenlet-local-python-modules-an-experiment.html" rel="bookmark"
+           title="Permalink to Hot-swapping Python modules. An experiment.">Hot-swapping Python modules. An experiment.</a></h2>
+      
+    </header>
+    <p>A new project I'm involved with will <em>probably</em> require dozens of servers
+running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlets</a> each.  Top-level greenlets represent jobs
+and their children will be individual tasks those greenlets are
+coordinating/supervising.</p>
+<p>This model, however prototypical, resembles that of the <a class="reference external" href="http://www.erlang.org/">OTP</a> in Erlang.  A
+greenlet may be either a supervisor or a worker.</p>
+<p>But there's something missing in our platform that Erlang do have and that
+might yield huge benefits.  You can change your Erlang code while the program
+is running.</p>
+<p>Modulets.  The idea</p>
+<p>I asked myself if I could devise an <em>import mechanism</em> that would allow to
+update a Python module in a way that already-running greenlets stay unaffected
+but newly created ones use the new code.</p>
+<p>To exemplify, let's say a typical tasks is:</p>
+<pre class="literal-block">
+def receive_confirmation(message, who):
+   from jobs.util.email import send_email
+   from jobs.util.email import wait_reply
+   # Assume both send_email and wait_reply switch away from the current
+   # greenlet and only switch back after they are done.
+   message = send_email(message, who)
+   res = wait_reply(message)
+   return res  # this will be sent to the parent greenlet
+</pre>
+<p>The servers start and hundreds of this task are launched in different jobs.
+Many of them are idle waiting for their replies.  Users are happily getting
+their confirmation emails and replying to them (or ignoring them).</p>
+<p>However, we start receiving lot of bounces in the postmaster inbox.  Some
+users have entered a wrong email address.  A change is in order.</p>
+<p>In response, we change our implementation of <tt class="docutils literal">send_email</tt> so that it does
+<a class="reference external" href="http://en.wikipedia.org/wiki/Variable_envelope_return_path">VERP</a> to know which recipients' address are bouncing, and also create a new
+<cite>job</cite> that involves receiving confirmation email when a new user registers.</p>
+<p>We'd love to simply update our <tt class="docutils literal">jobs.util</tt> package and be done with it like
+this:</p>
+<pre class="literal-block">
+$ source server-virtual-env/bin/activate
+$ pip install -U jobs.util -i https://my.private.server/
+</pre>
+<p>New jobs will pick up the new version and the older jobs will keep working as
+if nothing would have changed.</p>
+<p>That would be really nice.  Such a hot-swap of Python modules per job is what
+I'm calling a &quot;modulet&quot;.</p>
+<p>Currently I have a &quot;working&quot; <strong>yet very experimental and undertested</strong>
+implementation of such a mechanism in our <a class="reference external" href="https://github.com/merchise-autrement/xoutil/tree/experimental-modulets/xoutil/modules">experimental modulets branch</a> in
+xoutil.</p>
+<p>Modulets in xoutil</p>
+<p>The current implementation is a very early proof of concept and not something
+you'd like to put outside your playground.</p>
+<p>The file <a class="reference external" href="https://github.com/merchise-autrement/xoutil/blob/experimental-modulets/xoutil/modules/test_modulet.py"><tt class="docutils literal">test_modulet.py</tt></a> is a simple script you may run to see it working.
+It simply creates a temporary module <tt class="docutils literal">magic_module</tt> that has the
+<tt class="docutils literal">get_magic</tt> function.  This function returns a single value.</p>
+<p>The test launches three greenlets that simply call the <tt class="docutils literal">get_magic</tt> function
+and asserts it returns the &quot;right&quot; magic value.  Between launches the module
+gets updated to return a different magic value, which is passed as an argument
+to the newly created greenlet.</p>
+<p>A single run will print something like:</p>
+<pre class="literal-block">
+$ python test_modulet.py
+Beginning with 3 in /tmp/tmp1d4rK5
+Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module'
+Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module'
+Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4daa7d0&gt;.magic_module'
+Passed. I have the right magic number 1002
+Passed. I have the right magic number 1001
+Passed. I have the right magic number 1000
+</pre>
+<p>If you comment the bootstrapping of modulets, then you'll get something like:</p>
+<pre class="literal-block">
+$ python test_modulet.py
+Beginning with 3 in /tmp/tmpeI1oYA
+Wrong magic number
+Traceback (most recent call last):
+  File &quot;test_modulet.py&quot;, line 49, in rootprog
+    g.switch()
+  File &quot;test_modulet.py&quot;, line 31, in prog
+    assert res == magic, &quot;Expected %d but got %d.&quot; % (magic, res)
+AssertionError: Expected 1002 but got 1000.
+Wrong magic number
+Traceback (most recent call last):
+  File &quot;test_modulet.py&quot;, line 49, in rootprog
+    g.switch()
+  File &quot;test_modulet.py&quot;, line 31, in prog
+    assert res == magic, &quot;Expected %d but got %d.&quot; % (magic, res)
+AssertionError: Expected 1001 but got 1000.
+Passed. I have the right magic number 1000
+</pre>
+<p>Future work</p>
+<p>Since we are at the very early stages of this project is not easy to predict
+if we'll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest/">celery</a> based solution be
+enough.</p>
+<p>If we were to keep it, there are several things to improve:</p>
+<ul>
+<li><p class="first">The current mechanism pollutes the <tt class="docutils literal">sys.modules</tt> with a copy of a module
+per top-level greenlet.</p>
+<p>In the current state, this is an ever-growing pile of modules that never
+erases those that are no longer used.</p>
+<p>This needs to be changed in several ways:</p>
+<p>The namespace we use to masquerade the modules need not be (and should not
+be) the repr of the greenlet object.</p>
+<p>For the purposes of isolating different versions of the same code we can
+either use the timestamp of the files, the version of the distribution,
+etc...</p>
+<p>Running a <a class="reference external" href="http://diesel.io/">diesel</a> server will quickly eat all your RAM unless this is
+changed.</p>
+<p>When a <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlet</a> dies the only one informed is its parent.  But we certainly
+don't want jobs to mess with <tt class="docutils literal">sys.modules</tt> to clean our own mess.</p>
+<p>This poses a challenge of its own and may be delegated outside <cite>xoutil</cite>
+itself.</p>
+<p>That being said, it's likely that the calculation of the current namespace
+and how to dispose of unused modules will be extensions points of
+<cite>modulets</cite>.</p>
+</li>
+<li><p class="first">Currently we have a black-list of modules that will never be isolated.</p>
+<p>Changes in those modules will required a restart to be noticed.  Those
+modules are platform-level.  They include <cite>xoutil</cite> itself, <cite>greenlet</cite> and
+the entire standard library (which is not expected to change unless you
+change Python).</p>
+<p>We can also allow white-listing.  Both ways are on the table.</p>
+<p>The white-list imposes more explicit architecture of your platform since it
+requires throughout revision of which modules you're willing to update on
+the run.</p>
+<p>Access to both lists will be a public API of the Modulet Manager.  I can
+envision a remote-control console you'll use to include a new module in the
+white-list.  But that will be an application of the modulet API and included
+in the box.</p>
+</li>
+</ul>
+<!-- Local Variables:
+ispell-dictionary: "en"
+End: -->
+<!-- LocalWords:  greenlets modulets modulet greenlet Erlang OTP VERP -->
+
+    <footer>
+      <p>Published: <time datetime="2015-02-18T00:00:00+00:00">
+        Mi 18 Februar 2015
+      </time></p>
+        <address>
+          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
+        </address>
+        <p>
+          Category: <a href="/category/python.html">Python</a>
+        </p>
+        <p>
+          Tags:
+            <a href="/tag/isolation.html">isolation</a>
+            <a href="/tag/erlang.html">erlang</a>
+        </p>
+    </footer>
+  </article>
+      </main>
+      <footer>
+          <address>
+            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+          </address>
+      </footer>
+  </body>
+</html>

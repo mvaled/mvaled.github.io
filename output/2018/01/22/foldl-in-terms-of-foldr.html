@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <title>Manuel on Software - Reloaded - Dissecting foldl in terms of foldr</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+    <meta name="tags" content="Haskell" />
+
+  </head>
+
+  <body>
+      <header>
+          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
+          <nav><ul>
+                <li><a href="/category/architecture.html" >architecture</a></li>
+                <li><a href="/category/blogroll.html" >Blogroll</a></li>
+                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
+                <li><a href="/category/misc.html" >misc</a></li>
+                <li><a href="/category/openerp.html" >OpenERP</a></li>
+                <li><a href="/category/programming.html"  aria-current="page" >Programming</a></li>
+                <li><a href="/category/python.html" >Python</a></li>
+          </ul></nav>
+      </header>
+      <main>
+  <article>
+    <header>
+      <h2>
+        <a href="/2018/01/22/foldl-in-terms-of-foldr.html" rel="bookmark"
+           title="Permalink to Dissecting foldl in terms of foldr">Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></a></h2>
+      
+    </header>
+    <p>The book 'Real World Haskell' provides an implementation of <tt class="docutils literal">foldl</tt> in terms
+of <tt class="docutils literal">foldr</tt>:</p>
+<div class="highlight"><pre><span></span><span class="nf">myFoldl</span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span>
+<span class="nf">myFoldl</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">foldr</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">z</span>
+<span class="w">   </span><span class="kr">where</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+<p>They ask the reader (me) to try to understand the implementation.  They warn
+it's not trivial, but I found it interesting.  So, I just want to share my
+line of thought.</p>
+<p>The first thing I noticed is that <tt class="docutils literal">z</tt> is not an argument to <tt class="docutils literal">foldr</tt>; you
+can rewrite the first line as:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">foldr</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="n">xs</span><span class="p">)</span><span class="w"> </span><span class="n">z</span>
+</pre></div>
+<p>This makes visible that the result of the <tt class="docutils literal">foldr</tt> is a function that takes
+<cite>z</cite> as an argument.  By looking a the case <tt class="docutils literal">foldr step id []</tt>, which equates
+to <tt class="docutils literal">id</tt>, we can see that the type of the <tt class="docutils literal">foldr</tt>'s result is <tt class="docutils literal">b <span class="pre">-&gt;</span> b</tt>.</p>
+<p>This also implies that the type of <tt class="docutils literal">step</tt> must be <tt class="docutils literal">a <span class="pre">-&gt;</span> (b <span class="pre">-&gt;</span> b) <span class="pre">-&gt;</span> (b <span class="pre">-&gt;</span>
+b)</tt>.  You can prove that by extracting <tt class="docutils literal">step</tt>:</p>
+<div class="highlight"><pre><span></span><span class="nf">step1</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="nf">step1</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+
+<span class="nf">myFoldl1</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span>
+<span class="nf">myFoldl1</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">foldr</span><span class="w"> </span><span class="p">(</span><span class="n">step1</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">z</span>
+</pre></div>
+<p>Use <cite>ghci</cite> to verify that.</p>
+<p>Now comes the <em>funny</em> part of the implementation: <tt class="docutils literal">step</tt> is defined with
+three arguments</p>
+<pre class="literal-block">
+where step x g a = g(f a x)
+</pre>
+<p>but <tt class="docutils literal">foldr</tt> only passes the first two, and that's totally fine; the result
+will be another function.</p>
+<p>You can make this explicit:</p>
+<div class="highlight"><pre><span></span><span class="nf">myFoldl2</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span>
+<span class="nf">myFoldl2</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">foldr</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">z</span>
+<span class="w">   </span><span class="kr">where</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+<p>That's a beautiful thing about Haskell both definitions of <tt class="docutils literal">step</tt> are
+actually indistinguishable:</p>
+<pre class="literal-block">
+step x g a = g(f a x)
+
+step x g = \a -&gt; g(f a x)
+</pre>
+<p>The first one takes an <em>equation-like</em> outlook that I find very elegant in a
+programming language.</p>
+<p>Having all that we can easily follow how the expression <tt class="docutils literal">myFoldl (+) 0 [1,
+2]</tt> would proceed:</p>
+<pre class="literal-block">
+myFoldl (+) 0 [1, 2]
+(foldr step id [1, 2]) 0                  -- by def. of myFoldl
+(step 1 (foldr step id [2])) 0            -- by def. of foldr
+(step 1 (step 2 (foldr step id []))) 0    -- by def. of foldr
+(step 1 (step 2 id)) 0                    -- by def. of foldr for []
+(step 1 (\a -&gt; id(a + 2))) 0              -- applying `step 2 id`
+
+(step 1 (\a -&gt; a + 2)) 0                  -- applying id, Haskell might not
+                                             do this right now
+
+(\x -&gt; (\a -&gt; a + 2)(x + 1)) 0            -- applying step
+(\x -&gt; (x + 1) + 2) 0                     -- applying the inner lambda
+(0 + 1) + 2                               -- applying the outer lambda
+</pre>
+<p>And that's (more or less) how <tt class="docutils literal">myFoldl</tt> works.</p>
+
+    <footer>
+      <p>Published: <time datetime="2018-01-22T00:00:00+00:00">
+        Mo 22 Januar 2018
+      </time></p>
+        <address>
+          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
+        </address>
+        <p>
+          Category: <a href="/category/programming.html">Programming</a>
+        </p>
+        <p>
+          Tags:
+            <a href="/tag/haskell.html">Haskell</a>
+        </p>
+    </footer>
+  </article>
+      </main>
+      <footer>
+          <address>
+            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+          </address>
+      </footer>
+  </body>
+</html>
