@@ -41,6 +41,7 @@ PLUGINS = []
 
 # Theme settings
 THEME = "theme"
+THEME_STATIC_PATHS = ["static"]
 
 # Keep original copyright
 COPYRIGHT_YEAR = "2016-2025"
