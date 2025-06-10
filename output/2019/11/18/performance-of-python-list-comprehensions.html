@@ -15,19 +15,19 @@
     <main>
 <article>
     <header>
-        <h2>Why does creating a list comprehension is faster?</h2>
+        <h2>Why does creating a list comprehension is&nbsp;faster?</h2>
         <p class="meta">2019-11-18 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>Yesterday, I was removing a list-comprehension as an argument to <tt class="docutils literal">sum</tt>.
-This is the diff:</p>
+This is the&nbsp;diff:</p>
 <div class="highlight"><pre><span></span><span class="gd">- sum([p.price for p in self.products])</span>
 <span class="gi">+ sum(p.price for p in self.products)</span>
 </pre></div>
 <p>To show the original programmer my line of though I performed a little
-experiment with the following message and code:</p>
+experiment with the following message and&nbsp;code:</p>
 <p>List comprehensions as an argument to <em>reduce-like</em> functions are usually less
 efficient than using the generation expression itself.  The reason is that
-Python creates the list just to discard it afterwards:</p>
+Python creates the list just to discard it&nbsp;afterwards:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; def fib(n):
 ...     a, b = 1, 1
@@ -44,9 +44,9 @@ Python creates the list just to discard it afterwards:</p>
 </pre>
 <p>I was surprised to see that the list comprehension was a little bit faster
 than the generator expression.  So it seems that for short-enough lists, the
-implementation of <tt class="docutils literal">sum</tt> is quite fast.</p>
+implementation of <tt class="docutils literal">sum</tt> is quite&nbsp;fast.</p>
 <p>I had to change the implementation of <cite>fib</cite> to control the amount of items to
-show my point:</p>
+show my&nbsp;point:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; def fib(n):
 ...     a, b = 1, 1
@@ -54,7 +54,7 @@ show my point:</p>
 ...         yield a
 ...         a, b = b, a + b
 </pre>
-<p>An still with 100 items, passing a list is faster:</p>
+<p>An still with 100 items, passing a list is&nbsp;faster:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; %timeit sum(fib(100))
 14.2 µs ± 212 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
@@ -66,7 +66,7 @@ show my point:</p>
 18 µs ± 160 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
 </pre>
 <p>Of course the differences are too small to draw final conclusions.  And, of
-course, as the list grows larger it becomes slower:</p>
+course, as the list grows larger it becomes&nbsp;slower:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; %timeit sum([x for x in fib(10**5)])
 497 ms ± 84.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
@@ -75,9 +75,8 @@ course, as the list grows larger it becomes slower:</p>
 329 ms ± 17.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre>
 <p>So I think I still prefer the version using the generation expression just to
-cover my self from the case where there are too many items to be held in
-memory.</p>
-<p>(I didn't push the commit, though.)</p>
+cover my self from the case where there are too many items to be held in&nbsp;memory.</p>
+<p>(I didn&#8217;t push the commit,&nbsp;though.)</p>
 
 </article>
     </main>

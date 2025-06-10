@@ -15,18 +15,18 @@
     <main>
 <article>
     <header>
-        <h2>A failing fail in the monad list</h2>
+        <h2>A failing fail in the monad&nbsp;list</h2>
         <p class="meta">2018-06-22 &bull; Manuel Vázquez Acosta</p>
     </header>
     <div class="sidebar">
 <p class="first sidebar-title">Update.</p>
 <p class="last">The <a class="reference external" href="https://stackoverflow.com/q/50989541/211280">question</a> was answered in Stack Overflow, and it shows that the title
-of this post is incorrect: The failing <tt class="docutils literal">fail</tt> is in the <em>function</em> monad.</p>
+of this post is incorrect: The failing <tt class="docutils literal">fail</tt> is in the <em>function</em>&nbsp;monad.</p>
 </div>
-<p>I'm following the Real World Haskell book.  In the chapter about Monads, they
+<p>I&#8217;m following the Real World Haskell book.  In the chapter about Monads, they
 create simple example using the list monad compute all pairs of numbers <tt class="docutils literal">(x,
 y)</tt> that such that <tt class="docutils literal">x * y == n</tt> for a given <tt class="docutils literal">n</tt>.</p>
-<p>Their solution is:</p>
+<p>Their solution&nbsp;is:</p>
 <div class="highlight"><pre><span></span><span class="nf">multiplyTo</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[(</span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="kt">Int</span><span class="p">)]</span>
 <span class="nf">multiplyTo</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kr">do</span>
 <span class="w">      </span><span class="n">x</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="n">n</span><span class="p">]</span>
@@ -39,23 +39,23 @@ y)</tt> that such that <tt class="docutils literal">x * y == n</tt> for a given 
 <span class="nf">guarded</span><span class="w"> </span><span class="kt">False</span><span class="w"> </span><span class="kr">_</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">[]</span>
 </pre></div>
 <p>But I was wondering if I could restate <tt class="docutils literal">guarded</tt> for any monad.  Since
-<tt class="docutils literal">fail</tt> in the list monad is <tt class="docutils literal">fail _ = []</tt>, I though I could do:</p>
+<tt class="docutils literal">fail</tt> in the list monad is <tt class="docutils literal">fail _ = []</tt>, I though I could&nbsp;do:</p>
 <div class="highlight"><pre><span></span><span class="nf">guarded</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="kt">Bool</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
 <span class="nf">guarded</span><span class="w"> </span><span class="kt">True</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">id</span>
 <span class="nf">guarded</span><span class="w"> </span><span class="kt">False</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">fail</span><span class="w"> </span><span class="s">&quot;skipped&quot;</span>
 </pre></div>
-<p>However this actually fails in ghci:</p>
+<p>However this actually fails in&nbsp;ghci:</p>
 <pre class="literal-block">
 *Main&gt; multiplyTo 24
 *** Exception: skipped
 </pre>
-<p>I let myself sleep, and this morning I figured there's actually a
+<p>I let myself sleep, and this morning I figured there&#8217;s actually a
 small/important difference between <tt class="docutils literal">guarded False _ = []</tt> and <tt class="docutils literal">guarded
 False = fail <span class="pre">&quot;...&quot;</span></tt></p>
 <p>The type of <tt class="docutils literal">guarded False</tt> is <tt class="docutils literal">Monad m =&gt; m a <span class="pre">-&gt;</span> m a</tt>.  However the type
 of <tt class="docutils literal">fail 'skipped'</tt> is just <tt class="docutils literal">Monad m =&gt; m a</tt>.</p>
-<p>Why does <tt class="docutils literal">guarded False = fail &quot;skipped&quot;</tt> type-checks?  That's an <a class="reference external" href="https://stackoverflow.com/q/50989541/211280">open
-question</a> (as of the time of writing).</p>
+<p>Why does <tt class="docutils literal">guarded False = fail &quot;skipped&quot;</tt> type-checks?  That&#8217;s an <a class="reference external" href="https://stackoverflow.com/q/50989541/211280">open
+question</a> (as of the time of&nbsp;writing).</p>
 <p>If I define <tt class="docutils literal">guarded</tt> as:</p>
 <div class="highlight"><pre><span></span><span class="nf">guarded</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Monad</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">=&gt;</span><span class="w"> </span><span class="kt">Bool</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
 <span class="nf">guarded</span><span class="w"> </span><span class="kt">True</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">xs</span>
@@ -66,10 +66,10 @@ question</a> (as of the time of writing).</p>
 <span class="nf">guarded</span><span class="w"> </span><span class="kt">True</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">id</span>
 <span class="nf">guarded</span><span class="w"> </span><span class="kt">False</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="n">s</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">fail</span><span class="w"> </span><span class="s">&quot;skipped&quot;</span>
 </pre></div>
-<p>Both work correctly.</p>
+<p>Both work&nbsp;correctly.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last"><cite>fail</cite> is strongly discouraged to use in real world haskell code.</p>
+<p class="last"><cite>fail</cite> is strongly discouraged to use in real world haskell&nbsp;code.</p>
 </div>
 
 </article>

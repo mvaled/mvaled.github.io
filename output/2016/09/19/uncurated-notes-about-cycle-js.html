@@ -15,20 +15,19 @@
     <main>
 <article>
     <header>
-        <h2>Non-curated notes about Cycle.js</h2>
+        <h2>Non-curated notes about&nbsp;Cycle.js</h2>
         <p class="meta">2016-09-19 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>In the past few days I have been reading about Reactive Programming.  Mostly
-about how it's done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
+about how it&#8217;s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
 post is by no means an account of well thought ideas, but my first ideas and
-notes while reading about it.</p>
-<p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my
-opinion:</p>
+notes while reading about&nbsp;it.</p>
+<p><a class="reference external" href="http://cycle.js.org/">Cycle.js</a> is attractive, and its appeal spans from two key properties in my&nbsp;opinion:</p>
 <ul>
-<li><p class="first">There's a single type of connector between the components: the streams.</p>
+<li><p class="first">There&#8217;s a single type of connector between the components: the&nbsp;streams.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Both <tt class="docutils literal">sources</tt> and <tt class="docutils literal">sinks</tt> return streams.</p>
+<p class="last">Both <tt class="docutils literal">sources</tt> and <tt class="docutils literal">sinks</tt> return&nbsp;streams.</p>
 </div>
 </li>
 <li><p class="first">There are two distinct type of computational components: the drivers and the
@@ -42,45 +41,45 @@ structure of <tt class="docutils literal">main()</tt>.</p>
 </ul>
 <p>This is appealing because the architecture is simple.  You may understand the
 main points of this architecture in about an hour.  You may recall this is
-actually an evolution (or instance) of the producer-consumer pattern.</p>
-<p>There's a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
-the 'dialog abstraction'.  Actually, this is what caught my attention in the
+actually an evolution (or instance) of the producer-consumer&nbsp;pattern.</p>
+<p>There&#8217;s a third element in <a class="reference external" href="http://cycle.js.org/">cycle.js</a>: the cycle itself.  Which is based on
+the &#8216;dialog abstraction&#8217;.  Actually, this is what caught my attention in the
 first place.  It goes like: your program outputs are the input to an external
 (possibly human) entity which, in turn, may react and produce more events in
-your program's source streams.</p>
-<p>Architecturally this is simple and good.</p>
+your program&#8217;s source&nbsp;streams.</p>
+<p>Architecturally this is simple and&nbsp;good.</p>
 <div class="section" id="components">
 <h2>Components</h2>
 <blockquote>
-<p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
-<p class="attribution">&mdash;From the Cycle.js documentation</p>
+<p>Any Cycle.js app can be reused as a component in a larger Cycle.js&nbsp;app.</p>
+<p class="attribution">&mdash;From the Cycle.js&nbsp;documentation</p>
 </blockquote>
 <p>When it comes to designing an application or component you have to decide
 about the type of events your application may receive and the expected output
-events it may produce in response.</p>
-<p>The previous statement is only true in two cases:</p>
+events it may produce in&nbsp;response.</p>
+<p>The previous statement is only true in two&nbsp;cases:</p>
 <ul class="simple">
-<li>Your 'smaller' Cycle.js application does not need to interact with other
-parts of your 'larger' application.</li>
-<li>Your 'smaller' Cycle.js exposes its model; or you have &quot;model drivers&quot;.</li>
+<li>Your &#8216;smaller&#8217; Cycle.js application does not need to interact with other
+parts of your &#8216;larger&#8217;&nbsp;application.</li>
+<li>Your &#8216;smaller&#8217; Cycle.js exposes its model; or you have &#8220;model&nbsp;drivers&#8221;.</li>
 </ul>
-<p>I think this becomes rather obvious in the 16th part of the Egghead's video
+<p>I think this becomes rather obvious in the 16th part of the Egghead&#8217;s video
 series on Cycle.js.  The one when they make the slider component and they need
-to expose the stream of 'values' from the slider.</p>
+to expose the stream of &#8216;values&#8217; from the&nbsp;slider.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Actually the documentation states that components expose, somehow,
-its state.</p>
+its&nbsp;state.</p>
 </div>
 </div>
 <div class="section" id="streams-to-the-extreme-and-localization">
-<h2>Streams to the extreme (and localization)</h2>
-<p>The Egghead's series exposes how Cycle.js became to be and you can, therefore,
+<h2>Streams to the extreme (and&nbsp;localization)</h2>
+<p>The Egghead&#8217;s series exposes how Cycle.js became to be and you can, therefore,
 see the evolution it is.  Is a short video series worth watching: right to the
-point without many detours.</p>
-<p>There's a video when they needed to make a component out of the Height and
+point without many&nbsp;detours.</p>
+<p>There&#8217;s a video when they needed to make a component out of the Height and
 Weight sliders, and they needed to pass parameters like the label, min value
-and max value. I thought they were going to use old plain closures:</p>
+and max value. I thought they were going to use old plain&nbsp;closures:</p>
 <pre class="literal-block">
 function Slider(sources, props) {
     const label = props.label;
@@ -89,11 +88,10 @@ function Slider(sources, props) {
 }
 </pre>
 <p>It came as a surprise that they put those parameters into a <tt class="docutils literal">props</tt>
-<strong>source</strong> to the <tt class="docutils literal">main()</tt> function of the component.</p>
+<strong>source</strong> to the <tt class="docutils literal">main()</tt> function of the&nbsp;component.</p>
 <p>At first I thought that was really far fetched, but after thinking about it a
-bit more I think is can be really useful.</p>
-<p>I started to think about an application with just a slider and a language
-selector:</p>
+bit more I think is can be really&nbsp;useful.</p>
+<p>I started to think about an application with just a slider and a language&nbsp;selector:</p>
 <pre class="literal-block">
 Height: 6 feet   &lt;-----o--&gt;
 
@@ -101,37 +99,36 @@ Choose language: [ENG]
 </pre>
 <p>The slider component is the one we see in the video series.  The language
 selector is a selection component and the expected behavior is that when I
-change the language the <em>entire application</em> changes to the new language.</p>
+change the language the <em>entire application</em> changes to the new&nbsp;language.</p>
 <p>My first thought is that the language selector gets is value from a driver
-(which I don't know if it already exists) that deals with localization.  Let's
-say you can obtain such a driver like this:</p>
+(which I don&#8217;t know if it already exists) that deals with localization.  Let&#8217;s
+say you can obtain such a driver like&nbsp;this:</p>
 <pre class="literal-block">
 cycle.run(main, {
    // etc...
    locale: makeLocaleDriver({languages: ['en_US', 'es_ES'], ...})
 })
 </pre>
-<p>The driver would let you respond to changes in translations:</p>
+<p>The driver would let you respond to changes in&nbsp;translations:</p>
 <pre class="literal-block">
 const label$ = sources.locale.select('Height');
 </pre>
 <p>Or combining with another mapping from another stream so that the <tt class="docutils literal">props</tt>
-stream remains almost unchanged:</p>
+stream remains almost&nbsp;unchanged:</p>
 <pre class="literal-block">
 const label$ = props$.map(p =&gt; sources.locale.select(p.label));
 </pre>
-<p>However, after revisiting that last idea, I noticed that it doesn't work.  A
+<p>However, after revisiting that last idea, I noticed that it doesn&#8217;t work.  A
 change in in the locale does not trigger any event in the <tt class="docutils literal">props$</tt> stream.
-Assuming that <tt class="docutils literal">locale.current$</tt> is a stream of localization object, this may
-work:</p>
+Assuming that <tt class="docutils literal">locale.current$</tt> is a stream of localization object, this may&nbsp;work:</p>
 <pre class="literal-block">
 const label$ = props$.combine(sources.locale.current$)
                      .map((label, locale) =&gt; locale.gettext(label));
 </pre>
 <p>The thing gets a little bit more tricky when it comes to changing the units:
-feet vs meter, etc...  I've been thinking about it for a bit.  The most
+feet vs meter, etc&#8230;  I&#8217;ve been thinking about it for a bit.  The most
 problematic issue is that state is not clearly owned unless we introduce a
-kind of <em>quantity</em> for which the unit of measure is explicit:</p>
+kind of <em>quantity</em> for which the unit of measure is&nbsp;explicit:</p>
 <pre class="literal-block">
 run(main, {
     props: xs.of({
@@ -140,22 +137,21 @@ run(main, {
 })
 </pre>
 <p>However this may seem a bit overreaching for a single <em>value</em> that only needs
-to be in between two boundaries (slider).</p>
-<p>This is, IMO the breaking point: If I really need to manage units on my
+to be in between two boundaries&nbsp;(slider).</p>
+<p>This is, <span class="caps">IMO</span> the breaking point: If I really need to manage units on my
 application and those need to be fully localized, my components might be
 regarded as over-engineered for other apps.  My only hope is that a simple
 slider, without any knowledge of units, might be wrapped inside a
-<cite>FullyLocalizedSlider</cite> for that purpose.</p>
+<cite>FullyLocalizedSlider</cite> for that&nbsp;purpose.</p>
 </div>
 <div class="section" id="open-questions">
-<h2>Open questions</h2>
+<h2>Open&nbsp;questions</h2>
 <p>Most of the ideas exposed above are not battle tested.  I happen to be
 evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
-that require almost real-times updates, and the stream interface is thus quite
-natural.</p>
+that require almost real-times updates, and the stream interface is thus quite&nbsp;natural.</p>
 <p>There are challenges about integrating my components with the rest of the
 application, and being an application that must display at least three
-languages I need to think on advance about the problems I would face.</p>
+languages I need to think on advance about the problems I would&nbsp;face.</p>
 </div>
 
 </article>

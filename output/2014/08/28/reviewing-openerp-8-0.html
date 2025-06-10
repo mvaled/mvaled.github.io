@@ -15,53 +15,52 @@
     <main>
 <article>
     <header>
-        <h2>Reviewing Odoo 8.0</h2>
+        <h2>Reviewing Odoo&nbsp;8.0</h2>
         <p class="meta">2014-08-28 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>This is the first of a series of blog posts related to the next OpenERP 8.0
-(or should I say Odoo 8.0).  This first post will be very &quot;seeking for
-orientation&quot; on major new features and changes.  Don't expect anything to be
-deeply commented or analyzed.</p>
+(or should I say Odoo 8.0).  This first post will be very &#8220;seeking for
+orientation&#8221; on major new features and changes.  Don&#8217;t expect anything to be
+deeply commented or&nbsp;analyzed.</p>
 <p>I will probably devote several posts for changes in some modules, but in this
-one I'll just write about things that can be immediately seen when you first
-install it.</p>
+one I&#8217;ll just write about things that can be immediately seen when you first
+install&nbsp;it.</p>
 <div class="section" id="installing-odoo-8-0">
-<h2>Installing Odoo 8.0</h2>
-<p>I'm working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
-Of course I'm using the branch &quot;8.0&quot; for this review.</p>
-<p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like this:</p>
+<h2>Installing Odoo&nbsp;8.0</h2>
+<p>I&#8217;m working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
+Of course I&#8217;m using the branch &#8220;8.0&#8221; for this&nbsp;review.</p>
+<p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like&nbsp;this:</p>
 <pre class="literal-block">
 $ python setup.py develop
 </pre>
 <p>The first I noticed is that several new requirements are in place, and the
-<cite>pyPdf</cite> requirement had been forgotten.</p>
-<p>Second thing noticed is that unlike the &quot;7.0&quot; you don't need to run the
+<cite>pyPdf</cite> requirement had been&nbsp;forgotten.</p>
+<p>Second thing noticed is that unlike the &#8220;7.0&#8221; you don&#8217;t need to run the
 <tt class="docutils literal"><span class="pre">openerp-server</span></tt> script passing the <tt class="docutils literal"><span class="pre">--addons-path=./addons</span></tt>.  In 8.0 they
-include this path automatically.  So running <tt class="docutils literal"><span class="pre">./openerp-server</span></tt> is enough.</p>
+include this path automatically.  So running <tt class="docutils literal"><span class="pre">./openerp-server</span></tt> is&nbsp;enough.</p>
 <p>Also the <tt class="docutils literal">python setup.py sdist</tt> command includes this path as well, so a
-properly built distribution from source seems more doable.  I haven't tried
-this yet, but I will, cause that was for sure something missing in 7.0.  It's
-quite suspicious that the tarball is too small (around 13MB) though.</p>
+properly built distribution from source seems more doable.  I haven&#8217;t tried
+this yet, but I will, cause that was for sure something missing in 7.0.  It&#8217;s
+quite suspicious that the tarball is too small (around <span class="caps">13MB</span>)&nbsp;though.</p>
 </div>
 <div class="section" id="new-addons">
-<h2>New addons</h2>
+<h2>New&nbsp;addons</h2>
 <div class="section" id="instant-messaging">
-<h3>Instant Messaging</h3>
-<p>Once I ran the server I installed a demo DB to see what's new.  The first
-thing that captured my attention was an &quot;Instant Messaging&quot; module.  I gave it
-a try and it seemed to work out-of-box.</p>
+<h3>Instant&nbsp;Messaging</h3>
+<p>Once I ran the server I installed a demo <span class="caps">DB</span> to see what&#8217;s new.  The first
+thing that captured my attention was an &#8220;Instant Messaging&#8221; module.  I gave it
+a try and it seemed to work&nbsp;out-of-box.</p>
 <p>It uses the quite old <a class="reference external" href="http://stackoverflow.com/questions/11077857/what-are-long-polling-websockets-server-sent-events-sse-and-comet">long polling</a> technique instead of the brand new
-<a class="reference external" href="http://en.wikipedia.org/wiki/HTML5">HTML5</a>  <a class="reference external" href="http://en.wikipedia.org/wiki/Server-sent_events">Server-Sent Events</a> (SSE) stuff.  Why?</p>
+<a class="reference external" href="http://en.wikipedia.org/wiki/HTML5"><span class="caps">HTML5</span></a>  <a class="reference external" href="http://en.wikipedia.org/wiki/Server-sent_events">Server-Sent Events</a> (<span class="caps">SSE</span>) stuff.&nbsp;Why?</p>
 <p>My first guess was that multi-process deployments would need to pass messages
-around between the HTTP processes.  That requires a kind of Inter-Processes
-Communication (IPC).  Popular choices for achieving this in web applications
-are <a class="reference external" href="http://redis.io/">Redis</a> and <a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a>, but then you'd need to setup either for this to
-work.</p>
+around between the <span class="caps">HTTP</span> processes.  That requires a kind of Inter-Processes
+Communication (<span class="caps">IPC</span>).  Popular choices for achieving this in web applications
+are <a class="reference external" href="http://redis.io/">Redis</a> and <a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a>, but then you&#8217;d need to setup either for this to&nbsp;work.</p>
 <p>After thinking in this a bit more (actually the thinking about this occurred
 at the same time I was writing this post) I realized that the <em>current</em>
-multi-process deployments would still need this IPC to properly work.  So I
+multi-process deployments would still need this <span class="caps">IPC</span> to properly work.  So I
 ran <tt class="docutils literal"><span class="pre">./openerp-server</span> <span class="pre">--workers=2</span></tt> and tested it again.  The chat stopped to
-work and the following error was logged from time to time:</p>
+work and the following error was logged from time to&nbsp;time:</p>
 <div class="highlight"><pre><span></span>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
 Traceback (most recent call last):
   File &quot;/&lt;..&gt;/odoo/openerp/http.py&quot;, line 476, in _handle_exception
@@ -101,27 +100,27 @@ Exception: bus.Bus unavailable
         <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span>
 </pre></div>
-<p>The highlighted line says this won't work in a multi-process deployment.  How
-do you get to use the <cite>evented</cite> mode, I don't know.  Probably that's the
-default now.</p>
+<p>The highlighted line says this won&#8217;t work in a multi-process deployment.  How
+do you get to use the <cite>evented</cite> mode, I don&#8217;t know.  Probably that&#8217;s the
+default&nbsp;now.</p>
 <p>So I need to review this feature more closely before going to production.
-It's a nice addition though.</p>
+It&#8217;s a nice addition&nbsp;though.</p>
 <p>I found they have now a <a class="reference external" href="https://github.com/odoo/odoo/blob/master/openerp/service/server.py#L321"><tt class="docutils literal">GeventServer</tt></a> for long polling connections.  And the
 implementation of the Instant Messaging Bus (<a class="reference external" href="https://github.com/odoo/odoo/blob/master/openerp/addons/bus/bus.py">bus.py</a>) can be easily adapted
 for desktop-like notifications, updating your message inbox, and many other
-features that would benefit from this.</p>
+features that would benefit from&nbsp;this.</p>
 </div>
 <div class="section" id="messaging-has-gone-a-bit-different">
-<h3>Messaging has gone a bit different</h3>
+<h3>Messaging has gone a bit&nbsp;different</h3>
 <p>At this point I tried to send a message from a user to another (to test if the
 inbox was updated real-time) and realized that the Messaging addons has lost
-the &quot;compose a new message&quot; that was previously accessible from the inbox, let
-me show you a picture (7.0 on the right, 8.0 on the left):</p>
+the &#8220;compose a new message&#8221; that was previously accessible from the inbox, let
+me show you a picture (7.0 on the right, 8.0 on the&nbsp;left):</p>
 <div class="figure">
 <img alt="" src="odoo-vs-openerp.png" />
-<p class="caption">Odoo is missing the &quot;Compose new message&quot; button.</p>
+<p class="caption">Odoo is missing the &#8220;Compose new message&#8221;&nbsp;button.</p>
 </div>
-<p>This commit has some explanation:</p>
+<p>This commit has some&nbsp;explanation:</p>
 <pre class="literal-block">
 commit 0714b231646bb439b121a6aaa43df32fedcb5e6e
 Author: Thibault Delavallée &lt;tde&#64;openerp.com&gt;
@@ -132,9 +131,9 @@ followers' compose box. This comes only with hr, for the inbox. This was
 probably forgotten when updating the mailboxes hr-goal and hr-related
 gamification / chatter stuff.
 </pre>
-<p>I then installed the &quot;Employee directory&quot; addon and the &quot;Share with my
-followers&quot; box appeared.</p>
-<p>More digging in the logs reveals the following:</p>
+<p>I then installed the &#8220;Employee directory&#8221; addon and the &#8220;Share with my
+followers&#8221; box&nbsp;appeared.</p>
+<p>More digging in the logs reveals the&nbsp;following:</p>
 <pre class="literal-block">
 commit e6f8666b521fe8c2522d6e94c0c3def54a5f73ed
 Merge: d57a97d bf3d4a7
@@ -148,8 +147,8 @@ order to ease the choice and simplify options.
 already available. The first one is accessible using the top-right email icon, the second one
 is accessible with the 'write to my followers' text box alread present in the inbox.
 </pre>
-<p>However I don't see the mentioned &quot;top-right email icon&quot;.  In fact, that icon
-is present in 7.0, but not in 8.0.  More digging:</p>
+<p>However I don&#8217;t see the mentioned &#8220;top-right email icon&#8221;.  In fact, that icon
+is present in 7.0, but not in 8.0.  More&nbsp;digging:</p>
 <pre class="literal-block">
 commit 5209fbc7ed9fcad966ab064654a8a8697142be42
 Author: Antony Lesuisse &lt;al&#64;openerp.com&gt;
@@ -160,19 +159,18 @@ Date:   Mon Jun 30 01:51:40 2014 +0200
 The action is available from the wall.
 </pre>
 <p>Got you!  So, Antony removed the icon cause he thought it was the wall, but
-Amit had removed it from the wall cause because of the icon.  These things
-happen...</p>
+Amit had removed it from the wall cause because of the icon.  These things&nbsp;happen&#8230;</p>
 <p>After reverting this commit, the icon is reestablished.  But, then I realized
 that the feature, however hidden, is actually there: If you click on the
-&quot;Share with ...&quot; and instead of writing your message there, click on the
-&quot;expand&quot; icon, then you get the same as pressing the (now missing) email icon.
-I think that the icon is required, though, since now the &quot;Share...&quot; box is not
-shown until HR is installed, and the email icon allows to send email to
+&#8220;Share with &#8230;&#8221; and instead of writing your message there, click on the
+&#8220;expand&#8221; icon, then you get the same as pressing the (now missing) email icon.
+I think that the icon is required, though, since now the &#8220;Share&#8230;&#8221; box is not
+shown until <span class="caps">HR</span> is installed, and the email icon allows to send email to
 outsiders.  My current employer is willing to remove email in favor of this
-messaging module.  This may hold him back.</p>
-<p>I'm <a class="reference external" href="https://github.com/odoo/odoo/issues/2042">raising my hand to vote</a> for the rescue of (at least) the icon.
-Redundancy is not always bad when it comes to user interface.</p>
-<p>This enough for this post.  I'll keep looking at Odoo and I'll write about it.</p>
+messaging module.  This may hold him&nbsp;back.</p>
+<p>I&#8217;m <a class="reference external" href="https://github.com/odoo/odoo/issues/2042">raising my hand to vote</a> for the rescue of (at least) the icon.
+Redundancy is not always bad when it comes to user&nbsp;interface.</p>
+<p>This enough for this post.  I&#8217;ll keep looking at Odoo and I&#8217;ll write about&nbsp;it.</p>
 <!-- Local Variables:
 ispell-dictionary: "en"
 End: -->

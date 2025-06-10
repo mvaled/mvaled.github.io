@@ -45,3 +45,6 @@ THEME = "theme"
 # Keep original copyright
 COPYRIGHT_YEAR = "2016-2025"
 COPYRIGHT_NAME = AUTHOR
+
+
+TYPOGRIFY = True

@@ -15,98 +15,95 @@
     <main>
 <article>
     <header>
-        <h2>Memento: microservices</h2>
+        <h2>Memento:&nbsp;microservices</h2>
         <p class="meta">2015-04-08 &bull; Manuel Vázquez Acosta</p>
     </header>
-    <p>Lately there's been a raise of the debate about Microservices architectures.
+    <p>Lately there&#8217;s been a raise of the debate about Microservices architectures.
 Reading about the stuff I realized I did once architect an application called
-Pyxel based on the same principles, though different.</p>
-<p>Pyxel reached only its first prototype and was never actually deployed.  I'd
-say it wasn't given the chance to prove itself.  So I argue it was technically
+Pyxel based on the same principles, though&nbsp;different.</p>
+<p>Pyxel reached only its first prototype and was never actually deployed.  I&#8217;d
+say it wasn&#8217;t given the chance to prove itself.  So I argue it was technically
 sound and, although only a prototype and thus needing improvements, it would
 have meet its stated requirements <a class="footnote-reference" href="#disagreement" id="footnote-reference-1">[1]</a>.</p>
-<p>I haven't been given permission to freely distribute the source code.  But the
+<p>I haven&#8217;t been given permission to freely distribute the source code.  But the
 architecture was published in several public events, so I can freely describe
-it here.</p>
+it&nbsp;here.</p>
 <div class="section" id="pyxel">
 <h2>Pyxel</h2>
-<p>Pyxel's goal was simple:</p>
+<p>Pyxel&#8217;s goal was&nbsp;simple:</p>
 <blockquote>
 Be a shared repository of photographs for the news media that wish to
 collaborate.</blockquote>
-<p>Pyxel required that images were tagged with IPTC metadata before uploading.
+<p>Pyxel required that images were tagged with <span class="caps">IPTC</span> metadata before uploading.
 Upon upload, the image went through several processes for extracting the
 metadata, and for producing web-friendly versions <a class="footnote-reference" href="#retina" id="footnote-reference-2">[2]</a> for several
-standard dimensions before being published.</p>
-<p>On the technical side we have also very hard constraints:</p>
+standard dimensions before being&nbsp;published.</p>
+<p>On the technical side we have also very hard&nbsp;constraints:</p>
 <ul class="simple">
-<li>the system would have to be highly accessible.</li>
+<li>the system would have to be highly&nbsp;accessible.</li>
 <li>it should run on spare machines; introducing a new machine to replace an old
-one should be possible with minimal interruption.</li>
+one should be possible with minimal&nbsp;interruption.</li>
 </ul>
 <p>This constraints were the main driver that lead us to design what we called a
 distributed system.  Each major component was designed to run in isolation of
-the rest.</p>
-<p>Pyxel was split in several processes:</p>
+the&nbsp;rest.</p>
+<p>Pyxel was split in several&nbsp;processes:</p>
 <ul class="simple">
-<li>An image queue holding new images.  This was kind of a FIFO queue over the
-network.</li>
+<li>An image queue holding new images.  This was kind of a <span class="caps">FIFO</span> queue over the&nbsp;network.</li>
 <li>A catalog holding indexes for retrieving images based of queries.  Queries
 were defined a syntax allowing from very simple queries aided with pattern
-recognition (PR) of names and dates, to very specific queries that make the
-PR mostly unused.</li>
-<li>A &quot;feature&quot; index.  This basically allowed to find similar images.  There
-were two indexes, one based on Hu moments and the other based on wavelets.</li>
+recognition (<span class="caps">PR</span>) of names and dates, to very specific queries that make the
+<span class="caps">PR</span> mostly&nbsp;unused.</li>
+<li>A &#8220;feature&#8221; index.  This basically allowed to find similar images.  There
+were two indexes, one based on Hu moments and the other based on&nbsp;wavelets.</li>
 <li>Several image processing nodes, that take images from the queue and:<ul>
-<li>Extract IPTC metadata and put it the catalog</li>
-<li>Extract image features to allow detection of similar images.</li>
-<li>Produce &quot;web versions&quot; for the image.  We always kept the original file,
-but to keep the design of the prototype simple there was an &quot;as-is web
-version&quot; that simply returned the same file as the input.</li>
+<li>Extract <span class="caps">IPTC</span> metadata and put it the&nbsp;catalog</li>
+<li>Extract image features to allow detection of similar&nbsp;images.</li>
+<li>Produce &#8220;web versions&#8221; for the image.  We always kept the original file,
+but to keep the design of the prototype simple there was an &#8220;as-is web
+version&#8221; that simply returned the same file as the&nbsp;input.</li>
 </ul>
 </li>
-<li>A web application that communicates with the index and the catalogs.</li>
-<li>An FTP server that injects images to the queue using a FUSE mount point
-(drag-and-drop to the browser wasn't common yet).</li>
+<li>A web application that communicates with the index and the&nbsp;catalogs.</li>
+<li>An <span class="caps">FTP</span> server that injects images to the queue using a <span class="caps">FUSE</span> mount point
+(drag-and-drop to the browser wasn&#8217;t common&nbsp;yet).</li>
 </ul>
 <p>That were the main components and all of them ran independently.  Of course
 for some services to perform at 100%, they required others to be working.  The
 web application would not be able to perform a search if the catalog was down,
-or to upload new images if the queue was out of reach.</p>
+or to upload new images if the queue was out of&nbsp;reach.</p>
 </div>
 <div class="section" id="the-principles-stand">
-<h2>The principles stand</h2>
-<p>Microservices are &quot;a take&quot; on the same old issue about software composition.
+<h2>The principles&nbsp;stand</h2>
+<p>Microservices are &#8220;a take&#8221; on the same old issue about software composition.
 Conceptually <a class="reference external" href="https://www.cs.umd.edu/class/spring2003/cmsc838p/Design/criteria.pdf">Parnas</a> still rules: must do modules.  Names have changed and
-several rules to build better modules (components, services, etc) have been
-provided.</p>
-<p>Exposition of the modules as services have also been promoted.</p>
-<p>In the web, the modules have drifted away from the server into the client.</p>
+several rules to build better modules (components, services, etc) have been&nbsp;provided.</p>
+<p>Exposition of the modules as services have also been&nbsp;promoted.</p>
+<p>In the web, the modules have drifted away from the server into the&nbsp;client.</p>
 </div>
 <div class="section" id="microservices-and-pyxel">
-<h2>Microservices and Pyxel</h2>
+<h2>Microservices and&nbsp;Pyxel</h2>
 <p>Pyxel was not actually a microservice architecture as it is understood now.
 Deep down it used a central name-server that matched services names to network
-endpoints.  We used <a class="reference external" href="https://pypi.python.org/Pyro">Pyro</a> for this prototype.</p>
+endpoints.  We used <a class="reference external" href="https://pypi.python.org/Pyro">Pyro</a> for this&nbsp;prototype.</p>
 <p>We did recognize that this was an <em>accidental</em> choice, a matter of convenience
-to have the prototype working as soon as possible.</p>
+to have the prototype working as soon as&nbsp;possible.</p>
 <p>We chose Pyro to test our prototype not to keep it forever if it performed
-poorly.  And though our first tests were positive there was some slowness.</p>
+poorly.  And though our first tests were positive there was some&nbsp;slowness.</p>
 <p>To accommodate for a possible replacement of Pyro we chose to provide our own
-&quot;idiom&quot; (in Python) to connect and communicate with services:</p>
+&#8220;idiom&#8221; (in Python) to connect and communicate with&nbsp;services:</p>
 <pre class="literal-block">
 with service('pyxel.queue') as queue
     queue.method(*arguments)
 </pre>
-<p>That pattern was designed to have an appearance as simple as RPC.  Later we
-found that <a class="reference external" href="http://steve.vinoski.net/pdf/IEEE-RPC_Under_Fire.pdf">RPC was under fire</a>, but the project was being shut down, so we
-didn't fix that.</p>
-<p>Under current views Pyxel needs several changes.  I can think of a couple:</p>
+<p>That pattern was designed to have an appearance as simple as <span class="caps">RPC</span>.  Later we
+found that <a class="reference external" href="http://steve.vinoski.net/pdf/IEEE-RPC_Under_Fire.pdf"><span class="caps">RPC</span> was under fire</a>, but the project was being shut down, so we
+didn&#8217;t fix&nbsp;that.</p>
+<p>Under current views Pyxel needs several changes.  I can think of a&nbsp;couple:</p>
 <ul class="simple">
 <li>Probably exposing the queue to the client-side of the web application
-instead sending the images first to the server-side of the web application.</li>
-<li>Extract the user registration, authentication and authorization into a
-service.</li>
+instead sending the images first to the server-side of the web&nbsp;application.</li>
+<li>Extract the user registration, authentication and authorization into a&nbsp;service.</li>
 </ul>
 </div>
 <div class="section" id="notes">

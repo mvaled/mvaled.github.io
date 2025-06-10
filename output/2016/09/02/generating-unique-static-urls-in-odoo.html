@@ -15,21 +15,21 @@
     <main>
 <article>
     <header>
-        <h2>Generating unique static URLs in Odoo</h2>
+        <h2>Generating unique static URLs in&nbsp;Odoo</h2>
         <p class="meta">2016-09-02 &bull; Manuel Vázquez Acosta</p>
     </header>
-    <p>By default Odoo bundles static assets (JS and CSS) within a couple of
-files: All CSS files are bundled into a single big CSS file.  The same
-happens for JS files.</p>
+    <p>By default Odoo bundles static assets (<span class="caps">JS</span> and <span class="caps">CSS</span>) within a couple of
+files: All <span class="caps">CSS</span> files are bundled into a single big <span class="caps">CSS</span> file.  The same
+happens for <span class="caps">JS</span>&nbsp;files.</p>
 <p>The URLs of those bundles vary with any change within any of the
 included files.  But those files are big.  Therefore changing assets
-put some stress in the network and diminish the usefulness of caches.</p>
+put some stress in the network and diminish the usefulness of&nbsp;caches.</p>
 <p>Since Sep 19th, 2015 we introduced a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/03741a2cb81907b4b67ca8437f260b073689d212">patch</a> in
-Odoo to avoid bundling of static assets when using a SPDY or HTTP/2
-proxy like Nginx.</p>
+Odoo to avoid bundling of static assets when using a <span class="caps">SPDY</span> or <span class="caps">HTTP</span>/2
+proxy like&nbsp;Nginx.</p>
 <p>Reportedly, this has worked very well in our case where some users
 have slow connections.  However, measuring the logs of a week we see
-that about 21% of GET request are assets:</p>
+that about 21% of <span class="caps">GET</span> request are&nbsp;assets:</p>
 <pre class="literal-block">
 $ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
 10554
@@ -37,16 +37,16 @@ $ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
 $ egrep 'GET .* HTTP' /var/log/nginx/o.access.log.1 | wc -l
 50216
 </pre>
-<p>Odoo's default cache expiration time is seven days.  This is
-considerably low taking into account that bundle's URLs change when
-the content does.</p>
+<p>Odoo&#8217;s default cache expiration time is seven days.  This is
+considerably low taking into account that bundle&#8217;s URLs change when
+the content&nbsp;does.</p>
 <p>Another issue is that assets that change can be served staled from the
-caches for seven days.</p>
-<p>We're taking the path to produce unique URLs for static assets.  Our
+caches for seven&nbsp;days.</p>
+<p>We&#8217;re taking the path to produce unique URLs for static assets.  Our
 current work can be seen in our <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-unique-static-urls">merchise-unique-static-urls</a>
 branch.  In our development/deployment scenarios these simple changes
-would suffice for JS and CSS.  There's still work to do regarding
-invalidation of static images in our templates.</p>
+would suffice for <span class="caps">JS</span> and <span class="caps">CSS</span>.  There&#8217;s still work to do regarding
+invalidation of static images in our&nbsp;templates.</p>
 
 </article>
     </main>
