@@ -7,14 +7,12 @@ A failing fail in the monad list
 :slug: a-failing-fail-in-the-monad-list
 
 
-
 .. sidebar:: Update.
 
    The question__ was answered in Stack Overflow, and it shows that the title
    of this post is incorrect: The failing ``fail`` is in the *function* monad.
 
 __ stackoverflow-50989541_
-
 
 I'm following the Real World Haskell book.  In the chapter about Monads, they
 create simple example using the list monad compute all pairs of numbers ``(x,

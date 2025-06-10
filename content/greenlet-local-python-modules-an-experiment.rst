@@ -21,6 +21,7 @@ is running.
 
 
 Modulets.  The idea
+-------------------
 
 I asked myself if I could devise an *import mechanism* that would allow to
 update a Python module in a way that already-running greenlets stay unaffected
@@ -66,6 +67,7 @@ xoutil.
 
 
 Modulets in xoutil
+------------------
 
 The current implementation is a very early proof of concept and not something
 you'd like to put outside your playground.
@@ -112,6 +114,7 @@ If you comment the bootstrapping of modulets, then you'll get something like::
 
 
 Future work
+-----------
 
 Since we are at the very early stages of this project is not easy to predict
 if we'll keep modulets in our platform.  Probably a celery_ based solution be

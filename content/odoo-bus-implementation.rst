@@ -1,5 +1,6 @@
-The bus *implementation* in Odoo and notification systems in the Web
-===================================================================
+======================================================================
+ The bus *implementation* in Odoo and notification systems in the Web
+======================================================================
 
 :date: 2015-09-12
 :category: Web Development
@@ -23,10 +24,10 @@ The bus *implementation* in Odoo and notification systems in the Web
    - I discovered that Odoo 9's code base already has the cross-tab feature
      integrated.
 
-I commented on my `post about our migration to Odoo <odoo-at-last>`:ref: that
-our users open many tabs to the same Odoo instance.  When the chat is active
-this means an open connection for each tab and, since a chat is interactive in
-nature, all but one of these connections are not actually required [#notify]_.
+I commented on my post about our migration to Odoo that our users open many
+tabs to the same Odoo instance.  When the chat is active this means an open
+connection for each tab and, since a chat is interactive in nature, all but
+one of these connections are not actually required [#notify]_.
 
 A while ago `I reported <twitter-spike-report_>`__ that switching from a
 threaded based deployment to a pre-forked processes one with a gevent_ based
@@ -89,6 +90,7 @@ __ https://github.com/merchise-autrement/odoo/commit/555b5699b96178d5c87f36c0f69
 
 
 Cross-tab polling
+=================
 
 By looking better our users' usage pattern, we discovered that users switch
 from tab to tab regularly and thus the polling is still high.  So we went down
@@ -127,6 +129,7 @@ So probably I end up backporting their implementation into 8.0.
 .. |bus.rst| replace:: ``addons/bus/static/src/js/bus.rst``
 
 Notes
+=====
 
 .. [#notify] Of course it allows the web app to change the window's title when
    then user has an unread message, but in our case this notification is also

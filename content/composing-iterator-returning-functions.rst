@@ -42,6 +42,7 @@ initial objects.
 
 
 A little incursion in Haskell
+-----------------------------
 
 In order to test my Haskell, I did first a Haskell version.  I started by
 trying to create a *composition* operator much like the ``(.)`` operator,
@@ -131,6 +132,7 @@ is the best we can get (i.e. we can't generalize to Applicative_).
 
 
 Chaining several iterator-returning functions
+---------------------------------------------
 
 Now, I can define a ``chain`` function.  It takes a list of several
 ``a -> m a`` functions and compose them together (from right to left, as
@@ -161,6 +163,7 @@ And that completes our incursion in Haskell.
 
 
 Doing the same in Python
+------------------------
 
 Going from this Haskell definition of ``chain`` to Python is quite easy.  But
 we're not going to work with any possible monad, just lists (iterators,

@@ -1,38 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-        <title>Manuel on Software - Reloaded - Memento: microservices</title>
-      <meta charset="utf-8" />
-      <meta name="generator" content="Pelican" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-
-    <meta name="tags" content="memento" />
-
-  </head>
-
-  <body>
-      <header>
-          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
-          <nav><ul>
-                <li><a href="/category/architecture.html"  aria-current="page" >architecture</a></li>
-                <li><a href="/category/blogroll.html" >Blogroll</a></li>
-                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
-                <li><a href="/category/misc.html" >misc</a></li>
-                <li><a href="/category/openerp.html" >OpenERP</a></li>
-                <li><a href="/category/programming.html" >Programming</a></li>
-                <li><a href="/category/python.html" >Python</a></li>
-          </ul></nav>
-      </header>
-      <main>
-  <article>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofretería</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/static/style.css">
+</head>
+<body>
     <header>
-      <h2>
-        <a href="/2015/04/08/rememoring-microservices.html" rel="bookmark"
-           title="Permalink to Memento: microservices">Memento: microservices</a></h2>
-      
+        <h1><a href="/">Sofretería</a></h1>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Memento: microservices</h2>
+        <p class="meta">2015-04-08 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>Lately there's been a raise of the debate about Microservices architectures.
 Reading about the stuff I realized I did once architect an application called
@@ -44,7 +28,8 @@ have meet its stated requirements <a class="footnote-reference" href="#disagreem
 <p>I haven't been given permission to freely distribute the source code.  But the
 architecture was published in several public events, so I can freely describe
 it here.</p>
-<p>Pyxel</p>
+<div class="section" id="pyxel">
+<h2>Pyxel</h2>
 <p>Pyxel's goal was simple:</p>
 <blockquote>
 Be a shared repository of photographs for the news media that wish to
@@ -88,14 +73,18 @@ version&quot; that simply returned the same file as the input.</li>
 for some services to perform at 100%, they required others to be working.  The
 web application would not be able to perform a search if the catalog was down,
 or to upload new images if the queue was out of reach.</p>
-<p>The principles stand</p>
+</div>
+<div class="section" id="the-principles-stand">
+<h2>The principles stand</h2>
 <p>Microservices are &quot;a take&quot; on the same old issue about software composition.
 Conceptually <a class="reference external" href="https://www.cs.umd.edu/class/spring2003/cmsc838p/Design/criteria.pdf">Parnas</a> still rules: must do modules.  Names have changed and
 several rules to build better modules (components, services, etc) have been
 provided.</p>
 <p>Exposition of the modules as services have also been promoted.</p>
 <p>In the web, the modules have drifted away from the server into the client.</p>
-<p>Microservices and Pyxel</p>
+</div>
+<div class="section" id="microservices-and-pyxel">
+<h2>Microservices and Pyxel</h2>
 <p>Pyxel was not actually a microservice architecture as it is understood now.
 Deep down it used a central name-server that matched services names to network
 endpoints.  We used <a class="reference external" href="https://pypi.python.org/Pyro">Pyro</a> for this prototype.</p>
@@ -119,7 +108,9 @@ instead sending the images first to the server-side of the web application.</li>
 <li>Extract the user registration, authentication and authorization into a
 service.</li>
 </ul>
-<p>Notes</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes</h2>
 <table class="docutils footnote" frame="void" id="disagreement" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
@@ -135,29 +126,12 @@ icons and bandwidth is also more likely to allow very big pictures to be
 friendly.</td></tr>
 </tbody>
 </table>
+</div>
 
+</article>
+    </main>
     <footer>
-      <p>Published: <time datetime="2015-04-08T00:00:00+00:00">
-        Mi 08 April 2015
-      </time></p>
-        <address>
-          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-        </address>
-        <p>
-          Category: <a href="/category/architecture.html">architecture</a>
-        </p>
-        <p>
-          Tags:
-            <a href="/tag/memento.html">memento</a>
-        </p>
+        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
     </footer>
-  </article>
-      </main>
-      <footer>
-          <address>
-            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
-            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-          </address>
-      </footer>
-  </body>
+</body>
 </html>

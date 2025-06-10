@@ -34,6 +34,7 @@ integration and not the only way to do it.
 
 
 The Integration tale
+--------------------
 
 I want to start with a simple and very real [#accounting-last]_ use case: Bob
 is a salesperson processing a CRM_ lead.
@@ -76,6 +77,7 @@ So, what is wrong with this story?
 
 
 Depiction of wrongness
+----------------------
 
 In my opinion there are two things that are clearly wrong with this:
 
@@ -97,8 +99,8 @@ process.
 
 __ `On using properties`_
 
-
 The issue.  The making off
+--------------------------
 
 .. warning:: Technical stuff ahead.  Wearing hardhats is mandatory.
 
@@ -143,6 +145,7 @@ are "special".
 
 
 On using properties
+-------------------
 
 Properties are of course related to the "solution" for the problem described
 above.  But the solution is well hidden under the title of `Database setup`_
@@ -186,8 +189,6 @@ However this workaround is very unsatisfying:
   journal entries and before posting them, and change the account if needed.
 
 .. |res.partner| replace:: ``"res.partner"``
-
-
 
 An ERP should simplify things by *integrating business areas*, shouldn't it?
 That's the main driver behind the feature of automatically generating journal

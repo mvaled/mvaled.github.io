@@ -27,6 +27,7 @@ modules and fixing them.
 
 
 A summary of the process
+------------------------
 
 The OpenUpgrade_ project proved to be very complete for us --it had almost
 everything we needed:
@@ -53,7 +54,9 @@ published them should anyone finds them useful.
 .. _8.0-valid-rrules: https://github.com/mvaled/OpenUpgrade/tree/8.0-valid-rrules
 .. _merchise-8.0: https://github.com/mvaled/OpenUpgrade/tree/merchise-8.0
 
+
 The menu decomposition
+----------------------
 
 The biggest issue we've encountered so far is that after several hours of
 operation all the menus stopped working: You clicked the "Leads" menu item and
@@ -83,6 +86,7 @@ first place.
 
 
 The magical 6 tabs
+------------------
 
 Our users started to report slowness after a couple of hours of working.
 First, we noticed that the call to ``load_needaction`` was taking too long and
@@ -128,6 +132,7 @@ load.
 
 
 Epilogue
+--------
 
 That's what our migration to Odoo story has gone so far.  A little bit
 stressful at times, specially when the menus went south for the second time,

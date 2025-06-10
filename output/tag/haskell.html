@@ -1,82 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <title>Manuel on Software - Reloaded - Haskell tag</title>
-      <meta charset="utf-8" />
-      <meta name="generator" content="Pelican" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-
-  <body>
-      <header>
-          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
-          <nav><ul>
-                <li><a href="/category/architecture.html" >architecture</a></li>
-                <li><a href="/category/blogroll.html" >Blogroll</a></li>
-                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
-                <li><a href="/category/misc.html" >misc</a></li>
-                <li><a href="/category/openerp.html" >OpenERP</a></li>
-                <li><a href="/category/programming.html" >Programming</a></li>
-                <li><a href="/category/python.html" >Python</a></li>
-          </ul></nav>
-      </header>
-      <main>
-    <h2>Articles tagged with Haskell</h2>
-
-
-        <article>
-            <header> <h2><a href="/2018/08/01/composing-iterator-returning-functions.html" rel="bookmark" title="Permalink to Composing iterator-returning functions">Composing iterator-returning functions</a></h2> </header>
-            <section><p>A few days ago I was reviewing a piece of Python code.  I was looking for a
-bug, but in the process I found a very interesting function.</p>
-<p>The system allows the user to &quot;extend&quot; the structure of Products by providing
-more attributes which can be used later on when …</p></section>
-            <footer>
-                <p>Published: <time datetime="2018-08-01T00:00:00+00:00"> Mi 01 August 2018 </time></p>
-                <address>By
-                        <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-                </address>
-            </footer>
-        </article>
-        <article>
-            <header> <h2><a href="/2018/06/22/a-failing-fail-in-the-monad-list.html" rel="bookmark" title="Permalink to A failing fail in the monad list">A failing fail in the monad list</a></h2> </header>
-            <section><div class="sidebar">
-<p class="first sidebar-title">Update.</p>
-<p class="last">The <a class="reference external" href="https://stackoverflow.com/q/50989541/211280">question</a> was answered in Stack Overflow, and it shows that the title
-of this post is incorrect: The failing <tt class="docutils literal">fail</tt> is in the <em>function</em> monad.</p>
-</div>
-<p>I'm following the Real World Haskell book.  In the chapter about Monads, they
-create simple example using the list monad compute all pairs …</p></section>
-            <footer>
-                <p>Published: <time datetime="2018-06-22T00:00:00+00:00"> Fr 22 Juni 2018 </time></p>
-                <address>By
-                        <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-                </address>
-            </footer>
-        </article>
-        <article>
-            <header> <h2><a href="/2018/01/22/foldl-in-terms-of-foldr.html" rel="bookmark" title="Permalink to Dissecting foldl in terms of foldr">Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></a></h2> </header>
-            <section><p>The book 'Real World Haskell' provides an implementation of <tt class="docutils literal">foldl</tt> in terms
-of <tt class="docutils literal">foldr</tt>:</p>
-<div class="highlight"><pre><span></span><span class="nf">myFoldl</span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">b</span>
-<span class="nf">myFoldl</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">foldr</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">z</span>
-<span class="w">   </span><span class="kr">where</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
-</pre></div>
-<p>They ask the reader (me) to try to understand the implementation …</p></section>
-            <footer>
-                <p>Published: <time datetime="2018-01-22T00:00:00+00:00"> Mo 22 Januar 2018 </time></p>
-                <address>By
-                        <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-                </address>
-            </footer>
-        </article>
-
-
-      </main>
-      <footer>
-          <address>
-            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
-            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-          </address>
-      </footer>
-  </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofretería</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/static/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">Sofretería</a></h1>
+    </header>
+    <main>
+<h2>Tag: Haskell</h2>
+<ul>
+    <li><a href="/2018/08/01/composing-iterator-returning-functions.html">Composing iterator-returning functions</a></li>
+    <li><a href="/2018/06/22/a-failing-fail-in-the-monad-list.html">A failing fail in the monad list</a></li>
+    <li><a href="/2018/01/22/foldl-in-terms-of-foldr.html">Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></a></li>
+</ul>
+    </main>
+    <footer>
+        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+    </footer>
+</body>
 </html>

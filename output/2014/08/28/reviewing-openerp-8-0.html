@@ -1,38 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-        <title>Manuel on Software - Reloaded - Reviewing Odoo 8.0</title>
-      <meta charset="utf-8" />
-      <meta name="generator" content="Pelican" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-
-    <meta name="tags" content="review" />
-
-  </head>
-
-  <body>
-      <header>
-          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
-          <nav><ul>
-                <li><a href="/category/architecture.html" >architecture</a></li>
-                <li><a href="/category/blogroll.html" >Blogroll</a></li>
-                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
-                <li><a href="/category/misc.html" >misc</a></li>
-                <li><a href="/category/openerp.html"  aria-current="page" >OpenERP</a></li>
-                <li><a href="/category/programming.html" >Programming</a></li>
-                <li><a href="/category/python.html" >Python</a></li>
-          </ul></nav>
-      </header>
-      <main>
-  <article>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofretería</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/static/style.css">
+</head>
+<body>
     <header>
-      <h2>
-        <a href="/2014/08/28/reviewing-openerp-8-0.html" rel="bookmark"
-           title="Permalink to Reviewing Odoo 8.0">Reviewing Odoo 8.0</a></h2>
-      
+        <h1><a href="/">Sofretería</a></h1>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Reviewing Odoo 8.0</h2>
+        <p class="meta">2014-08-28 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>This is the first of a series of blog posts related to the next OpenERP 8.0
 (or should I say Odoo 8.0).  This first post will be very &quot;seeking for
@@ -41,7 +25,8 @@ deeply commented or analyzed.</p>
 <p>I will probably devote several posts for changes in some modules, but in this
 one I'll just write about things that can be immediately seen when you first
 install it.</p>
-<p>Installing Odoo 8.0</p>
+<div class="section" id="installing-odoo-8-0">
+<h2>Installing Odoo 8.0</h2>
 <p>I'm working with a clone from the now official <a class="reference external" href="https://github.com/odoo/odoo">github.com odoo repository</a>.
 Of course I'm using the branch &quot;8.0&quot; for this review.</p>
 <p>I prepared a <a class="reference external" href="https://pypi.python.org/pypi/virtualenv">virtual environment</a> and installed odoo there like this:</p>
@@ -57,8 +42,11 @@ include this path automatically.  So running <tt class="docutils literal"><span 
 properly built distribution from source seems more doable.  I haven't tried
 this yet, but I will, cause that was for sure something missing in 7.0.  It's
 quite suspicious that the tarball is too small (around 13MB) though.</p>
-<p>New addons</p>
-<p>Instant Messaging</p>
+</div>
+<div class="section" id="new-addons">
+<h2>New addons</h2>
+<div class="section" id="instant-messaging">
+<h3>Instant Messaging</h3>
 <p>Once I ran the server I installed a demo DB to see what's new.  The first
 thing that captured my attention was an &quot;Instant Messaging&quot; module.  I gave it
 a try and it seemed to work out-of-box.</p>
@@ -122,7 +110,9 @@ It's a nice addition though.</p>
 implementation of the Instant Messaging Bus (<a class="reference external" href="https://github.com/odoo/odoo/blob/master/openerp/addons/bus/bus.py">bus.py</a>) can be easily adapted
 for desktop-like notifications, updating your message inbox, and many other
 features that would benefit from this.</p>
-<p>Messaging has gone a bit different</p>
+</div>
+<div class="section" id="messaging-has-gone-a-bit-different">
+<h3>Messaging has gone a bit different</h3>
 <p>At this point I tried to send a message from a user to another (to test if the
 inbox was updated real-time) and realized that the Messaging addons has lost
 the &quot;compose a new message&quot; that was previously accessible from the inbox, let
@@ -186,29 +176,13 @@ Redundancy is not always bad when it comes to user interface.</p>
 <!-- Local Variables:
 ispell-dictionary: "en"
 End: -->
+</div>
+</div>
 
+</article>
+    </main>
     <footer>
-      <p>Published: <time datetime="2014-08-28T00:00:00+00:00">
-        Do 28 August 2014
-      </time></p>
-        <address>
-          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-        </address>
-        <p>
-          Category: <a href="/category/openerp.html">OpenERP</a>
-        </p>
-        <p>
-          Tags:
-            <a href="/tag/review.html">review</a>
-        </p>
+        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
     </footer>
-  </article>
-      </main>
-      <footer>
-          <address>
-            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
-            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-          </address>
-      </footer>
-  </body>
+</body>
 </html>

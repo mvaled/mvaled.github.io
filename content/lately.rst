@@ -47,6 +47,7 @@ reading a couple of books and articles:
 
 
 Things left in the attic
+------------------------
 
 At the beginning of 2014 I expected I could dedicate myself to finish
 `xotl.ql`_ by August.  This was, however, not possible.  I still keep my eye

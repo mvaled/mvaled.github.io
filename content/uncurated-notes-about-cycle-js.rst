@@ -37,8 +37,8 @@ your program's source streams.
 
 Architecturally this is simple and good.
 
-
 Components
+----------
 
    Any Cycle.js app can be reused as a component in a larger Cycle.js app.
 
@@ -64,6 +64,7 @@ to expose the stream of 'values' from the slider.
 
 
 Streams to the extreme (and localization)
+-----------------------------------------
 
 The Egghead's series exposes how Cycle.js became to be and you can, therefore,
 see the evolution it is.  Is a short video series worth watching: right to the
@@ -151,6 +152,7 @@ slider, without any knowledge of units, might be wrapped inside a
 
 
 Open questions
+--------------
 
 Most of the ideas exposed above are not battle tested.  I happen to be
 evaluating whether I could use `Cycle.js`_ inside Odoo to develop some widgets

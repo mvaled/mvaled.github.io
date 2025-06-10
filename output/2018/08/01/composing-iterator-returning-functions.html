@@ -1,39 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-        <title>Manuel on Software - Reloaded - Composing iterator-returning functions</title>
-      <meta charset="utf-8" />
-      <meta name="generator" content="Pelican" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-
-    <meta name="tags" content="Haskell" />
-    <meta name="tags" content="Python" />
-
-  </head>
-
-  <body>
-      <header>
-          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
-          <nav><ul>
-                <li><a href="/category/architecture.html" >architecture</a></li>
-                <li><a href="/category/blogroll.html" >Blogroll</a></li>
-                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
-                <li><a href="/category/misc.html" >misc</a></li>
-                <li><a href="/category/openerp.html" >OpenERP</a></li>
-                <li><a href="/category/programming.html"  aria-current="page" >Programming</a></li>
-                <li><a href="/category/python.html" >Python</a></li>
-          </ul></nav>
-      </header>
-      <main>
-  <article>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofretería</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/static/style.css">
+</head>
+<body>
     <header>
-      <h2>
-        <a href="/2018/08/01/composing-iterator-returning-functions.html" rel="bookmark"
-           title="Permalink to Composing iterator-returning functions">Composing iterator-returning functions</a></h2>
-      
+        <h1><a href="/">Sofretería</a></h1>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Composing iterator-returning functions</h2>
+        <p class="meta">2018-08-01 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>A few days ago I was reviewing a piece of Python code.  I was looking for a
 bug, but in the process I found a very interesting function.</p>
@@ -62,7 +45,8 @@ like this:</p>
 <p>That definition was OK, but I wondered if I could build just the <em>composition</em>
 of several functions returning iterators, so that I can reuse it with several
 initial objects.</p>
-<p>A little incursion in Haskell</p>
+<div class="section" id="a-little-incursion-in-haskell">
+<h2>A little incursion in Haskell</h2>
 <p>In order to test my Haskell, I did first a Haskell version.  I started by
 trying to create a <em>composition</em> operator much like the <tt class="docutils literal">(.)</tt> operator,
 which has type:</p>
@@ -121,7 +105,9 @@ equivalent to <tt class="docutils literal">m</tt>:</p>
 </pre></div>
 <p>This is as good as I was able to get.  Since we're using <tt class="docutils literal">&gt;&gt;=</tt>, I think this
 is the best we can get (i.e. we can't generalize to <a class="reference external" href="https://wiki.haskell.org/Applicative_functor">Applicative</a>).</p>
-<p>Chaining several iterator-returning functions</p>
+</div>
+<div class="section" id="chaining-several-iterator-returning-functions">
+<h2>Chaining several iterator-returning functions</h2>
 <p>Now, I can define a <tt class="docutils literal">chain</tt> function.  It takes a list of several
 <tt class="docutils literal"><span class="pre">a&nbsp;-&gt;&nbsp;m&nbsp;a</span></tt> functions and compose them together (from right to left, as
 expected):</p>
@@ -137,7 +123,9 @@ expected):</p>
 <span class="nf">chain</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">foldr</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;&gt;.</span><span class="p">)</span><span class="w"> </span><span class="n">return</span>
 </pre></div>
 <p>And that completes our incursion in Haskell.</p>
-<p>Doing the same in Python</p>
+</div>
+<div class="section" id="doing-the-same-in-python">
+<h2>Doing the same in Python</h2>
 <p>Going from this Haskell definition of <tt class="docutils literal">chain</tt> to Python is quite easy.  But
 we're not going to work with any possible monad, just lists (iterators,
 actually).</p>
@@ -155,30 +143,12 @@ actually).</p>
 </pre></div>
 <p>We have included <tt class="docutils literal">~xoutil.fp.iterators.iter_compose</tt> in <a class="reference external" href="https://github.com/merchise/xoutil">xoutil</a> 1.9.6
 and 2.0.6.</p>
+</div>
 
+</article>
+    </main>
     <footer>
-      <p>Published: <time datetime="2018-08-01T00:00:00+00:00">
-        Mi 01 August 2018
-      </time></p>
-        <address>
-          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-        </address>
-        <p>
-          Category: <a href="/category/programming.html">Programming</a>
-        </p>
-        <p>
-          Tags:
-            <a href="/tag/haskell.html">Haskell</a>
-            <a href="/tag/python.html">Python</a>
-        </p>
+        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
     </footer>
-  </article>
-      </main>
-      <footer>
-          <address>
-            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
-            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-          </address>
-      </footer>
-  </body>
+</body>
 </html>

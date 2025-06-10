@@ -38,6 +38,7 @@ So, my only strategy is:
 - Send as many PRs as I'm able to fix/improve something and hope for the best.
 
 Postdata
+--------
 
 My long-planned "`OpenERP corner`_" will simply be renamed accordingly.
 

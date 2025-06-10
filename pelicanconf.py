@@ -1,6 +1,6 @@
 AUTHOR = "Manuel Vázquez Acosta"
 SITENAME = "Sofretería"
-SITEURL = "https://mvaled.github.io/"
+SITEURL = ""
 
 PATH = "content"
 
@@ -42,12 +42,6 @@ PLUGINS = []
 # Theme settings
 THEME = "theme"
 
-# Disqus settings (from your original config)
-DISQUS_SITENAME = "mvaled-io"
-
 # Keep original copyright
-COPYRIGHT_YEAR = 2016
+COPYRIGHT_YEAR = "2016-2025"
 COPYRIGHT_NAME = AUTHOR
-
-# Use simple theme for now - you can customize later
-# THEME = 'simple'

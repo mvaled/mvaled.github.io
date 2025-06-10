@@ -20,6 +20,7 @@ architecture was published in several public events, so I can freely describe
 it here.
 
 Pyxel
+-----
 
 Pyxel's goal was simple:
 
@@ -76,6 +77,7 @@ or to upload new images if the queue was out of reach.
 
 
 The principles stand
+--------------------
 
 Microservices are "a take" on the same old issue about software composition.
 Conceptually Parnas_ still rules: must do modules.  Names have changed and
@@ -88,6 +90,7 @@ In the web, the modules have drifted away from the server into the client.
 
 
 Microservices and Pyxel
+-----------------------
 
 Pyxel was not actually a microservice architecture as it is understood now.
 Deep down it used a central name-server that matched services names to network
@@ -119,6 +122,7 @@ Under current views Pyxel needs several changes.  I can think of a couple:
 
 
 Notes
+-----
 
 .. [#disagreement] Actually one of the main causes of Pyxel being a failure
    was I could not make all participants agreed on the requirements.

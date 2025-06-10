@@ -1,39 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-        <title>Manuel on Software - Reloaded - Hot-swapping Python modules. An experiment.</title>
-      <meta charset="utf-8" />
-      <meta name="generator" content="Pelican" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-
-    <meta name="tags" content="isolation" />
-    <meta name="tags" content="erlang" />
-
-  </head>
-
-  <body>
-      <header>
-          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
-          <nav><ul>
-                <li><a href="/category/architecture.html" >architecture</a></li>
-                <li><a href="/category/blogroll.html" >Blogroll</a></li>
-                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
-                <li><a href="/category/misc.html" >misc</a></li>
-                <li><a href="/category/openerp.html" >OpenERP</a></li>
-                <li><a href="/category/programming.html" >Programming</a></li>
-                <li><a href="/category/python.html"  aria-current="page" >Python</a></li>
-          </ul></nav>
-      </header>
-      <main>
-  <article>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofretería</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/static/style.css">
+</head>
+<body>
     <header>
-      <h2>
-        <a href="/2015/02/18/greenlet-local-python-modules-an-experiment.html" rel="bookmark"
-           title="Permalink to Hot-swapping Python modules. An experiment.">Hot-swapping Python modules. An experiment.</a></h2>
-      
+        <h1><a href="/">Sofretería</a></h1>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Hot-swapping Python modules. An experiment.</h2>
+        <p class="meta">2015-02-18 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>A new project I'm involved with will <em>probably</em> require dozens of servers
 running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlets</a> each.  Top-level greenlets represent jobs
@@ -44,7 +27,8 @@ greenlet may be either a supervisor or a worker.</p>
 <p>But there's something missing in our platform that Erlang do have and that
 might yield huge benefits.  You can change your Erlang code while the program
 is running.</p>
-<p>Modulets.  The idea</p>
+<div class="section" id="modulets-the-idea">
+<h2>Modulets.  The idea</h2>
 <p>I asked myself if I could devise an <em>import mechanism</em> that would allow to
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.</p>
@@ -80,7 +64,9 @@ I'm calling a &quot;modulet&quot;.</p>
 <p>Currently I have a &quot;working&quot; <strong>yet very experimental and undertested</strong>
 implementation of such a mechanism in our <a class="reference external" href="https://github.com/merchise-autrement/xoutil/tree/experimental-modulets/xoutil/modules">experimental modulets branch</a> in
 xoutil.</p>
-<p>Modulets in xoutil</p>
+</div>
+<div class="section" id="modulets-in-xoutil">
+<h2>Modulets in xoutil</h2>
 <p>The current implementation is a very early proof of concept and not something
 you'd like to put outside your playground.</p>
 <p>The file <a class="reference external" href="https://github.com/merchise-autrement/xoutil/blob/experimental-modulets/xoutil/modules/test_modulet.py"><tt class="docutils literal">test_modulet.py</tt></a> is a simple script you may run to see it working.
@@ -121,7 +107,9 @@ Traceback (most recent call last):
 AssertionError: Expected 1001 but got 1000.
 Passed. I have the right magic number 1000
 </pre>
-<p>Future work</p>
+</div>
+<div class="section" id="future-work">
+<h2>Future work</h2>
 <p>Since we are at the very early stages of this project is not easy to predict
 if we'll keep modulets in our platform.  Probably a <a class="reference external" href="http://docs.celeryproject.org/en/latest/">celery</a> based solution be
 enough.</p>
@@ -166,30 +154,12 @@ in the box.</p>
 ispell-dictionary: "en"
 End: -->
 <!-- LocalWords:  greenlets modulets modulet greenlet Erlang OTP VERP -->
+</div>
 
+</article>
+    </main>
     <footer>
-      <p>Published: <time datetime="2015-02-18T00:00:00+00:00">
-        Mi 18 Februar 2015
-      </time></p>
-        <address>
-          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-        </address>
-        <p>
-          Category: <a href="/category/python.html">Python</a>
-        </p>
-        <p>
-          Tags:
-            <a href="/tag/isolation.html">isolation</a>
-            <a href="/tag/erlang.html">erlang</a>
-        </p>
+        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
     </footer>
-  </article>
-      </main>
-      <footer>
-          <address>
-            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
-            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-          </address>
-      </footer>
-  </body>
+</body>
 </html>

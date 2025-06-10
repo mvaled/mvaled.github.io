@@ -18,6 +18,7 @@ install it.
 
 
 Installing Odoo 8.0
+-------------------
 
 I'm working with a clone from the now official `github.com odoo repository`__.
 Of course I'm using the branch "8.0" for this review.
@@ -42,8 +43,10 @@ quite suspicious that the tarball is too small (around 13MB) though.
 
 
 New addons
+----------
 
 Instant Messaging
+~~~~~~~~~~~~~~~~~
 
 Once I ran the server I installed a demo DB to see what's new.  The first
 thing that captured my attention was an "Instant Messaging" module.  I gave it
@@ -122,6 +125,7 @@ features that would benefit from this.
 
 
 Messaging has gone a bit different
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At this point I tried to send a message from a user to another (to test if the
 inbox was updated real-time) and realized that the Messaging addons has lost

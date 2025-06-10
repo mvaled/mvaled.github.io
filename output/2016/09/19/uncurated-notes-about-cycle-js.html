@@ -1,39 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-        <title>Manuel on Software - Reloaded - Non-curated notes about Cycle.js</title>
-      <meta charset="utf-8" />
-      <meta name="generator" content="Pelican" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-
-    <meta name="tags" content="UI" />
-    <meta name="tags" content="Thought" />
-
-  </head>
-
-  <body>
-      <header>
-          <hgroup><h1><a href="/">Manuel on Software - Reloaded</a></h1></hgroup>
-          <nav><ul>
-                <li><a href="/category/architecture.html" >architecture</a></li>
-                <li><a href="/category/blogroll.html" >Blogroll</a></li>
-                <li><a href="/category/book-reviews.html" >Book Reviews</a></li>
-                <li><a href="/category/misc.html" >misc</a></li>
-                <li><a href="/category/openerp.html" >OpenERP</a></li>
-                <li><a href="/category/programming.html"  aria-current="page" >Programming</a></li>
-                <li><a href="/category/python.html" >Python</a></li>
-          </ul></nav>
-      </header>
-      <main>
-  <article>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofretería</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/static/style.css">
+</head>
+<body>
     <header>
-      <h2>
-        <a href="/2016/09/19/uncurated-notes-about-cycle-js.html" rel="bookmark"
-           title="Permalink to Non-curated notes about Cycle.js">Non-curated notes about Cycle.js</a></h2>
-      
+        <h1><a href="/">Sofretería</a></h1>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Non-curated notes about Cycle.js</h2>
+        <p class="meta">2016-09-19 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>In the past few days I have been reading about Reactive Programming.  Mostly
 about how it's done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
@@ -66,7 +49,8 @@ first place.  It goes like: your program outputs are the input to an external
 (possibly human) entity which, in turn, may react and produce more events in
 your program's source streams.</p>
 <p>Architecturally this is simple and good.</p>
-<p>Components</p>
+<div class="section" id="components">
+<h2>Components</h2>
 <blockquote>
 <p>Any Cycle.js app can be reused as a component in a larger Cycle.js app.</p>
 <p class="attribution">&mdash;From the Cycle.js documentation</p>
@@ -88,7 +72,9 @@ to expose the stream of 'values' from the slider.</p>
 <p class="last">Actually the documentation states that components expose, somehow,
 its state.</p>
 </div>
-<p>Streams to the extreme (and localization)</p>
+</div>
+<div class="section" id="streams-to-the-extreme-and-localization">
+<h2>Streams to the extreme (and localization)</h2>
 <p>The Egghead's series exposes how Cycle.js became to be and you can, therefore,
 see the evolution it is.  Is a short video series worth watching: right to the
 point without many detours.</p>
@@ -160,7 +146,9 @@ application and those need to be fully localized, my components might be
 regarded as over-engineered for other apps.  My only hope is that a simple
 slider, without any knowledge of units, might be wrapped inside a
 <cite>FullyLocalizedSlider</cite> for that purpose.</p>
-<p>Open questions</p>
+</div>
+<div class="section" id="open-questions">
+<h2>Open questions</h2>
 <p>Most of the ideas exposed above are not battle tested.  I happen to be
 evaluating whether I could use <a class="reference external" href="http://cycle.js.org/">Cycle.js</a> inside Odoo to develop some widgets
 that require almost real-times updates, and the stream interface is thus quite
@@ -168,30 +156,12 @@ natural.</p>
 <p>There are challenges about integrating my components with the rest of the
 application, and being an application that must display at least three
 languages I need to think on advance about the problems I would face.</p>
+</div>
 
+</article>
+    </main>
     <footer>
-      <p>Published: <time datetime="2016-09-19T00:00:00+00:00">
-        Mo 19 September 2016
-      </time></p>
-        <address>
-          By             <a href="/author/manuel-vazquez-acosta.html">Manuel Vázquez Acosta</a>
-        </address>
-        <p>
-          Category: <a href="/category/programming.html">Programming</a>
-        </p>
-        <p>
-          Tags:
-            <a href="/tag/ui.html">UI</a>
-            <a href="/tag/thought.html">Thought</a>
-        </p>
+        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
     </footer>
-  </article>
-      </main>
-      <footer>
-          <address>
-            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
-            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-          </address>
-      </footer>
-  </body>
+</body>
 </html>
