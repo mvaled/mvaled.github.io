@@ -61,7 +61,7 @@ at the same time I was writing this post) I realized that the <em>current</em>
 multi-process deployments would still need this <span class="caps">IPC</span> to properly work.  So I
 ran <tt class="docutils literal"><span class="pre">./openerp-server</span> <span class="pre">--workers=2</span></tt> and tested it again.  The chat stopped to
 work and the following error was logged from time to&nbsp;time:</p>
-<div class="highlight"><pre><span></span>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
+<div class="pygment-highlight"><pre><span></span>2014-08-27 22:53:48,972 17858 ERROR o8 openerp.http: Exception during JSON request handling.
 Traceback (most recent call last):
   File &quot;/&lt;..&gt;/odoo/openerp/http.py&quot;, line 476, in _handle_exception
     return super(JsonRequest, self)._handle_exception(exception)
@@ -83,22 +83,22 @@ Exception: bus.Bus unavailable
 </pre></div>
 <p>The code explains it all.  This is the method <tt class="docutils literal">ImDispatch.start()</tt> in file
 <tt class="docutils literal">addons/bus/bus.py</tt>:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">evented</span><span class="p">:</span>
-        <span class="c1"># gevent mode</span>
-        <span class="kn">import</span> <span class="nn">gevent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">gevent</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span>
-        <span class="n">gevent</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">openerp</span><span class="o">.</span><span class="n">multi_process</span><span class="p">:</span>
-        <span class="c1"># disabled in prefork mode</span>
-        <span class="k">return</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># threaded mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.Bus&quot;</span> <span class="o">%</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="k">return</span> <span class="bp">self</span>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-k">def</span> <span class="pygment-nf">start</span><span class="pygment-p">(</span><span class="pygment-bp">self</span><span class="pygment-p">):</span>
+    <span class="pygment-k">if</span> <span class="pygment-n">openerp</span><span class="pygment-o">.</span><span class="pygment-n">evented</span><span class="pygment-p">:</span>
+        <span class="pygment-c1"># gevent mode</span>
+        <span class="pygment-kn">import</span> <span class="pygment-nn">gevent</span>
+        <span class="pygment-bp">self</span><span class="pygment-o">.</span><span class="pygment-n">Event</span> <span class="pygment-o">=</span> <span class="pygment-n">gevent</span><span class="pygment-o">.</span><span class="pygment-n">event</span><span class="pygment-o">.</span><span class="pygment-n">Event</span>
+        <span class="pygment-n">gevent</span><span class="pygment-o">.</span><span class="pygment-n">spawn</span><span class="pygment-p">(</span><span class="pygment-bp">self</span><span class="pygment-o">.</span><span class="pygment-n">run</span><span class="pygment-p">)</span>
+    <span class="pygment-k">elif</span> <span class="pygment-n">openerp</span><span class="pygment-o">.</span><span class="pygment-n">multi_process</span><span class="pygment-p">:</span>
+        <span class="pygment-c1"># disabled in prefork mode</span>
+        <span class="pygment-k">return</span>
+    <span class="pygment-k">else</span><span class="pygment-p">:</span>
+        <span class="pygment-c1"># threaded mode</span>
+        <span class="pygment-bp">self</span><span class="pygment-o">.</span><span class="pygment-n">Event</span> <span class="pygment-o">=</span> <span class="pygment-n">threading</span><span class="pygment-o">.</span><span class="pygment-n">Event</span>
+        <span class="pygment-n">t</span> <span class="pygment-o">=</span> <span class="pygment-n">threading</span><span class="pygment-o">.</span><span class="pygment-n">Thread</span><span class="pygment-p">(</span><span class="pygment-n">name</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;</span><span class="pygment-si">%s</span><span class="pygment-s2">.Bus&quot;</span> <span class="pygment-o">%</span> <span class="pygment-vm">__name__</span><span class="pygment-p">,</span> <span class="pygment-n">target</span><span class="pygment-o">=</span><span class="pygment-bp">self</span><span class="pygment-o">.</span><span class="pygment-n">run</span><span class="pygment-p">)</span>
+        <span class="pygment-n">t</span><span class="pygment-o">.</span><span class="pygment-n">daemon</span> <span class="pygment-o">=</span> <span class="pygment-kc">True</span>
+        <span class="pygment-n">t</span><span class="pygment-o">.</span><span class="pygment-n">start</span><span class="pygment-p">()</span>
+    <span class="pygment-k">return</span> <span class="pygment-bp">self</span>
 </pre></div>
 <p>The highlighted line says this won&#8217;t work in a multi-process deployment.  How
 do you get to use the <cite>evented</cite> mode, I don&#8217;t know.  Probably that&#8217;s the

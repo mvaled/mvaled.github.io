@@ -8,6 +8,7 @@ dependencies = [
     "pelican[markdown]",
     "beautifulsoup4",
     "typogrify",
+    "pygments>=2.18.0",
 ]
 
 [tool.pelican]

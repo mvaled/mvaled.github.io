@@ -106,24 +106,24 @@ position, contact information,&nbsp;etc&#8230;</p>
 <p>When you install the <tt class="docutils literal">account</tt> addon, the <tt class="docutils literal">&quot;res.partner&quot;</tt> gets appended a
 whole bunch of other fields, including the said &#8220;account payable&#8221; and &#8220;account
 receivable&#8221; fields, which are also marked as&nbsp;mandatory:</p>
-<div class="highlight"><pre><span></span><span class="s1">&#39;property_account_payable&#39;</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
-    <span class="s1">&#39;account.account&#39;</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;many2one&#39;</span><span class="p">,</span>
-    <span class="n">relation</span><span class="o">=</span><span class="s1">&#39;account.account&#39;</span><span class="p">,</span>
-    <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Account Payable&quot;</span><span class="p">,</span>
-    <span class="n">view_load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;[(&#39;type&#39;, &#39;=&#39;, &#39;payable&#39;)]&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;This account will be used instead of the default one as the payable account for the current partner&quot;</span><span class="p">,</span>
-    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<span class="s1">&#39;property_account_receivable&#39;</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">property</span><span class="p">(</span>
-    <span class="s1">&#39;account.account&#39;</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;many2one&#39;</span><span class="p">,</span>
-    <span class="n">relation</span><span class="o">=</span><span class="s1">&#39;account.account&#39;</span><span class="p">,</span>
-    <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Account Receivable&quot;</span><span class="p">,</span>
-    <span class="n">view_load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;[(&#39;type&#39;, &#39;=&#39;, &#39;receivable&#39;)]&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;This account will be used instead of the default one as the receivable account for the current partner&quot;</span><span class="p">,</span>
-    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-s1">&#39;property_account_payable&#39;</span><span class="pygment-p">:</span> <span class="pygment-n">fields</span><span class="pygment-o">.</span><span class="pygment-n">property</span><span class="pygment-p">(</span>
+    <span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-nb">type</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;many2one&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">relation</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">string</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;Account Payable&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">view_load</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">,</span>
+    <span class="pygment-n">domain</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;[(&#39;type&#39;, &#39;=&#39;, &#39;payable&#39;)]&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">help</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;This account will be used instead of the default one as the payable account for the current partner&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">required</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">),</span>
+<span class="pygment-s1">&#39;property_account_receivable&#39;</span><span class="pygment-p">:</span> <span class="pygment-n">fields</span><span class="pygment-o">.</span><span class="pygment-n">property</span><span class="pygment-p">(</span>
+    <span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-nb">type</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;many2one&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">relation</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">string</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;Account Receivable&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">view_load</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">,</span>
+    <span class="pygment-n">domain</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;[(&#39;type&#39;, &#39;=&#39;, &#39;receivable&#39;)]&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">help</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;This account will be used instead of the default one as the receivable account for the current partner&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">required</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">),</span>
 </pre></div>
 <p>This are not actual fields of the model <tt class="docutils literal">&quot;res.partner&quot;</tt>, but properties, which
 are&nbsp;&#8220;special&#8221;.</p>

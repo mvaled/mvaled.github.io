@@ -49,3 +49,6 @@ COPYRIGHT_NAME = AUTHOR
 
 
 TYPOGRIFY = True
+
+
+PYGMENTS_RST_OPTIONS = {"classprefix": "pygment-", "cssclass": "pygment-highlight"}

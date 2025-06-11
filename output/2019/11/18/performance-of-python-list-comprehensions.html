@@ -20,60 +20,56 @@
     </header>
     <p>Yesterday, I was removing a list-comprehension as an argument to <tt class="docutils literal">sum</tt>.
 This is the&nbsp;diff:</p>
-<div class="highlight"><pre><span></span><span class="gd">- sum([p.price for p in self.products])</span>
-<span class="gi">+ sum(p.price for p in self.products)</span>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-gd">- sum([p.price for p in self.products])</span>
+<span class="pygment-gi">+ sum(p.price for p in self.products)</span>
 </pre></div>
 <p>To show the original programmer my line of though I performed a little
 experiment with the following message and&nbsp;code:</p>
 <p>List comprehensions as an argument to <em>reduce-like</em> functions are usually less
 efficient than using the generation expression itself.  The reason is that
 Python creates the list just to discard it&nbsp;afterwards:</p>
-<pre class="literal-block">
-&gt;&gt;&gt; def fib(n):
-...     a, b = 1, 1
-...     while a &lt; n:
-...         yield a
-...         a, b = b, a + b
-...
+<div class="pygment-highlight"><pre><span></span><span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-k">def</span> <span class="pygment-nf">fib</span><span class="pygment-p">(</span><span class="pygment-n">n</span><span class="pygment-p">):</span>
+<span class="pygment-o">...</span>     <span class="pygment-n">a</span><span class="pygment-p">,</span> <span class="pygment-n">b</span> <span class="pygment-o">=</span> <span class="pygment-mi">1</span><span class="pygment-p">,</span> <span class="pygment-mi">1</span>
+<span class="pygment-o">...</span>     <span class="pygment-k">while</span> <span class="pygment-n">a</span> <span class="pygment-o">&lt;</span> <span class="pygment-n">n</span><span class="pygment-p">:</span>
+<span class="pygment-o">...</span>         <span class="pygment-k">yield</span> <span class="pygment-n">a</span>
+<span class="pygment-o">...</span>         <span class="pygment-n">a</span><span class="pygment-p">,</span> <span class="pygment-n">b</span> <span class="pygment-o">=</span> <span class="pygment-n">b</span><span class="pygment-p">,</span> <span class="pygment-n">a</span> <span class="pygment-o">+</span> <span class="pygment-n">b</span>
+<span class="pygment-o">...</span>
 
-&gt;&gt;&gt; %timeit sum([x for x in fib(100)])
-2.61 µs ± 33 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+<span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">([</span><span class="pygment-n">x</span> <span class="pygment-k">for</span> <span class="pygment-n">x</span> <span class="pygment-ow">in</span> <span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">)])</span>
+<span class="pygment-mf">2.61</span> <span class="pygment-n">µs</span> <span class="pygment-err">±</span> <span class="pygment-mi">33</span> <span class="pygment-n">ns</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">100000</span> <span class="pygment-n">loops</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
 
-&gt;&gt;&gt; %timeit sum(x for x in fib(100))
-3.13 µs ± 18.6 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
-</pre>
+<span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">(</span><span class="pygment-n">x</span> <span class="pygment-k">for</span> <span class="pygment-n">x</span> <span class="pygment-ow">in</span> <span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">))</span>
+<span class="pygment-mf">3.13</span> <span class="pygment-n">µs</span> <span class="pygment-err">±</span> <span class="pygment-mf">18.6</span> <span class="pygment-n">ns</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">100000</span> <span class="pygment-n">loops</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
+</pre></div>
 <p>I was surprised to see that the list comprehension was a little bit faster
 than the generator expression.  So it seems that for short-enough lists, the
 implementation of <tt class="docutils literal">sum</tt> is quite&nbsp;fast.</p>
 <p>I had to change the implementation of <cite>fib</cite> to control the amount of items to
 show my&nbsp;point:</p>
-<pre class="literal-block">
-&gt;&gt;&gt; def fib(n):
-...     a, b = 1, 1
-...     for _ in range(n):
-...         yield a
-...         a, b = b, a + b
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-k">def</span> <span class="pygment-nf">fib</span><span class="pygment-p">(</span><span class="pygment-n">n</span><span class="pygment-p">):</span>
+<span class="pygment-o">...</span>     <span class="pygment-n">a</span><span class="pygment-p">,</span> <span class="pygment-n">b</span> <span class="pygment-o">=</span> <span class="pygment-mi">1</span><span class="pygment-p">,</span> <span class="pygment-mi">1</span>
+<span class="pygment-o">...</span>     <span class="pygment-k">for</span> <span class="pygment-n">_</span> <span class="pygment-ow">in</span> <span class="pygment-nb">range</span><span class="pygment-p">(</span><span class="pygment-n">n</span><span class="pygment-p">):</span>
+<span class="pygment-o">...</span>         <span class="pygment-k">yield</span> <span class="pygment-n">a</span>
+<span class="pygment-o">...</span>         <span class="pygment-n">a</span><span class="pygment-p">,</span> <span class="pygment-n">b</span> <span class="pygment-o">=</span> <span class="pygment-n">b</span><span class="pygment-p">,</span> <span class="pygment-n">a</span> <span class="pygment-o">+</span> <span class="pygment-n">b</span>
+</pre></div>
 <p>An still with 100 items, passing a list is&nbsp;faster:</p>
-<pre class="literal-block">
-&gt;&gt;&gt; %timeit sum(fib(100))
-14.2 µs ± 212 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+<div class="pygment-highlight"><pre><span></span><span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">(</span><span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">))</span>
+<span class="pygment-mf">14.2</span> <span class="pygment-n">µs</span> <span class="pygment-err">±</span> <span class="pygment-mi">212</span> <span class="pygment-n">ns</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">100000</span> <span class="pygment-n">loops</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
 
-&gt;&gt;&gt; %timeit sum(list(fib(100)))
-16.4 µs ± 247 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+<span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">(</span><span class="pygment-nb">list</span><span class="pygment-p">(</span><span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">)))</span>
+<span class="pygment-mf">16.4</span> <span class="pygment-n">µs</span> <span class="pygment-err">±</span> <span class="pygment-mi">247</span> <span class="pygment-n">ns</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">100000</span> <span class="pygment-n">loops</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
 
-&gt;&gt;&gt; %timeit sum([x for x in fib(100)])
-18 µs ± 160 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
-</pre>
+<span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">([</span><span class="pygment-n">x</span> <span class="pygment-k">for</span> <span class="pygment-n">x</span> <span class="pygment-ow">in</span> <span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">)])</span>
+<span class="pygment-mi">18</span> <span class="pygment-n">µs</span> <span class="pygment-err">±</span> <span class="pygment-mi">160</span> <span class="pygment-n">ns</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">100000</span> <span class="pygment-n">loops</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
+</pre></div>
 <p>Of course the differences are too small to draw final conclusions.  And, of
 course, as the list grows larger it becomes&nbsp;slower:</p>
-<pre class="literal-block">
-&gt;&gt;&gt; %timeit sum([x for x in fib(10**5)])
-497 ms ± 84.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+<div class="pygment-highlight"><pre><span></span><span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">([</span><span class="pygment-n">x</span> <span class="pygment-k">for</span> <span class="pygment-n">x</span> <span class="pygment-ow">in</span> <span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">10</span><span class="pygment-o">**</span><span class="pygment-mi">5</span><span class="pygment-p">)])</span>
+<span class="pygment-mi">497</span> <span class="pygment-n">ms</span> <span class="pygment-err">±</span> <span class="pygment-mf">84.4</span> <span class="pygment-n">ms</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">1</span> <span class="pygment-n">loop</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
 
-&gt;&gt;&gt; %timeit sum(x for x in fib(10**5))
-329 ms ± 17.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-</pre>
+<span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">(</span><span class="pygment-n">x</span> <span class="pygment-k">for</span> <span class="pygment-n">x</span> <span class="pygment-ow">in</span> <span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">10</span><span class="pygment-o">**</span><span class="pygment-mi">5</span><span class="pygment-p">))</span>
+<span class="pygment-mi">329</span> <span class="pygment-n">ms</span> <span class="pygment-err">±</span> <span class="pygment-mf">17.3</span> <span class="pygment-n">ms</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">1</span> <span class="pygment-n">loop</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
+</pre></div>
 <p>So I think I still prefer the version using the generation expression just to
 cover my self from the case where there are too many items to be held in&nbsp;memory.</p>
 <p>(I didn&#8217;t push the commit,&nbsp;though.)</p>

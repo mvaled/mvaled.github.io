@@ -19,7 +19,9 @@ experiment with the following message and code:
 
 List comprehensions as an argument to *reduce-like* functions are usually less
 efficient than using the generation expression itself.  The reason is that
-Python creates the list just to discard it afterwards::
+Python creates the list just to discard it afterwards:
+
+.. code-block:: python
 
 	>>> def fib(n):
 	...     a, b = 1, 1
@@ -39,7 +41,9 @@ than the generator expression.  So it seems that for short-enough lists, the
 implementation of ``sum`` is quite fast.
 
 I had to change the implementation of `fib` to control the amount of items to
-show my point::
+show my point:
+
+.. code-block:: python
 
   >>> def fib(n):
   ...     a, b = 1, 1
@@ -47,7 +51,9 @@ show my point::
   ...         yield a
   ...         a, b = b, a + b
 
-An still with 100 items, passing a list is faster::
+An still with 100 items, passing a list is faster:
+
+.. code-block:: python
 
   >>> %timeit sum(fib(100))
   14.2 µs ± 212 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
@@ -59,7 +65,9 @@ An still with 100 items, passing a list is faster::
   18 µs ± 160 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
 
 Of course the differences are too small to draw final conclusions.  And, of
-course, as the list grows larger it becomes slower::
+course, as the list grows larger it becomes slower:
+
+.. code-block:: python
 
   >>> %timeit sum([x for x in fib(10**5)])
   497 ms ± 84.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)

@@ -87,7 +87,7 @@ And list comprehensions can be easily rewritten using the ``do`` notation:
 
 The monadic ``>>=`` operator is usually called the *bind*.  It's type is
 
-::
+.. code-block:: Haskell
 
    Monad m => m a -> (a -> m b) -> m b
 
@@ -96,25 +96,33 @@ may start to see why I chose ``>>.``.
 
 The do notation is just syntax-sugar over using ``>>=`` (or its brother
 ``>>``).  The rules are given here__.  So let's transform our implementation.
-We start we our current definition::
+We start we our current definition:
+
+.. code-block:: Haskell
 
   \x -> do {y <- f x; z <- g y; return z}
 
 __ http://book.realworldhaskell.org/read/monads.html#monads.do
 
-And rewrite the ``do`` two times until there are no more::
+And rewrite the ``do`` two times until there are no more:
+
+.. code-block:: Haskell
 
   \x -> let s1 y = do {z <- g y; return z} in f x >>= s1
 
   \x -> let s1 y = (let s2 z = return z in g y >>= s2) in f x >>= s1
 
 Now, we can recall the `eta-conversion rule`_ and see that ``s2 = return``,
-so::
+so:
+
+.. code-block:: Haskell
 
   \x -> let s1 y = (g y >>= return) in f x >>= s1
 
 Now we can use the monadic "law" that states the ``m >>= return`` must be
-equivalent to ``m``::
+equivalent to ``m``:
+
+.. code-block:: Haskell
 
   \x -> let s1 y = g y in f x >>= s1
 
@@ -169,7 +177,7 @@ Going from this Haskell definition of ``chain`` to Python is quite easy.  But
 we're not going to work with any possible monad, just lists (iterators,
 actually).
 
-.. code-block:: Python
+.. code-block:: python
 
    from functools import reduce
 
