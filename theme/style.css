@@ -14,6 +14,7 @@
     --color-meta: #666666;
     --color-border: #eeeeee;
     --color-link: #666;
+    --color-link-disabled: #888;
     --color-link-hover: #000;
     --color-code-bg: #f0f0f0;
     --color-code-text: #000000;
@@ -47,6 +48,7 @@
         --color-border: #333333;
 
         --color-link: #aaa;
+        --color-link-disabled: #666;
         --color-link-hover: #fff;
         --color-code-bg: #2f2f2f;
         --color-code-text: #ffffff;
@@ -123,15 +125,6 @@ header .subtitle {
     color: var(--color-meta);
     font-size: var(--font-size-base);
     margin-top: 0.5rem;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
 }
 
 a {
