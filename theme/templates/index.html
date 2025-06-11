@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Articles</h2>
+<h2 class="text-center">Articles</h2>
 {% for article in articles %}
-<article>
+<article class="preview">
     <header>
         <h3><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h3>
         <p class="date">{{ article.date.strftime('%Y-%m-%d') }}</p>

@@ -7,7 +7,7 @@ A failing fail in the monad list
 :slug: a-failing-fail-in-the-monad-list
 
 
-.. sidebar:: Update.
+.. sidebar:: Update
 
    The question__ was answered in Stack Overflow, and it shows that the title
    of this post is incorrect: The failing ``fail`` is in the *function* monad.
