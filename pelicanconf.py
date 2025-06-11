@@ -1,5 +1,5 @@
 AUTHOR = "Manuel Vázquez Acosta"
-SITENAME = "&lt;mvaled&gt;"
+SITENAME = "&lt;manu&gt;"
 SITEURL = ""
 
 PATH = "content"
@@ -41,7 +41,7 @@ EXTRA_PATH_METADATA = {}
 
 # Plugin settings
 PLUGIN_PATHS = ["pelican-plugins"]
-PLUGINS = []
+PLUGINS = ["tailwindcss4"]
 
 # Theme settings
 THEME = "theme"

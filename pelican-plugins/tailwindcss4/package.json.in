@@ -1,0 +1,16 @@
+{
+    "name": "tailwindcss",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "tailwindcss": "tailwindcss"
+    },
+    "author": "",
+    "private": true,
+    "license": "AGPL-3.0",
+    "dependencies": {
+        "@tailwindcss/cli": "^4.1",
+        "tailwindcss": "4.1"
+    }
+}
