@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manu></title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header>
+        <hgroup>
+          <h1>
+            <a href="/">&lt;manu&gt;</a>
+          </h1>
+        </hgroup>
+        <nav>
+          <ul>
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Generating unique static URLs in&nbsp;Odoo</h2>
+        <p class="meta">2016-09-02 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>By default Odoo bundles static assets (<span class="caps">JS</span> and <span class="caps">CSS</span>) within a couple of
+files: All <span class="caps">CSS</span> files are bundled into a single big <span class="caps">CSS</span> file.  The same
+happens for <span class="caps">JS</span>&nbsp;files.</p>
+<p>The URLs of those bundles vary with any change within any of the
+included files.  But those files are big.  Therefore changing assets
+put some stress in the network and diminish the usefulness of&nbsp;caches.</p>
+<p>Since Sep 19th, 2015 we introduced a <a class="reference external" href="https://github.com/merchise-autrement/odoo/commit/03741a2cb81907b4b67ca8437f260b073689d212">patch</a> in
+Odoo to avoid bundling of static assets when using a <span class="caps">SPDY</span> or <span class="caps">HTTP</span>/2
+proxy like&nbsp;Nginx.</p>
+<p>Reportedly, this has worked very well in our case where some users
+have slow connections.  However, measuring the logs of a week we see
+that about 21% of <span class="caps">GET</span> request are&nbsp;assets:</p>
+<div class="pygment-highlight"><pre><span></span>$<span class="pygment-w"> </span>egrep<span class="pygment-w"> </span><span class="pygment-s1">&#39;GET .*(\.|/)(css|js).* HTTP/&#39;</span><span class="pygment-w"> </span>/var/log/nginx/o.access.log.1<span class="pygment-w"> </span><span class="pygment-p">|</span><span class="pygment-w"> </span>wc<span class="pygment-w"> </span>-l
+<span class="pygment-m">10554</span>
+
+$<span class="pygment-w"> </span>egrep<span class="pygment-w"> </span><span class="pygment-s1">&#39;GET .* HTTP&#39;</span><span class="pygment-w"> </span>/var/log/nginx/o.access.log.1<span class="pygment-w"> </span><span class="pygment-p">|</span><span class="pygment-w"> </span>wc<span class="pygment-w"> </span>-l
+<span class="pygment-m">50216</span>
+</pre></div>
+<p>Odoo&#8217;s default cache expiration time is seven days.  This is
+considerably low taking into account that bundle&#8217;s URLs change when
+the content&nbsp;does.</p>
+<p>Another issue is that assets that change can be served staled from the
+caches for seven&nbsp;days.</p>
+<p>We&#8217;re taking the path to produce unique URLs for static assets.  Our
+current work can be seen in our <a class="reference external" href="https://github.com/merchise-autrement/odoo/tree/merchise-unique-static-urls">merchise-unique-static-urls</a>
+branch.  In our development/deployment scenarios these simple changes
+would suffice for <span class="caps">JS</span> and <span class="caps">CSS</span>.  There&#8217;s still work to do regarding
+invalidation of static images in our&nbsp;templates.</p>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+

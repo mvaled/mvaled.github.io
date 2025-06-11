@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manu></title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header>
+        <hgroup>
+          <h1>
+            <a href="/">&lt;manu&gt;</a>
+          </h1>
+        </hgroup>
+        <nav>
+          <ul>
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Integration v.&nbsp;Automation</h2>
+        <p class="meta">2014-07-02 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <div class="sidebar">
+<p class="first sidebar-title">Editorial&nbsp;note</p>
+<p>I&#8217;m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation/">old blog</a>.  It&#8217;s published as it were
+when I first made it online with only minor changes.  I&#8217;m planning a follow
+up on the subject and more post about my experiences with <a class="reference external" href="http://www.odoo.com/">Odoo</a> (OpenERP).
+That&#8217;s I deem this repost&nbsp;needed.</p>
+<p class="last">Hope you&#8217;ll enjoy the&nbsp;reading.</p>
+</div>
+<p>Being an OpenERP bee these days has lead me to think a bit about integration,
+how does it happens inside OpenERP, its architecture, assumptions and other
+stuff.  In a first iteration I used to think about integration in terms of
+integrating two (or more) OpenERP addons, for instance, integrating Sales with
+Accounting.  At a very programming-oriented level this reduces, in the current
+state of OpenERP, to integrate their modules.  But later, I found out that
+this approach is fundamentally flawed and causes many&nbsp;quirks.</p>
+<p>This post starts with a tale about one of the many issues we have encounter
+when deploying OpenERP in an small enterprise.  Then I will argue about what
+integration means.  Lastly, I will turn to automation as a mean for
+integration and not the only way to do&nbsp;it.</p>
+<div class="section" id="the-integration-tale">
+<h2>The Integration&nbsp;tale</h2>
+<p>I want to start with a simple and very real&nbsp;<a class="footnote-reference" href="#accounting-last" id="footnote-reference-1">[1]</a> use case: Bob
+is a salesperson processing a <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management"><span class="caps">CRM</span></a>&nbsp;lead.</p>
+<p>The story beings when Bob opens the lead and clicks on the Edit button and the
+first thing he tries to do is to fill the client&#8217;s contact info because it&#8217;s a
+new client.  He clicks on the edit button besides the &#8220;Client&#8221; field which
+opens a window.  He fills the data and clicks &#8220;save&#8221;, but suddenly it fails
+saying that Bob (a salesperson) should have filled the &#8220;Account payable&#8221; and
+&#8220;Account receivable&#8221; fields.  So Bob&nbsp;says:</p>
+<blockquote>
+<p>Oh, boy!  What did I do wrong?.  Let&#8217;s try again&#8230;  Nope&#8230;  Uh.  What
+should I&nbsp;do?</p>
+<p>Hey!  Peter.  Do you know what&#8217;s happening here?  This won&#8217;t let me enter
+this client&#8217;s contact data, it keeps telling me that these accounts are
+wrong?  What the heck are these accounts&nbsp;anyway?</p>
+</blockquote>
+<p>And Peter has no idea, so he calls Sally who&#8217;s a very pretty girl that
+probably does not have a clue either about what&#8217;s happening but it&#8217;s so nice
+to have a reason to approach her&#8230;  Surprisingly Sally seems to be only one
+who actually paid attention to the information meeting that morning and she&nbsp;says:</p>
+<blockquote>
+Ah!  This probably has to do with the Accounting module being installed.
+They say they will do that today&#8230;  Let&#8217;s ask Stephanie.</blockquote>
+<p>And Stephanie realizes what&#8217;s happening and fix it somehow.  An hour later Bob
+can resume his work and finish processing his <span class="caps">CRM</span>&nbsp;lead.</p>
+<p>The&nbsp;end.</p>
+<p>So, what is wrong with this&nbsp;story?</p>
+<div class="figure">
+<img alt="Computer problems." src="./computer_problems.png" />
+<p class="caption">Computer Problems.  Taken from <a class="reference external" href="http://xkcd.com/">xkcb</a>.</p>
+</div>
+</div>
+<div class="section" id="depiction-of-wrongness">
+<h2>Depiction of&nbsp;wrongness</h2>
+<p>In my opinion there are two things that are clearly wrong with&nbsp;this:</p>
+<ol class="loweralpha">
+<li><p class="first">Requiring data <em>when</em> it&#8217;s not required.  When you&#8217;re in a <span class="caps">CRM</span> use case
+requiring accounting-related seems really&nbsp;overstepping.</p>
+</li>
+<li><p class="first">Not being able to issue a request for completion.  Bob should have been
+able to keep working and after the new client was saved a completion
+request should have been sent to those being able to complete the&nbsp;data.</p>
+<p>That completion request might just get ignored, but other use cases (like
+submit an invoice to that client) would actually require the data and thus
+the cycle would be closed after&nbsp;all.</p>
+</li>
+</ol>
+<p>Some would think that this is just a &#8220;configuration problem&#8221; as we will
+<a class="reference internal" href="#on-using-properties">discuss below</a>.  But finding that solution took me several dives into the
+code and re-parsing of the documentation, so I&#8217;ll try to walk you through the&nbsp;process.</p>
+</div>
+<div class="section" id="the-issue-the-making-off">
+<h2>The issue.  The making&nbsp;off</h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Technical stuff ahead.  Wearing hardhats is&nbsp;mandatory.</p>
+</div>
+<p>By installing the &#8220;Accounting <span class="amp">&amp;</span> Finance&#8221; addon <a class="footnote-reference" href="#v-accountant" id="footnote-reference-2">[2]</a> you touch many
+parts of your system besides installing new stuff.  In fact, the module forces
+the installation of many other modules, including <tt class="docutils literal">product</tt> <a class="footnote-reference" href="#no-gnucash" id="footnote-reference-3">[3]</a>.</p>
+<p>It also modifies the <tt class="docutils literal">&quot;res.partner&quot;</tt> model from the <tt class="docutils literal">base</tt> addon.  You may
+think about the <tt class="docutils literal">&quot;res.partner&quot;</tt> model as an attempt to merge the contact
+information for both clients, suppliers and employees into a single
+entity&nbsp;<a class="footnote-reference" href="#v-contact-info" id="footnote-reference-4">[4]</a>.  It has many fields that comprise name, job
+position, contact information,&nbsp;etc&#8230;</p>
+<p>When you install the <tt class="docutils literal">account</tt> addon, the <tt class="docutils literal">&quot;res.partner&quot;</tt> gets appended a
+whole bunch of other fields, including the said &#8220;account payable&#8221; and &#8220;account
+receivable&#8221; fields, which are also marked as&nbsp;mandatory:</p>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-s1">&#39;property_account_payable&#39;</span><span class="pygment-p">:</span> <span class="pygment-n">fields</span><span class="pygment-o">.</span><span class="pygment-n">property</span><span class="pygment-p">(</span>
+    <span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-nb">type</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;many2one&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">relation</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">string</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;Account Payable&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">view_load</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">,</span>
+    <span class="pygment-n">domain</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;[(&#39;type&#39;, &#39;=&#39;, &#39;payable&#39;)]&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">help</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;This account will be used instead of the default one as the payable account for the current partner&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">required</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">),</span>
+<span class="pygment-s1">&#39;property_account_receivable&#39;</span><span class="pygment-p">:</span> <span class="pygment-n">fields</span><span class="pygment-o">.</span><span class="pygment-n">property</span><span class="pygment-p">(</span>
+    <span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-nb">type</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;many2one&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">relation</span><span class="pygment-o">=</span><span class="pygment-s1">&#39;account.account&#39;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">string</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;Account Receivable&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">view_load</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">,</span>
+    <span class="pygment-n">domain</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;[(&#39;type&#39;, &#39;=&#39;, &#39;receivable&#39;)]&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">help</span><span class="pygment-o">=</span><span class="pygment-s2">&quot;This account will be used instead of the default one as the receivable account for the current partner&quot;</span><span class="pygment-p">,</span>
+    <span class="pygment-n">required</span><span class="pygment-o">=</span><span class="pygment-kc">True</span><span class="pygment-p">),</span>
+</pre></div>
+<p>This are not actual fields of the model <tt class="docutils literal">&quot;res.partner&quot;</tt>, but properties, which
+are&nbsp;&#8220;special&#8221;.</p>
+</div>
+<div class="section" id="on-using-properties">
+<h2>On using&nbsp;properties</h2>
+<p>Properties are of course related to the &#8220;solution&#8221; for the problem described
+above.  But the solution is well hidden under the title of <a class="reference external" href="https://doc.openerp.com/book/1/1_3_Real_Case/1_3_Real_Case_db_setup/">Database setup</a>
+in the OpenERP Book.  That&#8217;s the reason I&#8217;m using this case to open the
+<cite>OpenERP corner</cite>.  If you deploy <span class="caps">CRM</span> before accounting&nbsp;<a class="footnote-reference" href="#accounting-last" id="footnote-reference-5">[1]</a>
+you&#8217;d probably find no interest in reading a topic called &#8220;Database setup&#8221;&#8230;
+you have set your database up already, haven&#8217;t&nbsp;you?</p>
+<p>You should notice that both <cite>Account receivable</cite> and <cite>Account payable</cite> are, in
+fact, properties (i.e defined via <tt class="docutils literal">fields.property</tt>).  This actually means
+that those fields take their default values from a global&nbsp;configuration.</p>
+<p>Those values were not properly set in our case cause there were no localized
+account chart that applied to our enterprise.  We have to create all the
+accounts by hand, and yes, we missed (didn&#8217;t know) that we have to create
+those&nbsp;properties.</p>
+<p>Our problem is solved by defining those properties in the configuration&nbsp;menu.</p>
+<p>However this workaround is very&nbsp;unsatisfying:</p>
+<ul class="simple">
+<li>It involves the administrator of the system because he&#8217;s the one that has
+access to the &#8220;Configuration Parameters&#8221;.  <span class="caps">AFAIK</span>, the accountant
+himself/herself cannot change the defaults, unless you bestow all the powers
+on&nbsp;him/her.</li>
+<li>It does not resolve the integration problem others might present in the
+future.  Integration is harder that having some default values.  For
+instance, Cuban accounting norms establish more than 10 accounts for
+receivables with empty slots for more if needed.  They require to have
+different accounts (receivable and/or payable) for bills to/from people
+(<span class="caps">B2C</span>) separated from those bills to/from other enterprises (<span class="caps">B2B</span>), and also
+different accounts for long-term and short-terms bills.  The last case
+cannot be decided by just looking at the client or supplier, more
+information about the <cite>economic fact</cite> is&nbsp;needed.</li>
+<li>It does not actually resolve the current integration problem since the
+accountant needs to make sure the &#8220;Account Receivable&#8221; is the correct one
+for the client and he&#8217;s not notified when salesman Bob creates a new
+partner.  So, what really happens is that the accountant needs to review
+journal entries and before posting them, and change the account if&nbsp;needed.</li>
+</ul>
+<p>An <span class="caps">ERP</span> should simplify things by <em>integrating business areas</em>, shouldn&#8217;t it?
+That&#8217;s the main driver behind the feature of automatically generating journal
+entries.  Under this principle when an invoice is sent to a client a journal
+entry should be made recording we should get paid for that, ie.  the client&#8217;s
+account receivable gets increased&nbsp;<a class="footnote-reference" href="#account-normal-balance" id="footnote-reference-6">[5]</a>.  Likewise when
+we get a supplier invoice, an entry should record that we must pay that bill,
+ie.  the supplier&#8217;s account payable gets&nbsp;increased.</p>
+<p>You see now how the &#8220;Account Receivable&#8221; and &#8220;Account Payable&#8221; fields for the
+partner play their part in the <em>automation</em> of the accounting processes.  This
+is deeply weaved into the <tt class="docutils literal">account</tt> module&#8217;s source code.  Meaning that
+there&#8217;s the assumption that partners have those properties we&#8217;re talking
+about.  And that&#8217;s true because you have injected them and, if you configured
+everything as expected, they have their default&nbsp;values.</p>
+<p>Notice the difference between the expectation of <em>integration</em> of business
+areas and how the integration happens in this case via a very specific kind of
+<em>automation</em>.</p>
+<p>I&#8217;ll argue that the current state of this design is flawed.  When standards
+change and/or are not applicable this kind of automation does more harm that
+it&nbsp;helps.</p>
+<p>This is the reason the module that controls the &#8220;Anglo-Saxon
+accounting&#8221;&nbsp;<a class="footnote-reference" href="#basis" id="footnote-reference-7">[6]</a> is very difficult to understand and the result
+artificial: they need an &#8220;interim&#8221; account to keep track the different stages.
+In the standard (for OpenERP) accounting the event to produce journal items in
+the debtor/creditor account is the creation of the invoice.  In the
+anglo-saxon scheme the journal should be created at shipping&nbsp;time.</p>
+<p>I argue that given another framework that clearly separates every actor and
+function will improve how this pattern could be implemented.  I think that
+this framework must&nbsp;have:</p>
+<ol class="loweralpha simple">
+<li>Signals and&nbsp;events.</li>
+<li>Actors like the accountant, and probably an automated agent for the
+accountant that could do the same the models do right now.  But being
+responsive (ie. they respond to signals) they could be easily&nbsp;bypassed.</li>
+</ol>
+<p>Of course there are more things needed. I&#8217;m thinking about those two plus the
+ones OpenERP already&nbsp;has.</p>
+<p>I think that recognizing actors is the major improvement.  Actors are
+abstractions about intelligence. If a person should be doing some kind of
+intelligent decision (like accountants), then you should encode (in your
+design) that decision as being taken by an&nbsp;actor.</p>
+<p>Having artificial agents that could take over when the task is standard or
+programmable is also an option in this case.  Anywhere in you design an actor
+does something, and agent could be replacing the human.  The agents could be
+as dumb as the couple of rules we have now: create a journal entry each time
+an invoice goes to the valid state, and do it this way.  But agents could be
+also provided of machine learning techniques and they could observe the how
+the human accountant proceeds when something happened.  Of course this would
+require the human to proceed in case-by-case fashion and that&#8217;s not always&nbsp;true.</p>
+<p>No matter if the machine learning is never done, I argue that designing with
+actors and agents will lead to better a implementation, easier to understand,
+maintain and&nbsp;evolve.</p>
+<p>Notes</p>
+<table class="docutils footnote" frame="void" id="accounting-last" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#footnote-reference-1">1</a>, <a class="fn-backref" href="#footnote-reference-5">2</a>)</em> <p>This is no hypothetical at all.  We&#8217;re actually
+deploying Accounting after having deployed Project Management and <a class="reference external" href="http://en.wikipedia.org/wiki/Customer_relationship_management"><span class="caps">CRM</span></a>.</p>
+<p class="last">This has come with many surprises but that&#8217;s what this post is&nbsp;about.</p>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="v-accountant" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-2">[2]</a></td><td>The word addon in here is important.  There are actually
+two OpenERP addons named &#8220;Accounting <span class="amp">&amp;</span> Finance&#8221;: the <tt class="docutils literal">account</tt> addon and
+the <tt class="docutils literal">account_accountant</tt>.  The second one is flagged as an <cite>application</cite>
+and, thus, it takes a more prominent place in the listing of available
+applications.  Installing the application forces the installation of the
+<tt class="docutils literal">account</tt> module anyway.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="no-gnucash" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-3">[3]</a></td><td>That is why I still do my personal (home) accounting with
+<a class="reference external" href="http://www.gnucash.org/"><span class="caps">GNU</span> Cash</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="v-contact-info" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-4">[4]</a></td><td>This merge has problems of its own, but that&#8217;s a matter
+for another post.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="account-normal-balance" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-6">[5]</a></td><td>Though an account either gets credited or
+debited, I will avoid that accounting-related terms cause it&#8217;s not needed
+for the argument in this post.  If you need to know, start by knowing that
+receivables have a debit <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_balance">normal balance</a> and go from there.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="basis" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-7">[6]</a></td><td>I&#8217;m not quite sure if this &#8220;anglo-saxon accounting&#8221; refers to
+different <a class="reference external" href="http://en.wikipedia.org/wiki/Basis_of_accounting">basis of accounting</a>.</td></tr>
+</tbody>
+</table>
+<!-- LocalWords:  addon addons OpenERP CRM -->
+<!-- Local Variables:
+ispell-dictionary: "en"
+End: -->
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+

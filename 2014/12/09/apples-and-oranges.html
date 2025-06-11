@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manu></title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header>
+        <hgroup>
+          <h1>
+            <a href="/">&lt;manu&gt;</a>
+          </h1>
+        </hgroup>
+        <nav>
+          <ul>
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Apples and Oranges.  How books can mislead our thinking&nbsp;process.</h2>
+        <p class="meta">2014-12-09 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>I&#8217;ve just began to read the book &#8220;Twisted Network Programming&#8221;&#8230; <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
+a popular framework for networking programming.  However, I&#8217;d probably skim
+most of the Book.  I&#8217;m sorry&#8230; But as it happens, in the second page of the
+second chapter (the one that I began with) they show an illustration on
+&#8220;Comparing single-threaded, multithreaded, and event-driven program&nbsp;flow&#8221;.</p>
+<p>Hum&#8230; <a class="reference external" href="http://en.wikipedia.org/wiki/Apples_and_oranges">apples and oranges</a>.  I mean the thread model of a program will have
+some impact on how events are dealt with, but are they truly comparable or the
+sole responsibles for the program&nbsp;flow?</p>
+<p><a class="reference external" href="http://diesel.io/">Diesel</a> is usually ran in a single thread and so is <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  You may, of
+course, run programs written with them in multiple processes (or threads) to
+avoid contention when the volume of clients (events) is too&nbsp;high.</p>
+<p>Even with a single thread most of the time the system is waiting for the <span class="caps">IO</span>
+buffers to have data, so they can be classified as event-driven: They actually
+response to&nbsp;events.</p>
+<p>But what really bothers about this illustration is not that it compare two
+thing that could be (and should be made) complementary.  What bothers me is
+that the picture tries to fool me by showing that event-driven programs don&#8217;t
+have any &#8220;gaps&#8221; of idle time between tasks, while the threaded models do.  And
+that&#8217;s simply&nbsp;dishonest.</p>
+<p>Probably this is not what the authors meant, and I&#8217;m probably going prejudiced
+just because of this wrong picture. However, I go to a book like this not for
+pleasure but for information.  Finding a piece of data that is not trustworthy
+raises a flag and I start to read with a magnifying glass&#8230; And that&#8217;s not
+fun&nbsp;either.</p>
+<p>Don&#8217;t expect me to finish this&nbsp;book.</p>
+<p class="rubric">Update of a couple of hours&nbsp;later&#8230;</p>
+<p>A few lines below the illustration of matters, they actually&nbsp;say:</p>
+<blockquote>
+&#8220;The event-driven version of the program interleaves the execution of the
+three tasks, but in a single thread of control.&#8221;</blockquote>
+<p>So, let&#8217;s give it another&nbsp;try.</p>
+<!-- Local Variables:
+ispell-dictionary: "en"
+End: -->
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+

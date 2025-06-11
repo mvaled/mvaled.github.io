@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manu></title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header>
+        <hgroup>
+          <h1>
+            <a href="/">&lt;manu&gt;</a>
+          </h1>
+        </hgroup>
+        <nav>
+          <ul>
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2><span class="caps">TDD</span> is dead&nbsp;rally</h2>
+        <p class="meta">2014-05-27 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>These days there&#8217;s a kind of a rally about &#8220;<span class="caps">TDD</span> being&nbsp;dead&#8221;.</p>
+<p>Most <span class="caps">TDD</span> fan supporters are true that you must have a way to proof your code
+works.  Many computer <a class="reference external" href="http://en.wikipedia.org/wiki/Tony_Hoare">scientists</a> have done several attempts into
+the &#8220;proofs of correctness&#8221; for a program.  But tests are not always proofs,
+some are <a class="footnote-reference" href="#some-are" id="footnote-reference-1">[1]</a>.</p>
+<p>I think the main argument is about when <span class="caps">TDD</span> is too much.  Several <a class="reference external" href="https://www.destroyallsoftware.com">Destroy all
+software</a> screencasts show a <span class="caps">TDD</span> flow that I simply find it&#8217;s too
+much.  But they are, indeed, screencasts; and they are probably intended to
+illustrate a point and not to be followed without&nbsp;deviations.</p>
+<p>Nevertheless, I don&#8217;t like the &#8220;<span class="caps">TDD</span> is dead&#8221; mantra either.  It gives space to
+a flame war I&#8217;m not willing to get into.  I use tests and that&#8217;s it.  Tests
+at different levels may express several concerns I need to keep&nbsp;stable:</p>
+<ol class="loweralpha">
+<li><p class="first">A public <span class="caps">API</span>, for instance, should not change just like that.  At least not
+after you have made the commitment to keep it&nbsp;stable.</p>
+<p>You may even need to test for deprecation warnings being issued when you
+need to change an <span class="caps">API</span>.</p>
+</li>
+<li><p class="first">Collaborative in-progress debugging.  This tests allow to express standing
+issues.  Some regression tests fall into this&nbsp;category.</p>
+</li>
+</ol>
+<p>How do you do&nbsp;tests?</p>
+<div class="section" id="update-amplification-and-support-to-david-s-arguments">
+<h2>Update: Amplification and support to <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">David&#8217;s&nbsp;arguments</a></h2>
+<p>The previous words were written just after skimming over several tweets.  I
+had read <a class="reference external" href="http://david.heinemeierhansson.com/2014/test-induced-design-damage.html">David&#8217;s test-induced design damage</a> but I had missed the previous
+post <a class="reference external" href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html"><span class="caps">TDD</span> is dead.  Long live testing</a>.  So this update is my one cent to
+the issue.  I will not discuss about &#8220;slow collaborators&#8221; but about my design
+experience with our <a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">Python Query Language</a>.</p>
+<p>The test-first mantra assumes too much about how you are going to decompose
+your problem.  Let&#8217;s start with a retrospective account of how this happened
+in <a class="reference external" href="https://github.com/merchise-autrement/xotl.ql">xotl.ql</a>.</p>
+<p>I can detect four distinct&nbsp;stages:</p>
+<ol class="loweralpha">
+<li><p class="first">The&nbsp;beginnings.</p>
+<p>We wrote some tests, but never written before code.  Since <tt class="docutils literal">xotl.ql</tt> is
+just a language we were not sure about what to&nbsp;test.</p>
+<p>The idea of having a <em>query object</em> that stands for the expression
+was not totally consolidated.  The components of the query were not
+defined.  This stage was heavily driven by our own writings, like <a class="reference external" href="http://xotl-ql.readthedocs.org/en/latest/thoughts.html">this one</a>.</p>
+<p>In this case the &#8220;literate&#8221; spirit dominated the design process, not the
+testing.  Simply we didn&#8217;t have a full-stack: ie. the language and the
+<em>translators (query translator)</em> so that a query could actually be&nbsp;executed.</p>
+</li>
+<li><p class="first">Consolidation of the design.  In this stage several devices were invented
+to cope with implementation difficulties, i.e. the lack of clear
+boundaries between several sub-expressions in a
+single <em>query</em>.</p>
+<p>This was the hardest stage.  Testing was employed to keep track of several
+design decisions.  In this stage made appearance our &#8220;Particle Bubble&#8221; and
+this was complex enough to deserve a handful of tests.  Although several
+tests did influence the design, they hardly drove&nbsp;it.</p>
+</li>
+<li><p class="first">Then the core was done and we turned to <cite>translation</cite>.  This stage was
+mainly <span class="caps">TDD</span> cause we actually were testing a very <span class="caps">TDD</span> friendly layer: Given
+this state of the world, the following query should return these&nbsp;objects.</p>
+</li>
+<li><p class="first">Our current stage. Although in a long pause, we have decided to wipe out
+our entire design and do reverse engineering of python byte-code to extract
+build the query&nbsp;object.</p>
+<p>What is foreseeable is that again a kind of literate driven design is going
+to be king: The core structure of the language (the query <span class="caps">AST</span>) is what&#8217;s
+being designed so, what&#8217;s the point of asking if the result of calling a
+function with a given query expression is a particular <span class="caps">AST</span> if the <span class="caps">AST</span> is
+what&#8217;s needs to be validated not the function itself?  At this point this
+is non-sense.  At a later stage where the <span class="caps">AST</span> is stable enough those kind
+of tests would actually make sense: they will protect the query language
+against unintentional <span class="caps">API</span>-breaking&nbsp;changes.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
+<table class="docutils footnote" frame="void" id="some-are" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>If I recall correctly, the book by R.L Graham, <span class="caps">D.E.</span> Knuth
+and O. Patashnik called &#8220;Concrete Mathematics&#8221; shows some proofs that
+allow &#8220;proof-by-instances&#8221;.</td></tr>
+</tbody>
+</table>
+<!-- Local Variables:
+ispell-dictionary: "en"
+End: -->
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
