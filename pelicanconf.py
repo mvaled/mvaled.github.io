@@ -1,5 +1,5 @@
 AUTHOR = "Manuel Vázquez Acosta"
-SITENAME = "Sofretería"
+SITENAME = "&lt;mvaled&gt;"
 SITEURL = ""
 
 PATH = "content"
@@ -14,6 +14,9 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
+DISPLAY_CATEGORIES_ON_MENU = False
+DISPLAY_PAGES_ON_MENU = True
+
 # Blogroll
 LINKS = (
     ("Python.org", "https://www.python.org/"),
@@ -24,6 +27,7 @@ LINKS = (
 SOCIAL = (("GitHub", "https://github.com/mvaled"),)
 
 DEFAULT_PAGINATION = 10
+
 
 # URL settings to match your current structure
 ARTICLE_URL = "{date:%Y}/{date:%m}/{date:%d}/{slug}.html"

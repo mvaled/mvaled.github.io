@@ -1,277 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sofretería</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/theme/style.css">
-</head>
-<body>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><mvaled> - Articles by Manuel Vázquez Acosta</title>
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
     <header>
-        <h1><a href="/">Sofretería</a></h1>
+        <hgroup>
+          <h1>
+            <a href="/">&lt;mvaled&gt;</a>
+          </h1>
+        </hgroup>
+        <nav>
+          <ul>
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
     </header>
     <main>
-<article class="preview">
-    <header>
-        <h3><a href="/2019/11/18/performance-of-python-list-comprehensions.html">Why does creating a list comprehension is&nbsp;faster?</a></h3>
-        <p class="date">2019-11-18</p>
-    </header>
-    <section>
-        <p>Yesterday, I was removing a list-comprehension as an argument to <tt class="docutils literal">sum</tt>.
-This is the&nbsp;diff:</p>
-<div class="pygment-highlight"><pre><span></span><span class="pygment-gd">- sum([p.price for p in self.products])</span>
-<span class="pygment-gi">+ sum(p.price for p in self.products)</span>
-</pre></div>
-<p>To show the original programmer my line of though I performed a little
-experiment with the following message and …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2018/08/01/composing-iterator-returning-functions.html">Composing iterator-returning&nbsp;functions</a></h3>
-        <p class="date">2018-08-01</p>
-    </header>
-    <section>
-        <p>A few days ago I was reviewing a piece of Python code.  I was looking for a
-bug, but in the process I found a very interesting&nbsp;function.</p>
-<p>The system allows the user to &#8220;extend&#8221; the structure of Products by providing
-more attributes which can be used later on when …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2018/06/22/a-failing-fail-in-the-monad-list.html">A failing fail in the monad&nbsp;list</a></h3>
-        <p class="date">2018-06-22</p>
-    </header>
-    <section>
-        <div class="sidebar">
-<p class="first sidebar-title">Update</p>
-<p class="last">The <a class="reference external" href="https://stackoverflow.com/q/50989541/211280">question</a> was answered in Stack Overflow, and it shows that the title
-of this post is incorrect: The failing <tt class="docutils literal">fail</tt> is in the <em>function</em>&nbsp;monad.</p>
-</div>
-<p>I&#8217;m following the Real World Haskell book.  In the chapter about Monads, they
-create simple example using the list monad compute all …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2018/01/22/foldl-in-terms-of-foldr.html">Dissecting <cite>foldl</cite> in terms of <cite>foldr</cite></a></h3>
-        <p class="date">2018-01-22</p>
-    </header>
-    <section>
-        <p>The book &#8216;Real World Haskell&#8217; provides an implementation of <tt class="docutils literal">foldl</tt> in terms
-of <tt class="docutils literal">foldr</tt>:</p>
-<div class="pygment-highlight"><pre><span></span><span class="pygment-nf">myFoldl</span><span class="pygment-ow">::</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">b</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-n">a</span><span class="pygment-p">]</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span>
-<span class="pygment-nf">myFoldl</span><span class="pygment-w"> </span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">z</span><span class="pygment-w"> </span><span class="pygment-n">xs</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">foldr</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-w"> </span><span class="pygment-n">xs</span><span class="pygment-w"> </span><span class="pygment-n">z</span>
-<span class="pygment-w">   </span><span class="pygment-kr">where</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-p">)</span>
-</pre></div>
-<p>They ask the reader (me) to try to understand the implementation …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2016/09/19/uncurated-notes-about-cycle-js.html">Non-curated notes about&nbsp;Cycle.js</a></h3>
-        <p class="date">2016-09-19</p>
-    </header>
-    <section>
-        <p>In the past few days I have been reading about Reactive Programming.  Mostly
-about how it&#8217;s done with <a class="reference external" href="http://cycle.js.org/">cycle.js</a>.  As the title attempts to suggest, this
-post is by no means an account of well thought ideas, but my first ideas and
-notes while reading about&nbsp;it.</p>
-<p><a class="reference external" href="http://cycle.js.org/">Cycle …</a></p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2016/09/02/generating-unique-static-urls-in-odoo.html">Generating unique static URLs in&nbsp;Odoo</a></h3>
-        <p class="date">2016-09-02</p>
-    </header>
-    <section>
-        <p>By default Odoo bundles static assets (<span class="caps">JS</span> and <span class="caps">CSS</span>) within a couple of
-files: All <span class="caps">CSS</span> files are bundled into a single big <span class="caps">CSS</span> file.  The same
-happens for <span class="caps">JS</span>&nbsp;files.</p>
-<p>The URLs of those bundles vary with any change within any of the
-included files.  But those files are …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2015/09/12/odoo-bus-implementation.html">The bus <em>implementation</em> in Odoo and notification systems in the&nbsp;Web</a></h3>
-        <p class="date">2015-09-12</p>
-    </header>
-    <section>
-        <div class="sidebar">
-<p class="first sidebar-title">Delayed&nbsp;post.</p>
-<p>This post has been delayed for a very, very long time.  If I trust the logs
-in my blog&#8217;s git repository the post is &#8220;finished&#8221; since Sat&nbsp;Sep&nbsp;12, 2015.
-Well, that&#8217;s not true, and I must really finish it&nbsp;now.</p>
-<p>As it happens, in the …</p></div>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of&nbsp;today</a></h3>
-        <p class="date">2015-08-04</p>
-    </header>
-    <section>
-        <div class="sidebar">
-<p class="first sidebar-title">Editorial&nbsp;note</p>
-<p>I&#8217;m republishing this post from my old blog (which is no longer online).
-It&#8217;s published as it were when I first made it online with only minor
-changes.  But I think I stand by this&nbsp;still.</p>
-<p class="last">Hope you&#8217;ll enjoy the&nbsp;reading.</p>
-</div>
-<p>That&#8217;s probably harsh …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2015/05/26/odoo-at-last.html">Odoo at&nbsp;last!</a></h3>
-        <p class="date">2015-05-26</p>
-    </header>
-    <section>
-        <p>After several months, we have finally moved from OpenERP to Odoo.  It took
-several rounds of testing, finding bugs and incompatibilities in our own
-modules and fixing&nbsp;them.</p>
-<div class="section" id="a-summary-of-the-process">
-<h2>A summary of the&nbsp;process</h2>
-<p>The <a class="reference external" href="https://github.com/OpenUpgrade/OpenUpgrade">OpenUpgrade</a> project proved to be very complete for us &#8212;it had almost
-everything we&nbsp;needed:</p>
-<ul class="simple">
-<li>The …</li></ul></div>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2015/04/08/rememoring-microservices.html">Memento:&nbsp;microservices</a></h3>
-        <p class="date">2015-04-08</p>
-    </header>
-    <section>
-        <p>Lately there&#8217;s been a raise of the debate about Microservices architectures.
-Reading about the stuff I realized I did once architect an application called
-Pyxel based on the same principles, though&nbsp;different.</p>
-<p>Pyxel reached only its first prototype and was never actually deployed.  I&#8217;d
-say it wasn&#8217;t …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+    <article class="preview">
+      <header>
         <h3><a href="/2015/02/18/greenlet-local-python-modules-an-experiment.html">Hot-swapping Python modules. An&nbsp;experiment.</a></h3>
         <p class="date">2015-02-18</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>A new project I&#8217;m involved with will <em>probably</em> require dozens of servers
 running several thousands <a class="reference external" href="https://greenlet.readthedocs.org/en/latest/">greenlets</a> each.  Top-level greenlets represent jobs
 and their children will be individual tasks those greenlets are&nbsp;coordinating/supervising.</p>
 <p>This model, however prototypical, resembles that of the <a class="reference external" href="http://www.erlang.org/"><span class="caps">OTP</span></a> in Erlang.  A
 greenlet may be either …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/12/27/lately.html">What I&#8217;ve been doing&nbsp;lately</a></h3>
         <p class="date">2014-12-27</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>Lately my work has been mainly driven by the need to efficiently and smoothly
 deploy the Accounting module of <a class="reference external" href="http://www.odoo.com/">OpenERP</a> in my employer enterprise.  But at
 the same time I&#8217;m responsible of several development and deployments in the&nbsp;enterprise.</p>
 <p>The accounting-related tasks have made me to study the accounting …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/12/09/apples-and-oranges.html">Apples and Oranges.  How books can mislead our thinking&nbsp;process.</a></h3>
         <p class="date">2014-12-09</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>I&#8217;ve just began to read the book &#8220;Twisted Network Programming&#8221;&#8230; <a class="reference external" href="http://www.twistedmatrix.com/">Twisted</a> is
 a popular framework for networking programming.  However, I&#8217;d probably skim
 most of the Book.  I&#8217;m sorry&#8230; But as it happens, in the second page of the
 second chapter (the one that I began with) they …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/08/28/reviewing-openerp-8-0.html">Reviewing Odoo&nbsp;8.0</a></h3>
         <p class="date">2014-08-28</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>This is the first of a series of blog posts related to the next OpenERP 8.0
 (or should I say Odoo 8.0).  This first post will be very &#8220;seeking for
 orientation&#8221; on major new features and changes.  Don&#8217;t expect anything to be
 deeply commented or&nbsp;analyzed.</p>
 <p>I …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/07/02/integration-v-automation.html">Integration v.&nbsp;Automation</a></h3>
         <p class="date">2014-07-02</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <div class="sidebar">
 <p class="first sidebar-title">Editorial&nbsp;note</p>
 <p>I&#8217;m republishing this post from my <a class="reference external" href="http://manuelonsoftware.wordpress.com/2014/05/12/integration-v-automation/">old blog</a>.  It&#8217;s published as it were
 when I first made it online with only minor changes.  I&#8217;m planning a follow
 up on the subject and more post about my experiences with <a class="reference external" href="http://www.odoo.com/">Odoo</a> (OpenERP).
 That&#8217;s I deem this …</p></div>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/06/05/odoo.html">Odoo&#8230; I mean&nbsp;OpenERP</a></h3>
         <p class="date">2014-06-05</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>This is old news: OpenERP has changed its name and now becomes Odoo.  I don&#8217;t
 care much about the change in the name.  It&#8217;s the processes I&#8217;m interested&nbsp;in.</p>
 <p>The rename was synchronized with a move from <a class="reference external" href="https://launchpad.net/">Launchpad</a> to <a class="reference external" href="https://github.com/">Github</a>.  This, I
 much appreciate it.  I&#8217;m …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/05/27/tdd-is-dead-rally.html"><span class="caps">TDD</span> is dead&nbsp;rally</a></h3>
         <p class="date">2014-05-27</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>These days there&#8217;s a kind of a rally about &#8220;<span class="caps">TDD</span> being&nbsp;dead&#8221;.</p>
 <p>Most <span class="caps">TDD</span> fan supporters are true that you must have a way to proof your code
 works.  Many computer <a class="reference external" href="http://en.wikipedia.org/wiki/Tony_Hoare">scientists</a> have done several attempts into
 the &#8220;proofs of correctness&#8221; for a program.  But tests are not always …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2014/05/26/progress-in-the-move.html">Progress moving to&nbsp;github.io</a></h3>
         <p class="date">2014-05-26</p>
-    </header>
-    <section>
+      </header>
+      <section>
         <p>As you may see, I have made some progress.  Basically, I have partially ported
 my past look and feel, so that if looks like the old blog.  I still a work in
 progress and the &#8220;responsive&#8221; stuff is not entirely&nbsp;done.</p>
 <p>Nevertheless, I think this is good to go and …</p>
-    </section>
-</article>
-<article class="preview">
-    <header>
-        <h3><a href="/2014/05/13/welcome.html">Welcome</a></h3>
-        <p class="date">2014-05-13</p>
-    </header>
-    <section>
-        <p>This post intends to be one to welcome my previous readers from <a class="reference external" href="http://manuelonsoftware.wordpress.com/">Wordpress</a>.  I
-still have much to do to make this blog actually <strong>my</strong>&nbsp;blog:</p>
-<ol class="loweralpha simple">
-<li>Polish a theme that resembles my current Wordpress look and feel.  I like
-that central column, big fonts in big screens, unobtrusive reading and …</li></ol>
-    </section>
-</article>
+      </section>
+    </article>
+
+  <nav>
+    <ul>
+        <li><a href="/author/manuel-vazquez-acosta.html">&Lang;</a></li>
+        <li><a href="/author/manuel-vazquez-acosta.html">&lang;</a></li>
+      <li>Page 2 / 2</li>
+    </ul>
+  </nav>
     </main>
     <footer>
-        <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
     </footer>
-</body>
+  </body>
 </html>

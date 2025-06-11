@@ -6,10 +6,12 @@
 :category: Web Development
 :tags: HTML5, Odoo
 :slug: odoo-bus-implementation
+:summary: This post is about 2015's crosstab communication in browsers, and
+          how to use it Odoo to avoid it becoming unresponsive if the users
+          open many tabs.
 
 
-
-.. sidebar:: Delayed post.
+.. sidebar:: Delayed post
 
    This post has been delayed for a very, very long time.  If I trust the logs
    in my blog's git repository the post is "finished" since Sat Sep 12, 2015.

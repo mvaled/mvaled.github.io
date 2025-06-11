@@ -7,7 +7,11 @@ Odoo at last!
 :category: Management
 :tags: Odoo, OpenERP
 :slug: odoo-at-last
+:summary: A recollection of the process to upgrade from OpenERP to Odoo.
 
+     For the upgrade process we used OpenUpgrade_ and the CRM fork by Stefan
+     Rijnhart.  There were unexpected failures, bug fixes, learnings about the
+     behavior of our users, and more.  A true challenge.
 
 
 After several months, we have finally moved from OpenERP to Odoo.  It took

@@ -1,5 +1,5 @@
-Dissecting `foldl` in terms of `foldr`
-======================================
+Dissecting ``foldl`` in terms of ``foldr``
+==========================================
 
 :date: 2018-01-22
 :category: Programming

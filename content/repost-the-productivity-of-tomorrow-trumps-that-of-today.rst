@@ -4,6 +4,9 @@ The productivity of tomorrow trumps that of today
 :date: 2015-08-04
 :category: Programming
 :slug: repost-the-productivity-of-tomorrow-trumps-that-of-today
+:summary: A rant about unclear code, using plain numbers instead of meaningful
+          constants.
+
 
 .. sidebar:: Editorial note
 
