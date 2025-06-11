@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>⟨m∀nu⟩ &mdash; All things distributed
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header>
+        <hgroup class="tw:flex-line">
+          <h1>
+            <a href="/">&lang;m∀nu&rang;</a>
+          </h1>
+        </hgroup>
+        <nav>
+          <ul>
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>All things&nbsp;distributed</h2>
+        <p class="meta">9999-12-31 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>In the <a class="reference external" href="https://www.riakhandbook.com/">Riak Handbook by Mathias Meyer</a> there a
+first definition of a distributed&nbsp;system:</p>
+<blockquote>
+&#8220;By distributed systems I&#8217;m referring to systems that use more
+than one computer, a node, to get a job done&#8221;</blockquote>
+<p>By this definition even a simple website may be considered a
+distributed system by having a computer for the <span class="caps">DB</span>, another for the
+web application itself, and (if needed) another computer for the
+<span class="caps">SMTP</span> server that sends emails on behalf of the&nbsp;site.</p>
+<p>Of course, all of that software (the <span class="caps">DB</span>, the web app and the mail
+server) could be stuffed into a single box and now the system is not
+distributed&#8230; Not quite right, isn&#8217;t&nbsp;it?</p>
+<p>This definition does not satisfy our intuition about what a
+distributed system is.  By it everything&nbsp;is.</p>
+<p>When does my system is a distributed system?  Put it differently:
+when do I need to make my system a distributed one?  Is it only when
+the capacity of a single node is depleted and another node is
+required?  Does my <span class="caps">DB</span> and application boxes count as separate nodes?
+Does the users&#8217; machines count as&nbsp;well?</p>
+<p>The answer to that question requires a clear definition of what a
+distributed system is, or the benefits to design your system as a
+distributed&nbsp;system.</p>
+<div class="section" id="distribution-and-capacity">
+<h2>Distribution and&nbsp;Capacity</h2>
+<p>It seems that distribution is a way to overcome with some sort of
+capacity limit; either fundamental or not.  I will call a
+fundamental capacity limit to the limit imposed by nature&#8217;s laws and
+not technological limits.  But technological limits are, sometimes,
+high enough to resemble the fundamental&nbsp;ones.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To my understanding there are no purely theoretical limits
+to capacity, you can always imagine an infinitely fast
+with infinity memory Turing&nbsp;machine.</p>
+</div>
+<p>Though I don&#8217;t pretend to give a definition in this post, I will
+argue that many <em>information systems</em> should follow distributed
+patterns.  In fact, I will argue that <span class="caps">ERP</span> systems are going to
+collapse unless integration is done with distribution in&nbsp;mind.</p>
+<!-- Local Variables:
+fill-column: 68
+End: -->
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
