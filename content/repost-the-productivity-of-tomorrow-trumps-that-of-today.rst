@@ -34,7 +34,7 @@ yield something close to the `true measure <WTF per minute_>`__ of the
 
     -- Phil Karlton
 
-::
+.. code-block:: python
 
   def _check(l):
       if len(l) <= 1:
@@ -52,7 +52,7 @@ This code has a nice CC of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
 function `quicksort`...
 
-::
+.. code-block:: python
 
     >>> _check([84, 95, 89, 4, 77, 24, 95, 86, 70, 16])
     [4, 16, 24, 70, 77, 84, 86, 89, 95, 95]
@@ -61,7 +61,7 @@ function `quicksort`...
 A quiz in less than 5 seconds: What does it mean in OpenERP's ORM the
 following lines of code?
 
-::
+.. code-block:: python
 
     group.write({'implied_ids': [(3, implied_group.id)]})
 
@@ -69,7 +69,9 @@ following lines of code?
 This line of code has a CC of 1: as good as it gets, isn't it?  But it's so
 darn difficult to read that unless you have your brain wired up to see "forget
 the link between this group and the implied_group"...  To be fair there is
-someone out there in the OpenERP universe that cared a bit about this::
+someone out there in the OpenERP universe that cared a bit about this:
+
+.. code-block:: python
 
     # file addons/base/ir/ir_fields.py
 

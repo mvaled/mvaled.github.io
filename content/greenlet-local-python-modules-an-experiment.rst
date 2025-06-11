@@ -27,7 +27,9 @@ I asked myself if I could devise an *import mechanism* that would allow to
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new code.
 
-To exemplify, let's say a typical tasks is::
+To exemplify, let's say a typical tasks is:
+
+.. code-block:: python
 
   def receive_confirmation(message, who):
      from jobs.util.email import send_email
@@ -50,7 +52,9 @@ VERP_ to know which recipients' address are bouncing, and also create a new
 `job` that involves receiving confirmation email when a new user registers.
 
 We'd love to simply update our ``jobs.util`` package and be done with it like
-this::
+this:
+
+.. code-block:: bash
 
   $ source server-virtual-env/bin/activate
   $ pip install -U jobs.util -i https://my.private.server/
@@ -81,7 +85,9 @@ and asserts it returns the "right" magic value.  Between launches the module
 gets updated to return a different magic value, which is passed as an argument
 to the newly created greenlet.
 
-A single run will print something like::
+A single run will print something like:
+
+.. code-block:: bash
 
   $ python test_modulet.py
   Beginning with 3 in /tmp/tmp1d4rK5
@@ -92,7 +98,9 @@ A single run will print something like::
   Passed. I have the right magic number 1001
   Passed. I have the right magic number 1000
 
-If you comment the bootstrapping of modulets, then you'll get something like::
+If you comment the bootstrapping of modulets, then you'll get something like:
+
+.. code-block:: bash
 
   $ python test_modulet.py
   Beginning with 3 in /tmp/tmpeI1oYA

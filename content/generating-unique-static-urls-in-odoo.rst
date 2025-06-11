@@ -23,7 +23,9 @@ proxy like Nginx.
 
 Reportedly, this has worked very well in our case where some users
 have slow connections.  However, measuring the logs of a week we see
-that about 21% of GET request are assets::
+that about 21% of GET request are assets:
+
+.. code-block:: bash
 
   $ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
   10554

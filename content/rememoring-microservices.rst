@@ -103,7 +103,9 @@ We chose Pyro to test our prototype not to keep it forever if it performed
 poorly.  And though our first tests were positive there was some slowness.
 
 To accommodate for a possible replacement of Pyro we chose to provide our own
-"idiom" (in Python) to connect and communicate with services::
+"idiom" (in Python) to connect and communicate with services:
+
+.. code-block:: python
 
   with service('pyxel.queue') as queue
       queue.method(*arguments)

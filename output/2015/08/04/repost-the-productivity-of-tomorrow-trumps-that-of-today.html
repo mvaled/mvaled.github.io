@@ -42,46 +42,42 @@ yield something close to the <a class="reference external" href="http://www.osne
 and naming&nbsp;things.</p>
 <p class="attribution">&mdash;Phil&nbsp;Karlton</p>
 </blockquote>
-<pre class="literal-block">
-def _check(l):
-    if len(l) &lt;= 1:
-       return l
-    l1, l2 = [], []
-    m = l[0]
-    for x in l[1:]:
-       if x &lt;=m :
-          l1.append(x)
-       else:
-          l2.append(x)
-    return _check(l1) + [m] +_check(l2)
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-k">def</span> <span class="pygment-nf">_check</span><span class="pygment-p">(</span><span class="pygment-n">l</span><span class="pygment-p">):</span>
+    <span class="pygment-k">if</span> <span class="pygment-nb">len</span><span class="pygment-p">(</span><span class="pygment-n">l</span><span class="pygment-p">)</span> <span class="pygment-o">&lt;=</span> <span class="pygment-mi">1</span><span class="pygment-p">:</span>
+       <span class="pygment-k">return</span> <span class="pygment-n">l</span>
+    <span class="pygment-n">l1</span><span class="pygment-p">,</span> <span class="pygment-n">l2</span> <span class="pygment-o">=</span> <span class="pygment-p">[],</span> <span class="pygment-p">[]</span>
+    <span class="pygment-n">m</span> <span class="pygment-o">=</span> <span class="pygment-n">l</span><span class="pygment-p">[</span><span class="pygment-mi">0</span><span class="pygment-p">]</span>
+    <span class="pygment-k">for</span> <span class="pygment-n">x</span> <span class="pygment-ow">in</span> <span class="pygment-n">l</span><span class="pygment-p">[</span><span class="pygment-mi">1</span><span class="pygment-p">:]:</span>
+       <span class="pygment-k">if</span> <span class="pygment-n">x</span> <span class="pygment-o">&lt;=</span><span class="pygment-n">m</span> <span class="pygment-p">:</span>
+          <span class="pygment-n">l1</span><span class="pygment-o">.</span><span class="pygment-n">append</span><span class="pygment-p">(</span><span class="pygment-n">x</span><span class="pygment-p">)</span>
+       <span class="pygment-k">else</span><span class="pygment-p">:</span>
+          <span class="pygment-n">l2</span><span class="pygment-o">.</span><span class="pygment-n">append</span><span class="pygment-p">(</span><span class="pygment-n">x</span><span class="pygment-p">)</span>
+    <span class="pygment-k">return</span> <span class="pygment-n">_check</span><span class="pygment-p">(</span><span class="pygment-n">l1</span><span class="pygment-p">)</span> <span class="pygment-o">+</span> <span class="pygment-p">[</span><span class="pygment-n">m</span><span class="pygment-p">]</span> <span class="pygment-o">+</span><span class="pygment-n">_check</span><span class="pygment-p">(</span><span class="pygment-n">l2</span><span class="pygment-p">)</span>
+</pre></div>
 <p>This code has a nice <span class="caps">CC</span> of 4 which is very nice; yet it will take you at least
 a minute to figure out what it does.  If only I had chosen to name the
 function <cite>quicksort</cite>&#8230;</p>
-<pre class="literal-block">
-&gt;&gt;&gt; _check([84, 95, 89, 4, 77, 24, 95, 86, 70, 16])
-[4, 16, 24, 70, 77, 84, 86, 89, 95, 95]
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-n">_check</span><span class="pygment-p">([</span><span class="pygment-mi">84</span><span class="pygment-p">,</span> <span class="pygment-mi">95</span><span class="pygment-p">,</span> <span class="pygment-mi">89</span><span class="pygment-p">,</span> <span class="pygment-mi">4</span><span class="pygment-p">,</span> <span class="pygment-mi">77</span><span class="pygment-p">,</span> <span class="pygment-mi">24</span><span class="pygment-p">,</span> <span class="pygment-mi">95</span><span class="pygment-p">,</span> <span class="pygment-mi">86</span><span class="pygment-p">,</span> <span class="pygment-mi">70</span><span class="pygment-p">,</span> <span class="pygment-mi">16</span><span class="pygment-p">])</span>
+<span class="pygment-p">[</span><span class="pygment-mi">4</span><span class="pygment-p">,</span> <span class="pygment-mi">16</span><span class="pygment-p">,</span> <span class="pygment-mi">24</span><span class="pygment-p">,</span> <span class="pygment-mi">70</span><span class="pygment-p">,</span> <span class="pygment-mi">77</span><span class="pygment-p">,</span> <span class="pygment-mi">84</span><span class="pygment-p">,</span> <span class="pygment-mi">86</span><span class="pygment-p">,</span> <span class="pygment-mi">89</span><span class="pygment-p">,</span> <span class="pygment-mi">95</span><span class="pygment-p">,</span> <span class="pygment-mi">95</span><span class="pygment-p">]</span>
+</pre></div>
 <p>A quiz in less than 5 seconds: What does it mean in OpenERP&#8217;s <span class="caps">ORM</span> the
 following lines of&nbsp;code?</p>
-<pre class="literal-block">
-group.write({'implied_ids': [(3, implied_group.id)]})
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-n">group</span><span class="pygment-o">.</span><span class="pygment-n">write</span><span class="pygment-p">({</span><span class="pygment-s1">&#39;implied_ids&#39;</span><span class="pygment-p">:</span> <span class="pygment-p">[(</span><span class="pygment-mi">3</span><span class="pygment-p">,</span> <span class="pygment-n">implied_group</span><span class="pygment-o">.</span><span class="pygment-n">id</span><span class="pygment-p">)]})</span>
+</pre></div>
 <p>This line of code has a <span class="caps">CC</span> of 1: as good as it gets, isn&#8217;t it?  But it&#8217;s so
 darn difficult to read that unless you have your brain wired up to see &#8220;forget
 the link between this group and the implied_group&#8221;&#8230;  To be fair there is
 someone out there in the OpenERP universe that cared a bit about&nbsp;this:</p>
-<pre class="literal-block">
-# file addons/base/ir/ir_fields.py
+<div class="pygment-highlight"><pre><span></span><span class="pygment-c1"># file addons/base/ir/ir_fields.py</span>
 
-CREATE = lambda values: (0, False, values)
-UPDATE = lambda id, values: (1, id, values)
-DELETE = lambda id: (2, id, False)
-FORGET = lambda id: (3, id, False)
-LINK_TO = lambda id: (4, id, False)
-DELETE_ALL = lambda: (5, False, False)
-REPLACE_WITH = lambda ids: (6, False, ids)
-</pre>
+<span class="pygment-n">CREATE</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span> <span class="pygment-n">values</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">0</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">,</span> <span class="pygment-n">values</span><span class="pygment-p">)</span>
+<span class="pygment-n">UPDATE</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span> <span class="pygment-nb">id</span><span class="pygment-p">,</span> <span class="pygment-n">values</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">1</span><span class="pygment-p">,</span> <span class="pygment-nb">id</span><span class="pygment-p">,</span> <span class="pygment-n">values</span><span class="pygment-p">)</span>
+<span class="pygment-n">DELETE</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span> <span class="pygment-nb">id</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">2</span><span class="pygment-p">,</span> <span class="pygment-nb">id</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">)</span>
+<span class="pygment-n">FORGET</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span> <span class="pygment-nb">id</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">3</span><span class="pygment-p">,</span> <span class="pygment-nb">id</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">)</span>
+<span class="pygment-n">LINK_TO</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span> <span class="pygment-nb">id</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">4</span><span class="pygment-p">,</span> <span class="pygment-nb">id</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">)</span>
+<span class="pygment-n">DELETE_ALL</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">5</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">)</span>
+<span class="pygment-n">REPLACE_WITH</span> <span class="pygment-o">=</span> <span class="pygment-k">lambda</span> <span class="pygment-n">ids</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-mi">6</span><span class="pygment-p">,</span> <span class="pygment-kc">False</span><span class="pygment-p">,</span> <span class="pygment-n">ids</span><span class="pygment-p">)</span>
+</pre></div>
 <p>But no one else is using&nbsp;it!</p>
 <p>And, yes, it&#8217;s exhausting going over&nbsp;this.</p>
 

@@ -80,13 +80,12 @@ point without many&nbsp;detours.</p>
 <p>There&#8217;s a video when they needed to make a component out of the Height and
 Weight sliders, and they needed to pass parameters like the label, min value
 and max value. I thought they were going to use old plain&nbsp;closures:</p>
-<pre class="literal-block">
-function Slider(sources, props) {
-    const label = props.label;
-    // etc...
-    return main(sources);
-}
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-kd">function</span><span class="pygment-w"> </span><span class="pygment-nx">Slider</span><span class="pygment-p">(</span><span class="pygment-nx">sources</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-nx">props</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-p">{</span>
+<span class="pygment-w">    </span><span class="pygment-kd">const</span><span class="pygment-w"> </span><span class="pygment-nx">label</span><span class="pygment-w"> </span><span class="pygment-o">=</span><span class="pygment-w"> </span><span class="pygment-nx">props</span><span class="pygment-p">.</span><span class="pygment-nx">label</span><span class="pygment-p">;</span>
+<span class="pygment-w">    </span><span class="pygment-c1">// etc...</span>
+<span class="pygment-w">    </span><span class="pygment-k">return</span><span class="pygment-w"> </span><span class="pygment-nx">main</span><span class="pygment-p">(</span><span class="pygment-nx">sources</span><span class="pygment-p">);</span>
+<span class="pygment-p">}</span>
+</pre></div>
 <p>It came as a surprise that they put those parameters into a <tt class="docutils literal">props</tt>
 <strong>source</strong> to the <tt class="docutils literal">main()</tt> function of the&nbsp;component.</p>
 <p>At first I thought that was really far fetched, but after thinking about it a
@@ -103,39 +102,34 @@ change the language the <em>entire application</em> changes to the new&nbsp;lang
 <p>My first thought is that the language selector gets is value from a driver
 (which I don&#8217;t know if it already exists) that deals with localization.  Let&#8217;s
 say you can obtain such a driver like&nbsp;this:</p>
-<pre class="literal-block">
-cycle.run(main, {
-   // etc...
-   locale: makeLocaleDriver({languages: ['en_US', 'es_ES'], ...})
-})
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-nx">cycle</span><span class="pygment-p">.</span><span class="pygment-nx">run</span><span class="pygment-p">(</span><span class="pygment-nx">main</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-p">{</span>
+<span class="pygment-w">   </span><span class="pygment-c1">// etc...</span>
+<span class="pygment-w">   </span><span class="pygment-nx">locale</span><span class="pygment-o">:</span><span class="pygment-w"> </span><span class="pygment-nx">makeLocaleDriver</span><span class="pygment-p">({</span><span class="pygment-nx">languages</span><span class="pygment-o">:</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-s1">&#39;en_US&#39;</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-s1">&#39;es_ES&#39;</span><span class="pygment-p">],</span><span class="pygment-w"> </span><span class="pygment-p">...})</span>
+<span class="pygment-p">})</span>
+</pre></div>
 <p>The driver would let you respond to changes in&nbsp;translations:</p>
-<pre class="literal-block">
-const label$ = sources.locale.select('Height');
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-kd">const</span><span class="pygment-w"> </span><span class="pygment-nx">label$</span><span class="pygment-w"> </span><span class="pygment-o">=</span><span class="pygment-w"> </span><span class="pygment-nx">sources</span><span class="pygment-p">.</span><span class="pygment-nx">locale</span><span class="pygment-p">.</span><span class="pygment-nx">select</span><span class="pygment-p">(</span><span class="pygment-s1">&#39;Height&#39;</span><span class="pygment-p">);</span>
+</pre></div>
 <p>Or combining with another mapping from another stream so that the <tt class="docutils literal">props</tt>
 stream remains almost&nbsp;unchanged:</p>
-<pre class="literal-block">
-const label$ = props$.map(p =&gt; sources.locale.select(p.label));
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-kd">const</span><span class="pygment-w"> </span><span class="pygment-nx">label$</span><span class="pygment-w"> </span><span class="pygment-o">=</span><span class="pygment-w"> </span><span class="pygment-nx">props$</span><span class="pygment-p">.</span><span class="pygment-nx">map</span><span class="pygment-p">(</span><span class="pygment-nx">p</span><span class="pygment-w"> </span><span class="pygment-p">=&gt;</span><span class="pygment-w"> </span><span class="pygment-nx">sources</span><span class="pygment-p">.</span><span class="pygment-nx">locale</span><span class="pygment-p">.</span><span class="pygment-nx">select</span><span class="pygment-p">(</span><span class="pygment-nx">p</span><span class="pygment-p">.</span><span class="pygment-nx">label</span><span class="pygment-p">));</span>
+</pre></div>
 <p>However, after revisiting that last idea, I noticed that it doesn&#8217;t work.  A
 change in in the locale does not trigger any event in the <tt class="docutils literal">props$</tt> stream.
 Assuming that <tt class="docutils literal">locale.current$</tt> is a stream of localization object, this may&nbsp;work:</p>
-<pre class="literal-block">
-const label$ = props$.combine(sources.locale.current$)
-                     .map((label, locale) =&gt; locale.gettext(label));
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-kd">const</span><span class="pygment-w"> </span><span class="pygment-nx">label$</span><span class="pygment-w"> </span><span class="pygment-o">=</span><span class="pygment-w"> </span><span class="pygment-nx">props$</span><span class="pygment-p">.</span><span class="pygment-nx">combine</span><span class="pygment-p">(</span><span class="pygment-nx">sources</span><span class="pygment-p">.</span><span class="pygment-nx">locale</span><span class="pygment-p">.</span><span class="pygment-nx">current$</span><span class="pygment-p">)</span>
+<span class="pygment-w">                     </span><span class="pygment-p">.</span><span class="pygment-nx">map</span><span class="pygment-p">((</span><span class="pygment-nx">label</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-nx">locale</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-p">=&gt;</span><span class="pygment-w"> </span><span class="pygment-nx">locale</span><span class="pygment-p">.</span><span class="pygment-nx">gettext</span><span class="pygment-p">(</span><span class="pygment-nx">label</span><span class="pygment-p">));</span>
+</pre></div>
 <p>The thing gets a little bit more tricky when it comes to changing the units:
 feet vs meter, etc&#8230;  I&#8217;ve been thinking about it for a bit.  The most
 problematic issue is that state is not clearly owned unless we introduce a
 kind of <em>quantity</em> for which the unit of measure is&nbsp;explicit:</p>
-<pre class="literal-block">
-run(main, {
-    props: xs.of({
-       value: new Quantity(175, Unit.Length.cm),
-    })
-})
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-nx">run</span><span class="pygment-p">(</span><span class="pygment-nx">main</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-p">{</span>
+<span class="pygment-w">    </span><span class="pygment-nx">props</span><span class="pygment-o">:</span><span class="pygment-w"> </span><span class="pygment-nx">xs</span><span class="pygment-p">.</span><span class="pygment-k">of</span><span class="pygment-p">({</span>
+<span class="pygment-w">       </span><span class="pygment-nx">value</span><span class="pygment-o">:</span><span class="pygment-w"> </span><span class="pygment-ow">new</span><span class="pygment-w"> </span><span class="pygment-nx">Quantity</span><span class="pygment-p">(</span><span class="pygment-mf">175</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-nx">Unit</span><span class="pygment-p">.</span><span class="pygment-nx">Length</span><span class="pygment-p">.</span><span class="pygment-nx">cm</span><span class="pygment-p">),</span>
+<span class="pygment-w">    </span><span class="pygment-p">})</span>
+<span class="pygment-p">})</span>
+</pre></div>
 <p>However this may seem a bit overreaching for a single <em>value</em> that only needs
 to be in between two boundaries&nbsp;(slider).</p>
 <p>This is, <span class="caps">IMO</span> the breaking point: If I really need to manage units on my

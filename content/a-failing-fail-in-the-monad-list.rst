@@ -43,7 +43,9 @@ But I was wondering if I could restate ``guarded`` for any monad.  Since
    guarded True = id
    guarded False = fail "skipped"
 
-However this actually fails in ghci::
+However this actually fails in ghci:
+
+.. code-block:: haskell
 
   *Main> multiplyTo 24
   *** Exception: skipped

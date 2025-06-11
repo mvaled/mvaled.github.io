@@ -72,7 +72,9 @@ point without many detours.
 
 There's a video when they needed to make a component out of the Height and
 Weight sliders, and they needed to pass parameters like the label, min value
-and max value. I thought they were going to use old plain closures::
+and max value. I thought they were going to use old plain closures:
+
+.. code-block:: js
 
   function Slider(sources, props) {
       const label = props.label;
@@ -89,7 +91,6 @@ bit more I think is can be really useful.
 I started to think about an application with just a slider and a language
 selector::
 
-
    Height: 6 feet   <-----o-->
 
    Choose language: [ENG]
@@ -101,7 +102,9 @@ change the language the *entire application* changes to the new language.
 
 My first thought is that the language selector gets is value from a driver
 (which I don't know if it already exists) that deals with localization.  Let's
-say you can obtain such a driver like this::
+say you can obtain such a driver like this:
+
+.. code-block:: js
 
   cycle.run(main, {
      // etc...
@@ -109,13 +112,17 @@ say you can obtain such a driver like this::
   })
 
 
-The driver would let you respond to changes in translations::
+The driver would let you respond to changes in translations:
+
+.. code-block:: js
 
   const label$ = sources.locale.select('Height');
 
 
 Or combining with another mapping from another stream so that the ``props``
-stream remains almost unchanged::
+stream remains almost unchanged:
+
+.. code-block:: js
 
   const label$ = props$.map(p => sources.locale.select(p.label));
 
@@ -123,7 +130,9 @@ stream remains almost unchanged::
 However, after revisiting that last idea, I noticed that it doesn't work.  A
 change in in the locale does not trigger any event in the ``props$`` stream.
 Assuming that ``locale.current$`` is a stream of localization object, this may
-work::
+work:
+
+.. code-block:: js
 
   const label$ = props$.combine(sources.locale.current$)
                        .map((label, locale) => locale.gettext(label));
@@ -132,7 +141,9 @@ work::
 The thing gets a little bit more tricky when it comes to changing the units:
 feet vs meter, etc...  I've been thinking about it for a bit.  The most
 problematic issue is that state is not clearly owned unless we introduce a
-kind of *quantity* for which the unit of measure is explicit::
+kind of *quantity* for which the unit of measure is explicit:
+
+.. code-block:: js
 
   run(main, {
       props: xs.of({
@@ -162,8 +173,6 @@ natural.
 There are challenges about integrating my components with the rest of the
 application, and being an application that must display at least three
 languages I need to think on advance about the problems I would face.
-
-
 
 
 .. _cycle.js: http://cycle.js.org/

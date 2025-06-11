@@ -45,9 +45,8 @@ b)</tt>.  You can prove that by extracting <tt class="docutils literal">step</tt
 <p>Use <cite>ghci</cite> to verify&nbsp;that.</p>
 <p>Now comes the <em>funny</em> part of the implementation: <tt class="docutils literal">step</tt> is defined with
 three&nbsp;arguments</p>
-<pre class="literal-block">
-where step x g a = g(f a x)
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-kr">where</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-p">)</span>
+</pre></div>
 <p>but <tt class="docutils literal">foldr</tt> only passes the first two, and that&#8217;s totally fine; the result
 will be another&nbsp;function.</p>
 <p>You can make this&nbsp;explicit:</p>
@@ -57,30 +56,28 @@ will be another&nbsp;function.</p>
 </pre></div>
 <p>That&#8217;s a beautiful thing about Haskell both definitions of <tt class="docutils literal">step</tt> are
 actually&nbsp;indistinguishable:</p>
-<pre class="literal-block">
-step x g a = g(f a x)
+<div class="pygment-highlight"><pre><span></span><span class="pygment-nf">step</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-p">)</span>
 
-step x g = \a -&gt; g(f a x)
-</pre>
+<span class="pygment-nf">step</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-nf">\</span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-p">)</span>
+</pre></div>
 <p>The first one takes an <em>equation-like</em> outlook that I find very elegant in a
 programming&nbsp;language.</p>
 <p>Having all that we can easily follow how the expression <tt class="docutils literal">myFoldl (+) 0 [1,
 2]</tt> would&nbsp;proceed:</p>
-<pre class="literal-block">
-myFoldl (+) 0 [1, 2]
-(foldr step id [1, 2]) 0                  -- by def. of myFoldl
-(step 1 (foldr step id [2])) 0            -- by def. of foldr
-(step 1 (step 2 (foldr step id []))) 0    -- by def. of foldr
-(step 1 (step 2 id)) 0                    -- by def. of foldr for []
-(step 1 (\a -&gt; id(a + 2))) 0              -- applying `step 2 id`
+<div class="pygment-highlight"><pre><span></span><span class="pygment-nf">myFoldl</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-o">+</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-mi">1</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-p">]</span>
+<span class="pygment-p">(</span><span class="pygment-n">foldr</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-mi">1</span><span class="pygment-p">,</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-p">])</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">                  </span><span class="pygment-c1">-- by def. of myFoldl</span>
+<span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">foldr</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-mi">2</span><span class="pygment-p">]))</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">            </span><span class="pygment-c1">-- by def. of foldr</span>
+<span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">foldr</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-w"> </span><span class="pygment-kt">[]</span><span class="pygment-p">)))</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">    </span><span class="pygment-c1">-- by def. of foldr</span>
+<span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-p">))</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">                    </span><span class="pygment-c1">-- by def. of foldr for []</span>
+<span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-nf">\</span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-p">(</span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-p">)))</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">              </span><span class="pygment-c1">-- applying `step 2 id`</span>
 
-(step 1 (\a -&gt; a + 2)) 0                  -- applying id, Haskell might not
-                                             do this right now
+<span class="pygment-p">(</span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-nf">\</span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-p">))</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">                  </span><span class="pygment-c1">-- applying id, Haskell might not</span>
+<span class="pygment-w">                                             </span><span class="pygment-kr">do</span><span class="pygment-w"> </span><span class="pygment-n">this</span><span class="pygment-w"> </span><span class="pygment-n">right</span><span class="pygment-w"> </span><span class="pygment-n">now</span>
 
-(\x -&gt; (\a -&gt; a + 2)(x + 1)) 0            -- applying step
-(\x -&gt; (x + 1) + 2) 0                     -- applying the inner lambda
-(0 + 1) + 2                               -- applying the outer lambda
-</pre>
+<span class="pygment-p">(</span><span class="pygment-nf">\</span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-nf">\</span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-p">)(</span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-p">))</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">            </span><span class="pygment-c1">-- applying step</span>
+<span class="pygment-p">(</span><span class="pygment-nf">\</span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-mi">0</span><span class="pygment-w">                     </span><span class="pygment-c1">-- applying the inner lambda</span>
+<span class="pygment-p">(</span><span class="pygment-mi">0</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">1</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-o">+</span><span class="pygment-w"> </span><span class="pygment-mi">2</span><span class="pygment-w">                               </span><span class="pygment-c1">-- applying the outer lambda</span>
+</pre></div>
 <p>And that&#8217;s (more or less) how <tt class="docutils literal">myFoldl</tt> works.</p>
 
 </article>

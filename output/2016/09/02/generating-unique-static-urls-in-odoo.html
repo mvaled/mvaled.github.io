@@ -30,13 +30,12 @@ proxy like&nbsp;Nginx.</p>
 <p>Reportedly, this has worked very well in our case where some users
 have slow connections.  However, measuring the logs of a week we see
 that about 21% of <span class="caps">GET</span> request are&nbsp;assets:</p>
-<pre class="literal-block">
-$ egrep 'GET .*(\.|/)(css|js).* HTTP/' /var/log/nginx/o.access.log.1 | wc -l
-10554
+<div class="pygment-highlight"><pre><span></span>$<span class="pygment-w"> </span>egrep<span class="pygment-w"> </span><span class="pygment-s1">&#39;GET .*(\.|/)(css|js).* HTTP/&#39;</span><span class="pygment-w"> </span>/var/log/nginx/o.access.log.1<span class="pygment-w"> </span><span class="pygment-p">|</span><span class="pygment-w"> </span>wc<span class="pygment-w"> </span>-l
+<span class="pygment-m">10554</span>
 
-$ egrep 'GET .* HTTP' /var/log/nginx/o.access.log.1 | wc -l
-50216
-</pre>
+$<span class="pygment-w"> </span>egrep<span class="pygment-w"> </span><span class="pygment-s1">&#39;GET .* HTTP&#39;</span><span class="pygment-w"> </span>/var/log/nginx/o.access.log.1<span class="pygment-w"> </span><span class="pygment-p">|</span><span class="pygment-w"> </span>wc<span class="pygment-w"> </span>-l
+<span class="pygment-m">50216</span>
+</pre></div>
 <p>Odoo&#8217;s default cache expiration time is seven days.  This is
 considerably low taking into account that bundle&#8217;s URLs change when
 the content&nbsp;does.</p>

@@ -32,16 +32,15 @@ is&nbsp;running.</p>
 update a Python module in a way that already-running greenlets stay unaffected
 but newly created ones use the new&nbsp;code.</p>
 <p>To exemplify, let&#8217;s say a typical tasks&nbsp;is:</p>
-<pre class="literal-block">
-def receive_confirmation(message, who):
-   from jobs.util.email import send_email
-   from jobs.util.email import wait_reply
-   # Assume both send_email and wait_reply switch away from the current
-   # greenlet and only switch back after they are done.
-   message = send_email(message, who)
-   res = wait_reply(message)
-   return res  # this will be sent to the parent greenlet
-</pre>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-k">def</span> <span class="pygment-nf">receive_confirmation</span><span class="pygment-p">(</span><span class="pygment-n">message</span><span class="pygment-p">,</span> <span class="pygment-n">who</span><span class="pygment-p">):</span>
+   <span class="pygment-kn">from</span> <span class="pygment-nn">jobs.util.email</span> <span class="pygment-kn">import</span> <span class="pygment-n">send_email</span>
+   <span class="pygment-kn">from</span> <span class="pygment-nn">jobs.util.email</span> <span class="pygment-kn">import</span> <span class="pygment-n">wait_reply</span>
+   <span class="pygment-c1"># Assume both send_email and wait_reply switch away from the current</span>
+   <span class="pygment-c1"># greenlet and only switch back after they are done.</span>
+   <span class="pygment-n">message</span> <span class="pygment-o">=</span> <span class="pygment-n">send_email</span><span class="pygment-p">(</span><span class="pygment-n">message</span><span class="pygment-p">,</span> <span class="pygment-n">who</span><span class="pygment-p">)</span>
+   <span class="pygment-n">res</span> <span class="pygment-o">=</span> <span class="pygment-n">wait_reply</span><span class="pygment-p">(</span><span class="pygment-n">message</span><span class="pygment-p">)</span>
+   <span class="pygment-k">return</span> <span class="pygment-n">res</span>  <span class="pygment-c1"># this will be sent to the parent greenlet</span>
+</pre></div>
 <p>The servers start and hundreds of this task are launched in different jobs.
 Many of them are idle waiting for their replies.  Users are happily getting
 their confirmation emails and replying to them (or ignoring&nbsp;them).</p>
@@ -51,10 +50,9 @@ users have entered a wrong email address.  A change is in&nbsp;order.</p>
 <a class="reference external" href="http://en.wikipedia.org/wiki/Variable_envelope_return_path"><span class="caps">VERP</span></a> to know which recipients&#8217; address are bouncing, and also create a new
 <cite>job</cite> that involves receiving confirmation email when a new user&nbsp;registers.</p>
 <p>We&#8217;d love to simply update our <tt class="docutils literal">jobs.util</tt> package and be done with it like&nbsp;this:</p>
-<pre class="literal-block">
-$ source server-virtual-env/bin/activate
-$ pip install -U jobs.util -i https://my.private.server/
-</pre>
+<div class="pygment-highlight"><pre><span></span>$<span class="pygment-w"> </span><span class="pygment-nb">source</span><span class="pygment-w"> </span>server-virtual-env/bin/activate
+$<span class="pygment-w"> </span>pip<span class="pygment-w"> </span>install<span class="pygment-w"> </span>-U<span class="pygment-w"> </span>jobs.util<span class="pygment-w"> </span>-i<span class="pygment-w"> </span>https://my.private.server/
+</pre></div>
 <p>New jobs will pick up the new version and the older jobs will keep working as
 if nothing would have&nbsp;changed.</p>
 <p>That would be really nice.  Such a hot-swap of Python modules per job is what
@@ -74,36 +72,34 @@ and asserts it returns the &#8220;right&#8221; magic value.  Between launches th
 gets updated to return a different magic value, which is passed as an argument
 to the newly created&nbsp;greenlet.</p>
 <p>A single run will print something&nbsp;like:</p>
-<pre class="literal-block">
-$ python test_modulet.py
-Beginning with 3 in /tmp/tmp1d4rK5
-Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module'
-Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module'
-Isolating 'magic_module' as '&lt;greenlet.greenlet object at 0x7f21f4daa7d0&gt;.magic_module'
-Passed. I have the right magic number 1002
-Passed. I have the right magic number 1001
-Passed. I have the right magic number 1000
-</pre>
+<div class="pygment-highlight"><pre><span></span>$<span class="pygment-w"> </span>python<span class="pygment-w"> </span>test_modulet.py
+Beginning<span class="pygment-w"> </span>with<span class="pygment-w"> </span><span class="pygment-m">3</span><span class="pygment-w"> </span><span class="pygment-k">in</span><span class="pygment-w"> </span>/tmp/tmp1d4rK5
+Isolating<span class="pygment-w"> </span><span class="pygment-s1">&#39;magic_module&#39;</span><span class="pygment-w"> </span>as<span class="pygment-w"> </span><span class="pygment-s1">&#39;&lt;greenlet.greenlet object at 0x7f21f4e8daf0&gt;.magic_module&#39;</span>
+Isolating<span class="pygment-w"> </span><span class="pygment-s1">&#39;magic_module&#39;</span><span class="pygment-w"> </span>as<span class="pygment-w"> </span><span class="pygment-s1">&#39;&lt;greenlet.greenlet object at 0x7f21f4e8da50&gt;.magic_module&#39;</span>
+Isolating<span class="pygment-w"> </span><span class="pygment-s1">&#39;magic_module&#39;</span><span class="pygment-w"> </span>as<span class="pygment-w"> </span><span class="pygment-s1">&#39;&lt;greenlet.greenlet object at 0x7f21f4daa7d0&gt;.magic_module&#39;</span>
+Passed.<span class="pygment-w"> </span>I<span class="pygment-w"> </span>have<span class="pygment-w"> </span>the<span class="pygment-w"> </span>right<span class="pygment-w"> </span>magic<span class="pygment-w"> </span>number<span class="pygment-w"> </span><span class="pygment-m">1002</span>
+Passed.<span class="pygment-w"> </span>I<span class="pygment-w"> </span>have<span class="pygment-w"> </span>the<span class="pygment-w"> </span>right<span class="pygment-w"> </span>magic<span class="pygment-w"> </span>number<span class="pygment-w"> </span><span class="pygment-m">1001</span>
+Passed.<span class="pygment-w"> </span>I<span class="pygment-w"> </span>have<span class="pygment-w"> </span>the<span class="pygment-w"> </span>right<span class="pygment-w"> </span>magic<span class="pygment-w"> </span>number<span class="pygment-w"> </span><span class="pygment-m">1000</span>
+</pre></div>
 <p>If you comment the bootstrapping of modulets, then you&#8217;ll get something&nbsp;like:</p>
-<pre class="literal-block">
-$ python test_modulet.py
-Beginning with 3 in /tmp/tmpeI1oYA
-Wrong magic number
-Traceback (most recent call last):
-  File &quot;test_modulet.py&quot;, line 49, in rootprog
-    g.switch()
-  File &quot;test_modulet.py&quot;, line 31, in prog
-    assert res == magic, &quot;Expected %d but got %d.&quot; % (magic, res)
-AssertionError: Expected 1002 but got 1000.
-Wrong magic number
-Traceback (most recent call last):
-  File &quot;test_modulet.py&quot;, line 49, in rootprog
-    g.switch()
-  File &quot;test_modulet.py&quot;, line 31, in prog
-    assert res == magic, &quot;Expected %d but got %d.&quot; % (magic, res)
-AssertionError: Expected 1001 but got 1000.
-Passed. I have the right magic number 1000
-</pre>
+<div class="pygment-highlight"><pre><span></span>$<span class="pygment-w"> </span>python<span class="pygment-w"> </span>test_modulet.py
+Beginning<span class="pygment-w"> </span>with<span class="pygment-w"> </span><span class="pygment-m">3</span><span class="pygment-w"> </span><span class="pygment-k">in</span><span class="pygment-w"> </span>/tmp/tmpeI1oYA
+Wrong<span class="pygment-w"> </span>magic<span class="pygment-w"> </span>number
+Traceback<span class="pygment-w"> </span><span class="pygment-o">(</span>most<span class="pygment-w"> </span>recent<span class="pygment-w"> </span>call<span class="pygment-w"> </span>last<span class="pygment-o">)</span>:
+<span class="pygment-w">  </span>File<span class="pygment-w"> </span><span class="pygment-s2">&quot;test_modulet.py&quot;</span>,<span class="pygment-w"> </span>line<span class="pygment-w"> </span><span class="pygment-m">49</span>,<span class="pygment-w"> </span><span class="pygment-k">in</span><span class="pygment-w"> </span>rootprog
+<span class="pygment-w">    </span>g.switch<span class="pygment-o">()</span>
+<span class="pygment-w">  </span>File<span class="pygment-w"> </span><span class="pygment-s2">&quot;test_modulet.py&quot;</span>,<span class="pygment-w"> </span>line<span class="pygment-w"> </span><span class="pygment-m">31</span>,<span class="pygment-w"> </span><span class="pygment-k">in</span><span class="pygment-w"> </span>prog
+<span class="pygment-w">    </span>assert<span class="pygment-w"> </span><span class="pygment-nv">res</span><span class="pygment-w"> </span><span class="pygment-o">==</span><span class="pygment-w"> </span>magic,<span class="pygment-w"> </span><span class="pygment-s2">&quot;Expected %d but got %d.&quot;</span><span class="pygment-w"> </span>%<span class="pygment-w"> </span><span class="pygment-o">(</span>magic,<span class="pygment-w"> </span>res<span class="pygment-o">)</span>
+AssertionError:<span class="pygment-w"> </span>Expected<span class="pygment-w"> </span><span class="pygment-m">1002</span><span class="pygment-w"> </span>but<span class="pygment-w"> </span>got<span class="pygment-w"> </span><span class="pygment-m">1000</span>.
+Wrong<span class="pygment-w"> </span>magic<span class="pygment-w"> </span>number
+Traceback<span class="pygment-w"> </span><span class="pygment-o">(</span>most<span class="pygment-w"> </span>recent<span class="pygment-w"> </span>call<span class="pygment-w"> </span>last<span class="pygment-o">)</span>:
+<span class="pygment-w">  </span>File<span class="pygment-w"> </span><span class="pygment-s2">&quot;test_modulet.py&quot;</span>,<span class="pygment-w"> </span>line<span class="pygment-w"> </span><span class="pygment-m">49</span>,<span class="pygment-w"> </span><span class="pygment-k">in</span><span class="pygment-w"> </span>rootprog
+<span class="pygment-w">    </span>g.switch<span class="pygment-o">()</span>
+<span class="pygment-w">  </span>File<span class="pygment-w"> </span><span class="pygment-s2">&quot;test_modulet.py&quot;</span>,<span class="pygment-w"> </span>line<span class="pygment-w"> </span><span class="pygment-m">31</span>,<span class="pygment-w"> </span><span class="pygment-k">in</span><span class="pygment-w"> </span>prog
+<span class="pygment-w">    </span>assert<span class="pygment-w"> </span><span class="pygment-nv">res</span><span class="pygment-w"> </span><span class="pygment-o">==</span><span class="pygment-w"> </span>magic,<span class="pygment-w"> </span><span class="pygment-s2">&quot;Expected %d but got %d.&quot;</span><span class="pygment-w"> </span>%<span class="pygment-w"> </span><span class="pygment-o">(</span>magic,<span class="pygment-w"> </span>res<span class="pygment-o">)</span>
+AssertionError:<span class="pygment-w"> </span>Expected<span class="pygment-w"> </span><span class="pygment-m">1001</span><span class="pygment-w"> </span>but<span class="pygment-w"> </span>got<span class="pygment-w"> </span><span class="pygment-m">1000</span>.
+Passed.<span class="pygment-w"> </span>I<span class="pygment-w"> </span>have<span class="pygment-w"> </span>the<span class="pygment-w"> </span>right<span class="pygment-w"> </span>magic<span class="pygment-w"> </span>number<span class="pygment-w"> </span><span class="pygment-m">1000</span>
+</pre></div>
 </div>
 <div class="section" id="future-work">
 <h2>Future&nbsp;work</h2>

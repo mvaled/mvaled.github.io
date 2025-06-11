@@ -49,7 +49,7 @@ Use `ghci` to verify that.
 Now comes the *funny* part of the implementation: ``step`` is defined with
 three arguments
 
-::
+.. code-block:: haskell
 
    where step x g a = g(f a x)
 
@@ -68,7 +68,9 @@ You can make this explicit:
 
 
 That's a beautiful thing about Haskell both definitions of ``step`` are
-actually indistinguishable::
+actually indistinguishable:
+
+.. code-block:: haskell
 
     step x g a = g(f a x)
 
@@ -79,7 +81,9 @@ programming language.
 
 
 Having all that we can easily follow how the expression ``myFoldl (+) 0 [1,
-2]`` would proceed::
+2]`` would proceed:
+
+.. code-block:: haskell
 
    myFoldl (+) 0 [1, 2]
    (foldr step id [1, 2]) 0                  -- by def. of myFoldl
