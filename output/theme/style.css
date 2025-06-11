@@ -14,6 +14,9 @@
   --color-code-bg: #f0f0f0;
   --color-code-text: #000000;
 
+  --color-sidebar-bg: #f0f0f0;
+  --color-sidebar-text: #000000;
+
   --font-size-base: 1rem;
   --font-size-meta: 0.9rem;
   --font-size-h1: 2.5rem;
@@ -21,6 +24,7 @@
   --font-size-h3: 1.5rem;
 
   --radius-sm: 0.25rem;
+  --radius-lg: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,6 +37,10 @@
     --color-link-hover: #1a73e8;
     --color-code-bg: #2f2f2f;
     --color-code-text: #ffffff;
+
+    --color-sidebar-bg: #2f2f2f;
+    --color-sidebar-text: #ffffff;
+
   }
 }
 
@@ -157,4 +165,15 @@ footer {
   color: var(--color-code-text);
   padding: 0.05em 0.4em;
   border-radius: var(--radius-sm);
+}
+
+.sidebar {
+    color: var(--color-sidebar-text);
+    background-color: var(--color-sidebar-bg);
+    padding: 0.4em 0.8em;
+    border-radius: var(--radius-lg);
+    .sidebar-title {
+        font-size: var(--font-size-h3);
+        margin-top: 0;
+    }
 }
