@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; Adding code
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header class="logo tw:flex tw:flex-row tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:px-[2rem]">
+        <h1>
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Adding&nbsp;code</h2>
+        <p class="meta">9999-12-31 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>I have been staring at a single line of code for half an hour.  It&#8217;s actually
+not even a line of code, it&#8217;s a <span class="caps">TODO</span>&nbsp;comment:</p>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-c1"># TODO: Remove in favor of modules.</span>
+<span class="pygment-k">class</span> <span class="pygment-nc">ActiveTab</span><span class="pygment-p">(</span><span class="pygment-n">TextChoices</span><span class="pygment-p">):</span>
+    <span class="pygment-n">STRUCTURAL</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;structural&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Structural&quot;</span>
+    <span class="pygment-n">SAFETY</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;safety&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Safety&quot;</span>
+    <span class="pygment-n">CHECKLIST</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;checklist&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Checklists&quot;</span>
+    <span class="pygment-n">OVERVIEW</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;overview&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Overview&quot;</span>
+    <span class="pygment-n">ANALYTICS</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;analytics&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Analytics&quot;</span>
+    <span class="pygment-n">COMPANY_FORMS</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;company-forms&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Company Forms&quot;</span>
+    <span class="pygment-n">NOTIFICATIONS</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;notifications&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Notifications&quot;</span>
+    <span class="pygment-n">SETTINGS</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;settings&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Settings&quot;</span>
+    <span class="pygment-n">SIRE</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;sire2.0&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;SIRE 2.0&quot;</span>
+    <span class="pygment-n">VHL</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;vhl&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Hull &amp; Equipment&quot;</span>
+    <span class="pygment-n">PSC</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;psc&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Port Checklists&quot;</span>
+    <span class="pygment-n">RISQ</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;risq&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;RISQ&quot;</span>
+    <span class="pygment-n">SHORE</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;shore&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Shore reports&quot;</span>
+</pre></div>
+<p>I wrote it in 2021, and when I wrote it the class looked like&nbsp;this:</p>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-c1"># TODO: Remove in favor of modules.</span>
+<span class="pygment-k">class</span> <span class="pygment-nc">ActiveTab</span><span class="pygment-p">(</span><span class="pygment-n">TextChoices</span><span class="pygment-p">):</span>
+    <span class="pygment-n">STRUCTURAL</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;structural&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Structural&quot;</span>
+    <span class="pygment-n">SAFETY</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;safety&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Safety&quot;</span>
+    <span class="pygment-n">CHECKLIST</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;checklist&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Checklists&quot;</span>
+    <span class="pygment-n">OVERVIEW</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;overview&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Overview&quot;</span>
+    <span class="pygment-n">ANALYTICS</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;analytics&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Analytics&quot;</span>
+</pre></div>
+<p>How did we manage to double the size of this class before finally it removing&nbsp;it?</p>
+<div class="section" id="adding-bits-of-code-is-easy">
+<h2>Adding bits of code is&nbsp;easy</h2>
+</div>
+<div class="section" id="risk-management-or-risk-aversion">
+<h2>Risk management, or risk&nbsp;aversion</h2>
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
