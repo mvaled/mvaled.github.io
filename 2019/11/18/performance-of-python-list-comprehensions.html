@@ -61,7 +61,7 @@ show my&nbsp;point:</p>
 <span class="pygment-o">...</span>         <span class="pygment-k">yield</span> <span class="pygment-n">a</span>
 <span class="pygment-o">...</span>         <span class="pygment-n">a</span><span class="pygment-p">,</span> <span class="pygment-n">b</span> <span class="pygment-o">=</span> <span class="pygment-n">b</span><span class="pygment-p">,</span> <span class="pygment-n">a</span> <span class="pygment-o">+</span> <span class="pygment-n">b</span>
 </pre></div>
-<p>An still with 100 items, passing a list is&nbsp;faster:</p>
+<p>And still with 100 items, passing a list is&nbsp;faster:</p>
 <div class="pygment-highlight"><pre><span></span><span class="pygment-o">&gt;&gt;&gt;</span> <span class="pygment-o">%</span><span class="pygment-n">timeit</span> <span class="pygment-nb">sum</span><span class="pygment-p">(</span><span class="pygment-n">fib</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">))</span>
 <span class="pygment-mf">14.2</span> <span class="pygment-n">µs</span> <span class="pygment-err">±</span> <span class="pygment-mi">212</span> <span class="pygment-n">ns</span> <span class="pygment-n">per</span> <span class="pygment-n">loop</span> <span class="pygment-p">(</span><span class="pygment-n">mean</span> <span class="pygment-err">±</span> <span class="pygment-n">std</span><span class="pygment-o">.</span> <span class="pygment-n">dev</span><span class="pygment-o">.</span> <span class="pygment-n">of</span> <span class="pygment-mi">7</span> <span class="pygment-n">runs</span><span class="pygment-p">,</span> <span class="pygment-mi">100000</span> <span class="pygment-n">loops</span> <span class="pygment-n">each</span><span class="pygment-p">)</span>
 
