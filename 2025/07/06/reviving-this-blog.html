@@ -7,11 +7,11 @@
 </title>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link rel="stylesheet" href="/theme/style-202507061244.css">
+      <link rel="stylesheet" href="/theme/style-202507061303.css">
   </head>
   <body>
-    <header class="logo tw:flex tw:flex-row tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:px-[2rem]">
-        <h1>
+    <header class="logo tw:flex tw:flex-row tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+        <h1 class="tw:m-0">
           <a href="/">&lang;m∀&rang;</a>
         </h1>
       <div class="tw:grow"></div>
@@ -21,7 +21,7 @@
           </ul>
         </nav>
     </header>
-    <main>
+    <main class="tw:p-4 tw:md:p-8">
 <article>
     <header>
         <h2>Reviving my&nbsp;blog</h2>
@@ -87,10 +87,10 @@ could not make it work with the latest&nbsp;Python.</p>
 <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>.</p>
 <p>I keep writing in reStructuredText <a class="footnote-reference" href="#markdown-rant" id="footnote-reference-1">[1]</a>.  I will probably write
 about reStructuredText v. Markdown in some later post.  You know already my&nbsp;stand.</p>
-<p>I experimented with using TailwindCSS in my <tt class="docutils literal">base.html</tt> template, but I&#8217;m
-not going to be keeping that.  The generated <span class="caps">HTML</span> uses plain old <span class="caps">CSS</span> classes,
-which I need to keep tweaking every now and then.  TailwindCSS doesn&#8217;t make
-sense for this case and would simply add&nbsp;noise.</p>
+<p>I experimented with using TailwindCSS in my <tt class="docutils literal">base.html</tt> template.
+TailwindCSS allows to iterate quickly about the styling of the main templates.
+Nevertheless, I still need <span class="caps">CSS</span> for the generated <span class="caps">HTML</span> from reStructuredText.
+So this is still an ongoing&nbsp;experiment.</p>
 </div>
 <div class="section" id="footnotes">
 <h2>Footnotes</h2>
