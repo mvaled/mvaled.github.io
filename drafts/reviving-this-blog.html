@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; Reviving my blog
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style.css">
+  </head>
+  <body>
+    <header class="logo tw:flex tw:flex-row tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:px-[2rem]">
+        <h1>
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main>
+<article>
+    <header>
+        <h2>Reviving my&nbsp;blog</h2>
+        <p class="meta">2025-07-06 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>I have been away from this blog for a long time.  I&#8217;m still not feeling the
+same drive to write that I used to have before, but I want to give it another&nbsp;try.</p>
+<p>I have switched jobs. I live now in a new country.  My role have changed and
+my views have adapted.  I have things that are worth writing.  The hard part
+is putting myself to do&nbsp;it.</p>
+<p>This is an account of the process I have followed to revive the blog&#8217;s looks
+and the build&nbsp;tools.</p>
+<div class="section" id="the-looks">
+<h2>The&nbsp;looks</h2>
+<p>I&#8217;m not a designer, neither by trade or calling.  I consider myself a man with
+simple tastes, and a preferrence towards simplicity and&nbsp;space.</p>
+<p>Therefore I wanted a simple, minimal blog, featuring some degree of elagance.
+From the start I knew I don&#8217;t have them in me the tools, so I asked GPTs for&nbsp;it.</p>
+<p>I asked for a &#8220;modern&#8221; look with dark and light theme, and it gave me some
+horrible plain and lame all-white site.  I insisted by providing specific
+instructions.  The sizes of the screen, the spacing, etc.  After some
+iterations I had a decent starting&nbsp;point.</p>
+<p>I took inspiration from other good-looking blogs.  I cannot remember now the
+list of all, so I cannot give them proper&nbsp;credit.</p>
+<div class="section" id="the-fonts">
+<h3>The&nbsp;fonts</h3>
+<p>I have been undecided between Roboto and Merriweather for the body of text.  I
+wanted an accesible font, and I have read that sans-serif fonts tend to be
+nicer in terms of&nbsp;accessibility.</p>
+<p>Nevertheless (I think) I have decided for Merriweather.  I like it and there
+are some positive reports about it being fairly accessible, even for people
+with&nbsp;dyslexia.</p>
+<p>For the font size, I went&nbsp;big.</p>
+<p>I find myself very often reading with a 120% zoom.  I&#8217;m slightly shortsighted
+and have some degreed of astigmatism.  Text with small fonts are fused
+together and the strokes become very&nbsp;blurry.</p>
+<p>Just&nbsp;compare</p>
+<div class="figure">
+<img alt="Side-by-side of my blog and TailwindCSS' Typography Post." src="/images/2025/blog-revival-font-size.png" style="width: 90%;" />
+</div>
+<p>Yes, the screenshots have been rescaled to fit in this blog.  In my eyes,
+however, I can still read my blog without too much&nbsp;effort.</p>
+<p>I wanted to be able to read my blog without zooming in.  I hope you don&#8217;t need
+to zoom&nbsp;out.</p>
+</div>
+<div class="section" id="the-colors">
+<h3>The&nbsp;colors</h3>
+<p>This was another struggle.  Chosing colors that mix weld together is very hard
+for me (and GPTs).  I kept it simple &#8212; black, white and grays in between for
+the main text and styling; and Pygment&#8217;s Lovelace and Material for the code&nbsp;blocks.</p>
+</div>
+<div class="section" id="this-is-not-settled">
+<h3>This is not&nbsp;settled</h3>
+<p>I&#8217;m still tweaking the sizes, and weights.  I need to work more for the
+smaller screens.  The titles are too big there, and there is too much wasted&nbsp;space.</p>
+</div>
+</div>
+<div class="section" id="the-tech">
+<h2>The&nbsp;tech</h2>
+<p>I used to write this using <a class="reference external" href="https://pypi.org/project/Tinkerer/">Tinkerer</a>, which is no longer maintained, and I
+could not make it work with the latest&nbsp;Python.</p>
+<p>I have switched hence to <a class="reference external" href="https://getpelican.com/">Pelican</a>, and I keep my blog&#8217;s virtual env with
+<a class="reference external" href="https://docs.astral.sh/uv/">uv</a>.</p>
+<p>I keep writing in reStructuredText <a class="footnote-reference" href="#markdown-rant" id="footnote-reference-1">[1]</a>.  I will probably write
+about reStructuredText v. Markdown in some later post.  You know already my&nbsp;stand.</p>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
+<table class="docutils footnote" frame="void" id="markdown-rant" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td><p class="first">I have no clue why Markdown won the text-format battle.
+There are so many Markdown flavors and extensions that you always need to
+be reminded <strong>which</strong> kind of Markdown are you&nbsp;using.</p>
+<p class="last">Let&#8217;s keep this rant for another&nbsp;day.</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
