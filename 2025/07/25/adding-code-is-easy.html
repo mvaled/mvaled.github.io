@@ -3,11 +3,11 @@
   <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title><manuel> &mdash; Adding code is easy, rewarded
+      <title><manuel> &mdash; Adding code is easy
 </title>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link rel="stylesheet" href="/theme/style-202507061303.css">
+      <link rel="stylesheet" href="/theme/style-202507260025.css">
   </head>
   <body>
     <header class="logo tw:flex tw:flex-row tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
@@ -24,8 +24,8 @@
     <main class="tw:p-4 tw:md:p-8">
 <article>
     <header>
-        <h2>Adding code is easy,&nbsp;rewarded</h2>
-        <p class="meta">9999-12-31 &bull; Manuel Vázquez Acosta</p>
+        <h2>Adding code is&nbsp;easy</h2>
+        <p class="meta">2025-07-25 &bull; Manuel Vázquez Acosta</p>
     </header>
     <p>I have been staring at a single line of code for half an hour.  It&#8217;s actually
 not even a line of code, it&#8217;s a <span class="caps">TODO</span>&nbsp;comment:</p>
@@ -58,18 +58,56 @@ not even a line of code, it&#8217;s a <span class="caps">TODO</span>&nbsp;commen
 of pages that actually need <em>something</em> instead of replace this.  Namely the
 only three modules that share a common&nbsp;view.</p>
 <p>How did we manage to double the size of this class before finally removing&nbsp;it?</p>
-<div class="section" id="adding-bits-of-code-is-easy">
-<h2>Adding bits of code is&nbsp;easy</h2>
-<p>The answer is that adding code is deemed <em>simpler</em>.  I disagree.  It&#8217;s just
-<em>easier</em>.  Simplicity/complexity is rather a feature of the code you end up
-having after you do your&nbsp;job.</p>
-<blockquote>
-<p>Say you took one [file] out. Is it still the file room?&nbsp;(&#8230;)</p>
+<div class="section" id="the-heap">
+<h2>The&nbsp;Heap</h2>
+<blockquote class="epigraph">
 <p>If the file room minus one file is still the file room, and you keep
-subtracting one at a time, you could end up with zero&nbsp;files&#8230;</p>
-<p class="attribution">&mdash;Key and Peele, in Fargo, discovering The Heap&nbsp;Paradox.</p>
+subtracting one at a time, you could end up with zero&nbsp;files.</p>
+<p class="attribution">&mdash;Key and Peele in Fargo, discovering <a class="reference external" href="https://en.wikipedia.org/wiki/Sorites_paradox">The Heap Paradox</a>.</p>
 </blockquote>
-<p>But, when adding just a new variant to the enumeration&nbsp;I</p>
+<p>When does adding one new option to the class, transforms it to a heap of
+noisy, and mostly useless&nbsp;code?</p>
+<p>While the above is rather philosophical there are some practical implications.
+I have found that most immediate effect is that of making the on-boarding to
+the code somewhat&nbsp;harder.</p>
+<p>Senior (or seasoned) developers would have built a mental blockade around this
+and won&#8217;t be bothered by it anymore.  For them adding code is <em>simpler</em>
+<a class="footnote-reference" href="#simple-easy" id="footnote-reference-1">[1]</a>.</p>
+<p>The risk of removing it and replacing it with a what it is actually needed, is
+higher.  But the cost was not higher two years ago than it is today.  We have
+added more cost by adding one variant at a&nbsp;time.</p>
+<div class="compound">
+<p class="compound-first">The merge request to remove this today touches 12&nbsp;files:</p>
+<pre class="compound-middle literal-block">
+12 files changed, 29 insertions(+), 99 deletions(-)
+</pre>
+<p class="compound-last">and it is not yet&nbsp;ready.</p>
+</div>
+<p>This is of course a trade-off game.  Each time we were faced with the option
+to just add one more choice to this class versus removing it, there were
+time-constraints and other non-technical factors that tipped the balance
+towards the safer path, less risky&nbsp;path.</p>
+<p>There is actually no valid technical criteria to keep this class around, and
+we have better test coverage, better testers.  <a class="reference external" href="https://www.kaikosystems.com/">We</a> are today a bigger
+company, and we deserve a better&nbsp;code.</p>
+<p>I will remove it.&nbsp;Soon.</p>
+</div>
+<div class="section" id="epilogue">
+<h2>Epilogue</h2>
+<p>I planned to write about the impact of <span class="caps">AI</span> coding tools like <a class="reference external" href="https://aider.chat/">aider</a>, <a class="reference external" href="https://openai.com/index/openai-codex/">codex</a>,
+and <a class="reference external" href="https://docs.anthropic.com/en/docs/claude-code/overview">Claude Code</a> on this &#8216;adding code&#8217; game.  But let&#8217;s not make a heap out
+of this&nbsp;post.</p>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
+<table class="docutils footnote" frame="void" id="simple-easy" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>I often say it&#8217;s just <em>easier</em>, and emphasize simplicity
+(complexity) as a feature of the code you end up having after you do your
+job.</td></tr>
+</tbody>
+</table>
 </div>
 
 </article>
