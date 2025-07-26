@@ -1,0 +1,372 @@
+@import url("output.css");
+@import url("code-202507261946.css");
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Libertinus+Math&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --font-family-header: 'Merriweather', sans-serif;
+    --font-family-body: 'Merriweather', sans-serif;
+    --font-family-body-header: 'Libertinus Math', serif;
+
+    --font-family-footnote-ref: 'Libertinus Math', serif;
+
+    --font-family-code: 'Roboto Mono', monospace;
+    --font-family-logo: 'Libertinus Math', serif;
+    --line-height: 1.6;
+
+    font-size: 18px; /* The basis of all rem */
+    font-weight: 300;
+
+    --font-size-base: 1rem;
+    --font-size-meta: 0.9rem;
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h3: 1.5rem;
+    --font-size-h4: 1.25rem;
+    --font-size-h5: 1rem;
+
+    --radius-xs: 0.125rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-4xl: 2rem;
+}
+
+@layer user-color-scheme {
+    /* Respect html data-color-scheme attribute */
+    html[data-color-scheme="light"] {
+        --color-bg: #f9f9f9;
+        --color-text: #2e2e2e;
+        --color-meta: #555555;
+        --color-border: #dddddd;
+        --color-link: #666;
+        --color-link-disabled: #888;
+        --color-link-hover: #000;
+        --color-code-bg: #e8e8e8;
+        --color-code-text: #000000;
+
+        --color-sidebar-bg: #e8e8e8;
+        --color-sidebar-text: #000000;
+
+        --color-blockquote-bg: #e8e8e8;
+        --color-blockquote-text: #000000;
+    }
+
+    html[data-color-scheme="dark"] {
+        --color-bg: #1e1e1e;
+        --color-text: #e0e0e0;
+        --color-meta: #aaaaaa;
+        --color-border: #333333;
+        --color-link: #aaa;
+        --color-link-disabled: #666;
+        --color-link-hover: #fff;
+        --color-code-bg: #2f2f2f;
+        --color-code-text: #ffffff;
+        --color-sidebar-bg: #2f2f2f;
+        --color-sidebar-text: #ffffff;
+        --color-blockquote-bg: #2f2f2f;
+        --color-blockquote-text: #ffffff;
+    }
+}
+
+@media (min-width: 600px) {
+    :root {
+        --font-size-base: 1.125rem;
+        --font-size-h1: 2.75rem;
+        --font-size-h2: 2.25rem;
+        --font-size-h3: 1.75rem;
+        --font-size-h4: 1.5rem;
+        --font-size-h5: 1.25rem;
+    }
+}
+
+@media (min-width: 900px) {
+    :root {
+        --font-size-base: 1.25rem;
+        --font-size-h1: 3rem;
+        --font-size-h2: 2.5rem;
+        --font-size-h3: 2rem;
+        --font-size-h4: 1.75rem;
+        --font-size-h5: 1.5rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        --font-size-base: 1.375rem;
+        --font-size-h1: 3.25rem;
+        --font-size-h2: 2.75rem;
+        --font-size-h3: 2.25rem;
+        --font-size-h4: 2rem;
+        --font-size-h5: 1.75rem;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-body);
+    line-height: var(--line-height);
+    font-size: var(--font-size-base);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+article.preview {
+    header {
+        border-bottom: none !important;
+    }
+    border-bottom: 1px solid var(--color-border);
+}
+
+header .subtitle {
+    color: var(--color-meta);
+    font-size: var(--font-size-base);
+    margin-top: 0.5rem;
+}
+
+a {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+
+article {
+    h1, h2, h3, h4, h5, h6, h9 {
+        font-family: var(--font-family-body-header);
+        font-weight: 500;
+    }
+    header {
+        h1, h2, h3, h4, h5, h6, h9 {
+            font-family: var(--font-family-header);
+        }
+    }
+}
+
+header.logo {
+    h1 {
+        text-transform: uppercase;
+        font-family: var(--font-family-logo);
+        font-weight: 400;
+    }
+}
+
+h1 {
+    font-size: var(--font-size-h1);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+}
+
+h4 {
+    font-size: var(--font-size-h4);
+}
+
+h5 {
+    font-size: var(--font-size-h5);
+}
+
+p.date, .meta {
+    color: var(--color-meta);
+    font-size: var(--font-size-meta);
+}
+
+pre,
+code {
+    font-family: var(--font-family-code);
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+pre {
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+footer {
+    text-align: center;
+    margin: 4rem 0 2rem 0;
+    color: var(--color-meta);
+    font-size: var(--font-size-meta);
+}
+
+.docutils.literal {
+    background-color: var(--color-code-bg);
+    color: var(--color-code-text);
+    padding: 0.05em 0.4em;
+    border-radius: var(--radius-sm);
+}
+header {
+    h1, h2, h3 {
+        .docutils.literal {
+            background-color: inherit;
+            padding: initial;
+        }
+    }
+}
+
+.sidebar {
+    color: var(--color-sidebar-text);
+    background-color: var(--color-sidebar-bg);
+    padding: 0.4em 0.8em;
+    border-radius: var(--radius-lg);
+    .sidebar-title {
+        font-family: var(--font-family-header);
+        font-size: var(--font-size-h5);
+        margin-top: 0;
+    }
+    .docutils.literal {
+        background-color: var(--color-bg);
+    }
+}
+
+main article {
+    blockquote {
+        font-size: 0.75em;
+        color: var(--color-blockquote-text);
+        background-color: var(--color-blockquote-bg);
+        padding: 0.2em 0.9em;
+        margin-left: 20%;
+        p { margin: 0.5em 0; }
+
+        .attribution {
+            margin-top: 1em;
+            text-align: right;
+        }
+    }
+
+    .compound {
+        pre, p {
+            margin: 0.2em 0;
+        }
+    }
+
+    div.section[id] .section-link {
+        color: var(--color-link-hover);
+    }
+    div.section[id] .section-header .section-link::after {
+        content: " #";
+        opacity: 0;
+        margin-left: 0.25em;
+        transition: opacity 0.2s ease-in-out;
+    }
+    div.section[id] .section-header .section-link:hover::after {
+        opacity: 1;
+    }
+}
+
+
+article.preview {
+    .sidebar {
+        display: none;
+    }
+
+    section{
+        h2 {
+            font-size: var(--font-size-h4);
+            margin-top: 1.25rem;
+        }
+
+        h3 {
+            font-size: var(--font-size-h5);
+            margin-top: 1rem;
+        }
+    }
+}
+
+table.footnote {
+    td.label {
+        font-family: var(--font-family-footnote-ref);
+        padding: 0 0.5rem 0 0;
+        color: var(--color-text)
+
+    }
+    td {
+        p.first {
+            margin-top: 0
+        }
+    }
+}
+
+a.footnote-reference {
+    font-family: var(--font-family-footnote-ref);
+    font-variant-position: super;
+    padding: 0 0.1rem;
+    color: var(--color-text)
+}
+
+h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+pre {
+    page-break-inside: avoid;
+    break-inside: avoid;
+
+}
+div.pygment-highlight {
+    page-break-before: avoid;
+    break-before: avoid;
+}
+
+
+#color-scheme-selector {
+    border: 1px solid var(--color-border);
+}
+#color-scheme-selector svg {
+    padding: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-link);
+}
+#color-scheme-selector button {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+#color-scheme-selector button:hover {
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='auto'] #color-scheme-selector button[name='auto']
+{
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='light'] #color-scheme-selector button[name='light']
+{
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='dark'] #color-scheme-selector button[name='dark']
+{
+    background-color: var(--color-border);
+}
