@@ -55,8 +55,10 @@ not even a line of code, it&#8217;s a <span class="caps">TODO</span>&nbsp;commen
     <span class="pygment-n">ANALYTICS</span> <span class="pygment-o">=</span> <span class="pygment-s2">&quot;analytics&quot;</span><span class="pygment-p">,</span> <span class="pygment-s2">&quot;Analytics&quot;</span>
 </pre></div>
 <p>The value of this class is, as of now, mostly noise.  There are just a couple
-of pages that actually need <em>something</em> instead of replace this.  Namely the
-only three modules that share a common&nbsp;view.</p>
+of pages that actually need <em>something else</em> instead.  Namely the only three
+modules that share a common view class that will use just three of those
+options to select perform the right queries to the <span class="caps">DB</span>.  All other modules are
+there wasting&nbsp;bytes.</p>
 <p>How did we manage to double the size of this class before finally removing&nbsp;it?</p>
 <div class="section" id="the-heap">
 <h2>The&nbsp;Heap</h2>
