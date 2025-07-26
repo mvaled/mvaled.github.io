@@ -265,6 +265,19 @@ main article {
             margin: 0.2em 0;
         }
     }
+
+    div.section[id] .section-link {
+        color: var(--color-link-hover);
+    }
+    div.section[id] .section-header .section-link::after {
+        content: " #";
+        opacity: 0;
+        margin-left: 0.25em;
+        transition: opacity 0.2s ease-in-out;
+    }
+    div.section[id] .section-header .section-link:hover::after {
+        opacity: 1;
+    }
 }
 
 
