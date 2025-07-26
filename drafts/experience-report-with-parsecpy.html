@@ -8,12 +8,60 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link rel="stylesheet" href="/theme/style-202507261729.css">
+    <script src="/theme/js/mva.js"></script>
+    <script>
+      onColorSchemeChange();
+    </script>
   </head>
   <body>
-    <header class="logo tw:flex tw:flex-row tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+    <header class="logo tw:flex tw:flex-row tw:gap-2 tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
         <h1 class="tw:m-0">
           <a href="/">&lang;m∀&rang;</a>
         </h1>
+      <div id="color-scheme-selector" class="tw:ml-4 tw:flex tw:flex-row tw:gap-1 tw:flex-no-wrap tw:rounded-full tw:items-center">
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="auto"
+          onclick="setUserColorScheme('auto');"
+          aria-label="Auto mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M20 15.31 23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20zM12 18V6c3.31 0 6 2.69 6 6s-2.69 6-6 6"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="light"
+          onclick="setUserColorScheme('light');"
+          aria-label="Light mode">
+          <svg
+            fill="currentColor"
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24" aria-label="fontSize large">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="dark"
+          onclick="setUserColorScheme('dark');"
+          aria-label="Dark mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path>
+          </svg>
+        </button>
+      </div>
       <div class="tw:grow"></div>
         <nav>
           <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
@@ -49,7 +97,6 @@ things (yet they provide examples to parse a <span class="caps">JSON</span>).</l
       <p>Content licensed under the Creative Commons
         attribution-noncommercial-sharealike License.</p>
     </footer>
-    <script src="/theme/js/section_anchor.js"></script>
   </body>
 </html>
 

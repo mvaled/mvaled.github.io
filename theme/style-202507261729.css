@@ -13,23 +13,6 @@
     --font-family-logo: 'Libertinus Math', serif;
     --line-height: 1.6;
 
-    --color-bg: #ffffff;
-    --color-text: #333333;
-    --color-meta: #666666;
-    --color-border: #eeeeee;
-    --color-link: #666;
-    --color-link-disabled: #888;
-    --color-link-hover: #000;
-    --color-code-bg: #f0f0f0;
-    --color-code-text: #000000;
-
-    --color-sidebar-bg: #f0f0f0;
-    --color-sidebar-text: #000000;
-
-    --color-blockquote-bg: #f0f0f0;
-    --color-blockquote-text: #000000;
-
-
     font-size: 18px; /* The basis of all rem */
     font-weight: 300;
 
@@ -51,25 +34,40 @@
     --radius-4xl: 2rem;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-bg: #121212;
+@layer user-color-scheme {
+    /* Respect html data-color-scheme attribute */
+    html[data-color-scheme="light"] {
+        --color-bg: #f9f9f9;
+        --color-text: #2e2e2e;
+        --color-meta: #555555;
+        --color-border: #dddddd;
+        --color-link: #666;
+        --color-link-disabled: #888;
+        --color-link-hover: #000;
+        --color-code-bg: #e8e8e8;
+        --color-code-text: #000000;
+
+        --color-sidebar-bg: #e8e8e8;
+        --color-sidebar-text: #000000;
+
+        --color-blockquote-bg: #e8e8e8;
+        --color-blockquote-text: #000000;
+    }
+
+    html[data-color-scheme="dark"] {
+        --color-bg: #1e1e1e;
         --color-text: #e0e0e0;
         --color-meta: #aaaaaa;
         --color-border: #333333;
-
         --color-link: #aaa;
         --color-link-disabled: #666;
         --color-link-hover: #fff;
         --color-code-bg: #2f2f2f;
         --color-code-text: #ffffff;
-
         --color-sidebar-bg: #2f2f2f;
         --color-sidebar-text: #ffffff;
-
         --color-blockquote-bg: #2f2f2f;
         --color-blockquote-text: #ffffff;
-
     }
 }
 
@@ -333,4 +331,42 @@ pre {
 div.pygment-highlight {
     page-break-before: avoid;
     break-before: avoid;
+}
+
+
+#color-scheme-selector {
+    border: 1px solid var(--color-border);
+}
+#color-scheme-selector svg {
+    padding: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-link);
+}
+#color-scheme-selector button {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+#color-scheme-selector button:hover {
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='auto'] #color-scheme-selector button[name='auto']
+{
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='light'] #color-scheme-selector button[name='light']
+{
+    background-color: var(--color-border);
+}
+
+html[data-user-color-scheme='dark'] #color-scheme-selector button[name='dark']
+{
+    background-color: var(--color-border);
 }
