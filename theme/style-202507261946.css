@@ -198,7 +198,7 @@ code {
     background-color: var(--color-code-bg);
     color: var(--color-code-text);
     padding: 0.2rem 0.4rem;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
 }
 
 pre {
@@ -245,6 +245,7 @@ header {
 
 main article {
     blockquote {
+        border-radius: var(--radius-lg);
         font-size: 0.75em;
         color: var(--color-blockquote-text);
         background-color: var(--color-blockquote-bg);
