@@ -191,8 +191,7 @@ we&#8217;re not going to work with any possible monad, just lists (iterators,&nb
 <span class="pygment-k">def</span> <span class="pygment-nf">_compose</span><span class="pygment-p">(</span><span class="pygment-n">g</span><span class="pygment-p">,</span> <span class="pygment-n">f</span><span class="pygment-p">):</span>
    <span class="pygment-k">return</span> <span class="pygment-k">lambda</span> <span class="pygment-n">x</span><span class="pygment-p">:</span> <span class="pygment-p">(</span><span class="pygment-n">z</span> <span class="pygment-k">for</span> <span class="pygment-n">y</span> <span class="pygment-ow">in</span> <span class="pygment-n">f</span><span class="pygment-p">(</span><span class="pygment-n">x</span><span class="pygment-p">)</span> <span class="pygment-k">for</span> <span class="pygment-n">z</span> <span class="pygment-ow">in</span> <span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">y</span><span class="pygment-p">))</span>
 </pre></div>
-<p>We have included <tt class="docutils literal">~xoutil.fp.iterators.iter_compose</tt> in <a class="reference external" href="https://github.com/merchise/xoutil">xoutil</a> 1.9.6
-and&nbsp;2.0.6.</p>
+<p>We have included <tt class="docutils literal">iter_compose</tt> in <a class="reference external" href="https://github.com/merchise/xoutil">xoutil</a> 1.9.6 and&nbsp;2.0.6.</p>
 </div>
 
 </article>
