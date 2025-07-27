@@ -46,7 +46,6 @@ function makeInlinedCodeNonbreak() {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
         var node;
         while (node = walker.nextNode()) {
-            console.debug(node);
             node.nodeValue = node.nodeValue.replace(/ /g, '\u00A0');
         }
     });
