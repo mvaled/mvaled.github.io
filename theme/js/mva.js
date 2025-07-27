@@ -56,6 +56,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const handleChange = _ => onColorSchemeChange();
     colorSchemeQuery.addEventListener('change', handleChange);
 
+    document.documentElement.addEventListener("htmx:afterSwap", () => {
+        replaceSectionHeader();
+        makeInlinedCodeNonbreak();
+    })
+
     replaceSectionHeader();
     makeInlinedCodeNonbreak();
 });
