@@ -218,7 +218,9 @@ footer {
     color: var(--color-code-text);
     padding: 0.05em 0.4em;
     border-radius: var(--radius-sm);
+    break-inside: avoid;
 }
+
 header {
     h1, h2, h3 {
         .docutils.literal {

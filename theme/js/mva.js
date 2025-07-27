@@ -41,10 +41,22 @@ function replaceSectionHeader() {
     });
 }
 
+function makeInlinedCodeNonbreak() {
+    document.querySelectorAll('p tt.docutils.literal').forEach(function (el) {
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        var node;
+        while (node = walker.nextNode()) {
+            console.debug(node);
+            node.nodeValue = node.nodeValue.replace(/ /g, '\u00A0');
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = _ => onColorSchemeChange();
     colorSchemeQuery.addEventListener('change', handleChange);
 
     replaceSectionHeader();
+    makeInlinedCodeNonbreak();
 });
