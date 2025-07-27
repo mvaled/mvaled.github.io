@@ -373,3 +373,7 @@ html[data-user-color-scheme='dark'] #color-scheme-selector button[name='dark']
 {
     background-color: var(--color-border);
 }
+
+article {
+    p {text-align: justify;}
+}
