@@ -3,7 +3,7 @@ const validUserSelectedSchemes = new Set(["auto", "light", "dark"]);
 function onColorSchemeChange() {
     let userSelectedScheme = localStorage.getItem('userColorScheme');
     if (!validUserSelectedSchemes.has(userSelectedScheme)) {
-        userSelectedScheme="auto"
+        userSelectedScheme = "auto"
     }
     if (userSelectedScheme != "auto") {
         document.documentElement.setAttribute('data-color-scheme', userSelectedScheme)
@@ -31,12 +31,14 @@ function replaceSectionHeader() {
         if (header) {
             header.classList.add('section-header');
             var id = section.id;
-            var link = document.createElement('a');
-            link.classList.add('section-link');
-            link.href = `#${id}`;
-            link.textContent = header.textContent;
-            header.textContent = '';
-            header.appendChild(link);
+            if (id != "footnotes") {
+                var link = document.createElement('a');
+                link.classList.add('section-link');
+                link.href = `#${id}`;
+                link.textContent = header.textContent;
+                header.textContent = '';
+                header.appendChild(link);
+            }
         }
     });
 }
