@@ -286,8 +286,8 @@ main article {
     }
 
     .compound {
-        pre, p {
-            margin: 0.2em 0;
+        .compound-middle, .compound-first, .compound-last {
+            margin: 0.25em 0;
         }
     }
 
