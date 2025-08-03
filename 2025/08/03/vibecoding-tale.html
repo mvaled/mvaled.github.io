@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; A tale about vibe-coding
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style-202507261946.css">
+    <script src="/theme/js/mva.js"></script>
+    <script>
+      onColorSchemeChange();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+  </head>
+  <body hx-boost="true">
+    <header class="logo tw:flex tw:flex-row tw:gap-2 tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+        <h1 class="tw:m-0">
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div id="color-scheme-selector" class="tw:ml-4 tw:flex tw:flex-row tw:gap-1 tw:flex-no-wrap tw:rounded-full tw:items-center">
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="auto"
+          onclick="setUserColorScheme('auto');"
+          aria-label="Auto mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M20 15.31 23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20zM12 18V6c3.31 0 6 2.69 6 6s-2.69 6-6 6"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="light"
+          onclick="setUserColorScheme('light');"
+          aria-label="Light mode">
+          <svg
+            fill="currentColor"
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24" aria-label="fontSize large">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="dark"
+          onclick="setUserColorScheme('dark');"
+          aria-label="Dark mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main class="tw:p-4 tw:md:p-8">
+<article>
+    <header>
+        <h2>A tale about&nbsp;vibe-coding</h2>
+        <p class="meta">2025-08-03 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>This is my son&#8217;s story with <span class="caps">AI</span> assisted programming.  He didn&#8217;t know what to
+do this summer, so my wife and I gave him a task to create a <a class="reference external" href="https://core.telegram.org/bots">telegram bot</a>
+to organize our family&nbsp;trips.</p>
+<p>This was a fun project.  Neither I or him had any expericience with telegram&#8217;s
+<a class="reference external" href="https://core.telegram.org/api"><span class="caps">API</span></a>, which is huge, by the way.  So, at the initial stage of the project I
+could not be any more helpful than any <span class="caps">AI</span>&nbsp;tool.</p>
+<p>I just guided him to make the first two or three prompts, and then left him to
+keep working on&nbsp;that.</p>
+<div class="section" id="the-poc">
+<h2>The&nbsp;PoC</h2>
+<p>We started with free ChatGPT 4o account and had the first version of it
+running under 2&nbsp;hours.</p>
+<p>The prompts were basic <em>requests</em>:</p>
+<ul class="simple">
+<li>Create a command that allows to register a trip with a name, destination,
+and&nbsp;date</li>
+<li>Let&#8217;s make that command interactive, so that the bot asks for the name, then
+the destination, then the dates,&nbsp;etc.</li>
+<li>Create a command to list the stored&nbsp;trips.</li>
+<li>Create a Menu with the list of&nbsp;commands.</li>
+</ul>
+<p>etc.</p>
+<p>My son doesn&#8217;t have yet the knowledge to drive the <span class="caps">AI</span> into the more technical
+concerns.  For instance, the <span class="caps">AI</span> decided to store the list of trips in a <span class="caps">JSON</span>
+file, and load it and save it for every command.  My son could not judge this
+as foundational bad design with future&nbsp;implications.</p>
+<p>I did notice that but I didn&#8217;t care either. This is toy bot after all, and <em>my
+aim</em> is not get a shipable product, but to teach him.  I have put a lot on his
+plate already &#8212; from setting up the <span class="caps">IDE</span>, github.com account, doing commits,
+managing a python project with <a class="reference external" href="https://docs.astral.sh/uv/"><tt class="docutils literal">uv</tt></a>,&nbsp;etc.</p>
+</div>
+<div class="section" id="the-mvp">
+<h2>The <span class="caps">MVP</span></h2>
+<p>For next few days I could not keep up.  My wife took over and acted as a
+<em>product manager</em>.  She would ask my son for features, perform tests of the
+bot, and debating about what to do&nbsp;next.</p>
+<p>She was also be the moral-keeper when things would not go as smoothly as in
+the&nbsp;beginning.</p>
+<p>They managed to get the bot up and running at home, create travels, attach
+files (plane tickets, hotel reservations, etc.) to each of the&nbsp;travels.</p>
+<div class="figure">
+<img alt="The menu of the Telegram Bot, showing the list of commands" src="/images/2025/telegram-bot-poc.png" style="width: 90%;" />
+<p class="caption">The first screenshot of the <span class="caps">MVP</span></p>
+</div>
+</div>
+<div class="section" id="the-first-obstacle">
+<h2>The first&nbsp;obstacle</h2>
+<p>The command <tt class="docutils literal">/startnotifications</tt>, as cooked by the <span class="caps">GPT</span> has never worked.
+We wanted the Bot to send automated reminders about planned trips the day
+before they start, and send us back all the important files (tickets,
+bookings, etc.) so that we had them at&nbsp;hand.</p>
+<p>My son could not make it work.  He provided the <span class="caps">GPT</span> with the full traceback of
+errors, and the <span class="caps">GPT</span> would double down and give him back bug code.  It insists
+on get a <tt class="docutils literal">context.application.job_queue</tt> which is clearly <tt class="docutils literal">None</tt>:</p>
+<pre class="literal-block">
+Traceback (most recent call last):
+  File &quot;.venv/lib/python3.13/site-packages/telegram/ext/_application.py&quot;, line 1311, in process_update
+    await coroutine
+  File &quot;.venv/lib/python3.13/site-packages/telegram/ext/_handlers/basehandler.py&quot;, line 158, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;main.py&quot;, line 64, in wrapped
+    return await func(update, context, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;.venv/lib/python3.13/site-packages/logfire/_internal/instrument.py&quot;, line 93, in wrapper
+    result = await func(*func_args, **func_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;main.py&quot;, line 182, in start_notifications
+    current_jobs = job_queue.get_jobs_by_name(str(chat_id))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get_jobs_by_name'
+</pre>
+<p>Since at the time I didn&#8217;t have the time at the moment, we all decided we
+could fix that later, and the moved on to other&nbsp;features.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The solution is just to install a new dependency
+<tt class="docutils literal"><span class="pre">python-telegram-bot[job-queue]</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="the-second-obstacle">
+<h2>The second&nbsp;obstacle</h2>
+<p>The next obstacle was the hardest.  The bot would not fail with an error, but
+it would not work as&nbsp;expected.</p>
+<p>At this point the single file <tt class="docutils literal">main.py</tt> had become a huge melange of
+vibe-coded <tt class="docutils literal">ConversationHandler</tt>s, <tt class="docutils literal">MessageHandler</tt>s, several
+intermingled state machines, and the familiar (and mostly useless) comments
+that all GPTs&nbsp;generate.</p>
+<p>This was the breaking point.  Where my son met its own limitations and we
+could no longer keep feeding the <span class="caps">GPT</span> with that 1000 lines of code and expect
+it to figure out the right approach for this stuck state&nbsp;machine.</p>
+<p>There is the argument that the free <span class="caps">GPT</span> is not powerful enough and a more
+powerful one would be able to debug this.  There is also the cost/benefit
+perspective.  This is a non-profit project and my son cannot throw his
+allowance into an expensive tool he cannot use&nbsp;profitably.</p>
+</div>
+<div class="section" id="the-way-out">
+<h2>The way&nbsp;out</h2>
+<p>I&#8217;m now taking a more active role in the project&nbsp;again.</p>
+<div class="compound">
+<p class="compound-first">I started to read the code and noticed that there were states with the same&nbsp;identifier:</p>
+<div class="compound-middle"><div class="pygment-highlight"><pre><span></span><span class="pygment-n">ASK_NAME</span><span class="pygment-p">,</span> <span class="pygment-n">ASK_DESTINATION</span><span class="pygment-p">,</span> <span class="pygment-n">ASK_START_DATE</span><span class="pygment-p">,</span> <span class="pygment-n">ASK_END_DATE</span><span class="pygment-p">,</span> <span class="pygment-n">ASK_DOCUMENTS</span> <span class="pygment-o">=</span> <span class="pygment-nb">range</span><span class="pygment-p">(</span><span class="pygment-mi">5</span><span class="pygment-p">)</span>
+<span class="pygment-n">ASK_TRIP_ID_TO_EDIT</span><span class="pygment-p">,</span> <span class="pygment-n">ASK_FIELD_TO_EDIT</span><span class="pygment-p">,</span> <span class="pygment-n">ASK_NEW_VALUE</span> <span class="pygment-o">=</span> <span class="pygment-nb">range</span><span class="pygment-p">(</span><span class="pygment-mi">100</span><span class="pygment-p">,</span> <span class="pygment-mi">103</span><span class="pygment-p">)</span>
+<span class="pygment-n">ASK_CONTINUE_EDIT</span> <span class="pygment-o">=</span> <span class="pygment-mi">103</span>
+<span class="pygment-n">ASK_AFTER_EDIT_OPTION</span> <span class="pygment-o">=</span> <span class="pygment-mi">104</span>
+<span class="pygment-n">INFO_NAME</span><span class="pygment-p">,</span> <span class="pygment-n">INFO_LASTNAME</span><span class="pygment-p">,</span> <span class="pygment-n">INFO_BIRTHDATE</span><span class="pygment-p">,</span> <span class="pygment-n">INFO_CERTIFICATES</span> <span class="pygment-o">=</span> <span class="pygment-nb">range</span><span class="pygment-p">(</span><span class="pygment-mi">4</span><span class="pygment-p">)</span>
+</pre></div>
+</div><p class="compound-last">all the last symbols can be confused with the ones in the first&nbsp;line.</p>
+</div>
+<p>Being me, however, I also started to refactor this and the first thing to do
+was to use an <tt class="docutils literal">enum.StrEnum</tt>.</p>
+<p>This didn&#8217;t actually solved the bug and therefore I&#8217;m taking a look at the
+Telegram&#8217;s <span class="caps">API</span> and&nbsp;concepts.</p>
+</div>
+<div class="section" id="the-learning">
+<h2>The&nbsp;learning</h2>
+<p>The important take-away for him is that he needs to use the <span class="caps">AI</span> as tool, but he
+also must gain more understanding about what the <span class="caps">AI</span> is doing.  Taking myself a
+role model, I could spot some issues (like the repeated state identifiers) in
+a single glance, and he could not see that&nbsp;mistake.</p>
+<p>There is still (and I think there will always be) value in learning the basic
+skills needed for&nbsp;programming.</p>
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
