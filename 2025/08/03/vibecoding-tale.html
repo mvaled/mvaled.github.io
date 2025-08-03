@@ -164,10 +164,9 @@ never&nbsp;know.</p>
 <h2>The second&nbsp;obstacle</h2>
 <p>The next obstacle was the hardest.  The bot would not fail with an error, but
 it would not work as&nbsp;expected.</p>
-<p>At this point the single file <tt class="docutils literal">main.py</tt> had become a huge melange of
-vibe-coded <tt class="docutils literal">ConversationHandler</tt>s, <tt class="docutils literal">MessageHandler</tt>s, several
-intermingled state machines, and the familiar (and mostly useless) comments
-that all GPTs&nbsp;generate.</p>
+<p>At this point the single file <a class="reference internal" href="#main-py"><tt class="docutils literal">main.py</tt></a> had become a huge melange of
+vibe-coded <a class="reference external" href="https://docs.python-telegram-bot.org/en/stable/telegram.ext.conversationhandler.html"><tt class="docutils literal">ConversationHandler</tt></a>, <a class="reference external" href="https://docs.python-telegram-bot.org/en/stable/telegram.ext.messagehandler.html"><tt class="docutils literal">MessageHandler</tt></a>, several intermingled
+state machines, and the familiar (and mostly useless) comments that all GPTs&nbsp;generate.</p>
 <p>This was the breaking point.  Where my son met its own limitations and we
 could no longer keep feeding the <span class="caps">GPT</span> with that 1000 lines of code and expect
 it to figure out the right approach for this stuck state&nbsp;machine.</p>
@@ -175,7 +174,7 @@ it to figure out the right approach for this stuck state&nbsp;machine.</p>
 powerful one would be able to debug this.  There is also the cost/benefit
 perspective.  This is a non-profit project and my son cannot throw his
 allowance into an expensive tool he cannot use&nbsp;profitably.</p>
-</div>
+<span class="target" id="main-py"></span></div>
 <div class="section" id="the-way-out">
 <h2>The way&nbsp;out</h2>
 <p>I&#8217;m now taking a more active role in the project&nbsp;again.</p>
@@ -190,7 +189,7 @@ allowance into an expensive tool he cannot use&nbsp;profitably.</p>
 </div><p class="compound-last">all the symbols in the last line can be confused with the ones in the&nbsp;first.</p>
 </div>
 <p>Being me, however, I also started to refactor this and the first thing to do
-was to use an <tt class="docutils literal">enum.StrEnum</tt>.</p>
+was to use an <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.StrEnum"><tt class="docutils literal">enum.StrEnum</tt></a>.</p>
 <p>This didn&#8217;t actually solved the bug and therefore I&#8217;m taking a look at the
 Telegram&#8217;s <span class="caps">API</span> and&nbsp;concepts.</p>
 </div>
