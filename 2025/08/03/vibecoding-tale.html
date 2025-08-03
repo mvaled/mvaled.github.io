@@ -124,13 +124,14 @@ files (plane tickets, hotel reservations, etc.) to each of the&nbsp;travels.</p>
 </div>
 <div class="section" id="the-first-obstacle">
 <h2>The first&nbsp;obstacle</h2>
-<p>The command <tt class="docutils literal">/startnotifications</tt>, as cooked by the <span class="caps">GPT</span> has never worked.
-We wanted the Bot to send automated reminders about planned trips the day
-before they start, and send us back all the important files (tickets,
-bookings, etc.) so that we had them at&nbsp;hand.</p>
+<p>The command <tt class="docutils literal">/startnotifications</tt>, as cooked by the <span class="caps">GPT</span> never worked.  We
+wanted the Bot to send automated reminders about planned trips the day before
+they start, and send us back all the important files (tickets, bookings, etc.)
+so that we had them at&nbsp;hand.</p>
 <p>My son could not make it work.  He provided the <span class="caps">GPT</span> with the full traceback of
-errors, and the <span class="caps">GPT</span> would double down and give him back bug code.  It insists
-on get a <tt class="docutils literal">context.application.job_queue</tt> which is clearly <tt class="docutils literal">None</tt>:</p>
+errors, and the <span class="caps">GPT</span> would double down and give him back code that didn&#8217;t work.
+It insisted on get a <tt class="docutils literal">context.application.job_queue</tt> which is clearly
+<tt class="docutils literal">None</tt>:</p>
 <pre class="literal-block">
 Traceback (most recent call last):
   File &quot;.venv/lib/python3.13/site-packages/telegram/ext/_application.py&quot;, line 1311, in process_update
@@ -153,8 +154,10 @@ AttributeError: 'NoneType' object has no attribute 'get_jobs_by_name'
 could fix that later, and the moved on to other&nbsp;features.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The solution is just to install a new dependency
+<p>The solution is just to install a new dependency
 <tt class="docutils literal"><span class="pre">python-telegram-bot[job-queue]</span></tt>.</p>
+<p class="last">Did the <span class="caps">GPT</span> told my son to install this and he didn&#8217;t read it?  I&#8217;ll
+never&nbsp;know.</p>
 </div>
 </div>
 <div class="section" id="the-second-obstacle">
