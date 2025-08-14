@@ -32,12 +32,28 @@ function replaceSectionHeader() {
             header.classList.add('section-header');
             var id = section.id;
             if (id != "footnotes") {
-                var link = document.createElement('a');
-                link.classList.add('section-link');
-                link.href = `#${id}`;
-                link.textContent = header.textContent;
-                header.textContent = '';
-                header.appendChild(link);
+                // Check if we already processed this header
+                if (!header.querySelector('.section-anchor')) {
+                    // Create an invisible anchor element that provides the clickable area
+                    var anchor = document.createElement('a');
+                    anchor.classList.add('section-anchor');
+                    anchor.href = `#${id}`;
+                    anchor.setAttribute('aria-label', 'Link to this section');
+
+                    // Make the entire header clickable by wrapping it
+                    var wrapper = document.createElement('a');
+                    wrapper.classList.add('section-link');
+                    wrapper.href = `#${id}`;
+                    wrapper.setAttribute('aria-label', 'Link to this section');
+
+                    // Move all header content into the wrapper
+                    while (header.firstChild) {
+                        wrapper.appendChild(header.firstChild);
+                    }
+
+                    // Add the wrapper back to the header
+                    header.appendChild(wrapper);
+                }
             }
         }
     });

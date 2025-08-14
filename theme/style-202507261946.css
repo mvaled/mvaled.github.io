@@ -229,6 +229,10 @@ footer {
     break-inside: avoid;
 }
 
+.docutils.literal + .docutils.literal {
+    margin-left: 0.5rem;
+}
+
 header {
     h1, h2, h3 {
         .docutils.literal {
@@ -264,6 +268,9 @@ main article {
         margin-left: 20%;
     }
 
+    .figure img {
+        border-radius: 0.5rem;
+    }
     .figure, .figure p {
         text-align: center;
         font-size: 0.9rem;
@@ -294,6 +301,12 @@ main article {
     div.section[id] .section-link {
         color: var(--color-link-hover);
     }
+
+    /* Remove default underline from nested links to avoid visual conflicts */
+    div.section[id] .section-link a {
+        text-decoration: none;
+    }
+
     div.section[id] .section-header .section-link::after {
         content: " #";
         opacity: 0;
@@ -342,7 +355,14 @@ a.footnote-reference {
     font-family: var(--font-family-footnote-ref);
     font-variant-position: super;
     padding: 0 0.1rem;
-    color: var(--color-text)
+    color: var(--color-text);
+    position: relative;
+    transition: top 0.4s ease-in-out;
+    top: 0;
+    text-decoration: none;
+}
+a.footnote-reference:hover {
+    top: 0.2rem;
 }
 
 h1, h2, h3, h4, h5, h6 {

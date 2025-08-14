@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; Trying Hyprland, by means of Omarchy
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style-202507261946.css">
+    <script src="/theme/js/mva.js"></script>
+    <script>
+      onColorSchemeChange();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+  </head>
+  <body hx-boost="true">
+    <header class="logo tw:flex tw:flex-row tw:gap-2 tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+        <h1 class="tw:m-0">
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div id="color-scheme-selector" class="tw:ml-4 tw:flex tw:flex-row tw:gap-1 tw:flex-no-wrap tw:rounded-full tw:items-center">
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="auto"
+          onclick="setUserColorScheme('auto');"
+          aria-label="Auto mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M20 15.31 23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20zM12 18V6c3.31 0 6 2.69 6 6s-2.69 6-6 6"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="light"
+          onclick="setUserColorScheme('light');"
+          aria-label="Light mode">
+          <svg
+            fill="currentColor"
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24" aria-label="fontSize large">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="dark"
+          onclick="setUserColorScheme('dark');"
+          aria-label="Dark mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main class="tw:p-4 tw:md:p-8">
+<article>
+    <header>
+        <h2>Trying Hyprland, by means of&nbsp;Omarchy</h2>
+        <p class="meta">2025-08-15 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>I don&#8217;t remember exactly the first time I heard about <a class="reference external" href="https://hypr.land/">Hyprland</a> <a class="footnote-reference" href="#hyperland" id="footnote-reference-1">[1]</a>.
+Maybe it was <a class="reference external" href="https://github.com/leiserfg">Leiser</a> who showed it to me first, but I don&#8217;t keep a
+recollection about it.  Regardless of how it was, I know that about two weeks
+ago I started to read about it more and more.  I wanted it to try&nbsp;it.</p>
+<p>In parallel, I read some <a class="reference external" href="https://x.com/dhh/status/1954271139766698168">posts</a> by <a class="reference external" href="https://x.com/dhh"><span class="caps">DHH</span></a> about something called <a class="reference external" href="https://omarchy.org/">Omarchy</a> and I
+didn&#8217;t pay too much attention to them, until Leiser told me he was using
+Hyprland.  So I got curious, and went to find that Omarchy was Hyprland on top
+of Arch, curated and ready to enjoy.  So I decided to try it&nbsp;immediately.</p>
+<div class="section" id="the-good-the-bad-and-the-ugly">
+<h2>The good, the bad and the&nbsp;ugly</h2>
+<div class="section" id="the-good">
+<h3>The&nbsp;good</h3>
+<p>As promised, it provides a comfortable enough environment for the modern
+desktop of a&nbsp;programmer.</p>
+<p>Not all <span class="caps">DHH</span>&#8217;s choices are mine.  I use Emacs instead of Neovim.  I prefer
+Telegram over WhatsApp or Signal.  I use Firefox and not Chromium (nor Chrome
+except when I&#8217;m forced to use it).  I don&#8217;t have <span class="caps">HEY</span>! nor Basecamp&nbsp;accounts.</p>
+<p>But overall, I could tweak my preferences for those programs in a matter of
+minutes just by editing <tt class="docutils literal"><span class="pre">~/.config/hypr/bindings.conf</span></tt>, after having my
+choices&nbsp;installed.</p>
+<p>Omarchy is indeed a very good starting point for those who, like me, want to
+try Hyprland but cannot devote too much time to the project.  Thanks, <span class="caps">DHH</span>!</p>
+<p>His choices for other tools are really good alternatives.  I was considering
+switching to Kitty, but Alacritty seems pretty&nbsp;decent.</p>
+<p>I&#8217;m exploring the other programs <span class="caps">DHH</span> selected.  Many of them will likely be
+subsumed by my trusted Emacs.  In Emacs I write (code or prose), navigate the
+files, encrypt/decrypt with <tt class="docutils literal">gpg</tt>, and lot more.  Nevertheless, I will still
+explore the other tools like Obsidian, Pinta,&nbsp;etc.</p>
+<p>In terms of aesthetics I decided for the theme Ristretto.  All the dark themes
+are very good, but I like this one&nbsp;better.</p>
+<p>Overall, I&#8217;m learning a lot and enjoying the&nbsp;process.</p>
+</div>
+<div class="section" id="the-bad-and-the-ugly">
+<h3>the bad, and the&nbsp;ugly</h3>
+<p>I&#8217;m still in this initial phase of adjustment to the new world.  I&#8217;m not
+really claiming the following are bad or ugly <a class="footnote-reference" href="#bad" id="footnote-reference-2">[3]</a>.</p>
+<p>I have <a class="reference external" href="https://github.com/mvaled/omarchy">forked</a> Omarchy&#8217;s repository because there are somethings in the
+<tt class="docutils literal">bin/omarchy_menu</tt> which are not&nbsp;configurable:</p>
+<div class="pygment-highlight"><pre><span></span>edit_in_nvim<span class="pygment-o">()</span><span class="pygment-w"> </span><span class="pygment-o">{</span>
+<span class="pygment-w">  </span>notify-send<span class="pygment-w"> </span><span class="pygment-s2">&quot;Editing config file&quot;</span><span class="pygment-w"> </span><span class="pygment-s2">&quot;</span><span class="pygment-nv">$1</span><span class="pygment-s2">&quot;</span>
+<span class="pygment-w">  </span>alacritty<span class="pygment-w"> </span>-e<span class="pygment-w"> </span>nvim<span class="pygment-w"> </span><span class="pygment-s2">&quot;</span><span class="pygment-nv">$1</span><span class="pygment-s2">&quot;</span>
+<span class="pygment-o">}</span>
+
+open_web<span class="pygment-o">()</span><span class="pygment-w"> </span><span class="pygment-o">{</span>
+<span class="pygment-w">   </span>setsid<span class="pygment-w"> </span>chromium<span class="pygment-w"> </span>--new-window<span class="pygment-w"> </span>--app<span class="pygment-o">=</span><span class="pygment-s2">&quot;</span><span class="pygment-nv">$1</span><span class="pygment-s2">&quot;</span><span class="pygment-w"> </span><span class="pygment-p">&amp;</span>
+<span class="pygment-o">}</span>
+</pre></div>
+<p>These I have switched&nbsp;for</p>
+<div class="pygment-highlight"><pre><span></span>edit_in_emacs<span class="pygment-o">()</span><span class="pygment-w"> </span><span class="pygment-o">{</span>
+<span class="pygment-w">  </span>notify-send<span class="pygment-w"> </span><span class="pygment-s2">&quot;Editing config file&quot;</span><span class="pygment-w"> </span><span class="pygment-s2">&quot;</span><span class="pygment-nv">$1</span><span class="pygment-s2">&quot;</span>
+<span class="pygment-w">  </span>alacritty<span class="pygment-w"> </span>-e<span class="pygment-w"> </span>emacs<span class="pygment-w"> </span>-nw<span class="pygment-w"> </span><span class="pygment-s2">&quot;</span><span class="pygment-nv">$1</span><span class="pygment-s2">&quot;</span>
+<span class="pygment-o">}</span>
+
+open_web<span class="pygment-o">()</span><span class="pygment-w"> </span><span class="pygment-o">{</span>
+<span class="pygment-w">  </span>setsid<span class="pygment-w"> </span>firefox<span class="pygment-w"> </span>--new-tab<span class="pygment-w"> </span><span class="pygment-s2">&quot;</span><span class="pygment-nv">$1</span><span class="pygment-s2">&quot;</span><span class="pygment-w"> </span><span class="pygment-p">&amp;</span>
+<span class="pygment-o">}</span>
+</pre></div>
+<div class="section" id="capslock-as-compose">
+<h4>CapsLock as&nbsp;compose</h4>
+<p>I like using CapsLock to <tt class="docutils literal">WRITE_ALL_CAPS_CONSTS</tt> in some languages.  I have
+heard all the rationalization about a mechanical traits from the typewriters
+era being transfered into the digital world along with many other arguments.
+I simply find it comfortable to type <tt class="docutils literal">const ASK_ABRACADABRA = 1</tt> with the
+CapsLock&nbsp;on.</p>
+<p>It&#8217;s muscular memory for me, I don&#8217;t think but instinctively reach for
+CapsLock when I need to type all caps for more that a couple of&nbsp;letters.</p>
+<p>That being said, I&#8217;m asking myself questions: Do I use CapsLock outside Emacs?
+I could use an Emacs <a class="reference external" href="https://github.com/emacs-straight/caps-lock/blob/master/caps-lock.el"><tt class="docutils literal"><span class="pre">caps-lock</span></tt></a> minor mode for this in Emacs.  However, I
+wonder if I will then get used to whatever keybind I could set to
+activate/deactive caps in Emacs and try to transfer that to any other typing
+scenario.  I do press <tt class="docutils literal">Ctrl + n</tt> in other programs, only to find out I&#8217;m
+opening lots of&nbsp;windows.</p>
+</div>
+<div class="section" id="keyboard-layouts">
+<h4>Keyboard&nbsp;layouts</h4>
+<p>I switch my keyboard layout to Spanish when I chat in languages other than
+English.  In my previous setup the Spanish keyboard had the the key <tt class="docutils literal">'</tt>
+automatically composes with vowels&nbsp;(deadkeys).</p>
+<p>So instead of pressing <tt class="docutils literal">Caps</tt><tt class="docutils literal">'</tt><tt class="docutils literal">&lt;vowel&gt;</tt> (as I&#8217;m doing since I
+moved to Omarchy), I would like to just press <tt class="docutils literal">'</tt><tt class="docutils literal">&lt;vowel&gt;</tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>I&#8217;m kind of a purist and refuse to spell <tt class="docutils literal">si</tt> (if, whether) when
+it should be <tt class="docutils literal">sí</tt> (yes).</p>
+<p class="last">I&#8217;m not completely deranged and I rarely use the <tt class="docutils literal">¿</tt> (opening
+question mark) or <tt class="docutils literal">¡</tt> (opening exclamation mark) anymore.  But I
+do type them from time to time in formal&nbsp;settings.</p>
+</div>
+<p>The <tt class="docutils literal">ñ</tt> deserves its own key in a Spanish layout instead of <tt class="docutils literal">Caps</tt><tt class="docutils literal">~</tt>
+(which requires a <tt class="docutils literal">Shift</tt>) and <tt class="docutils literal">n</tt> &#8212; <em>she</em> is not dead <a class="footnote-reference" href="#evolution" id="footnote-reference-3">[4]</a>!</p>
+<p>I have temporarily set my keyboard to <tt class="docutils literal">kb_variant = intl</tt>, but is not
+satisfactory either.  It allows me to type <tt class="docutils literal">ñ</tt>, and accented vowels with
+fewer key strokes, but then English with <tt class="docutils literal">'s</tt> becomes painful to type (e.g
+<tt class="docutils literal">'</tt><tt class="docutils literal"><span class="caps">SPACE</span></tt><tt class="docutils literal">s</tt>, or I risk getting <tt class="docutils literal">ś</tt>).</p>
+<p>The solution to this seems to be <tt class="docutils literal">fcitx5</tt>, instead of using hyprland&#8217;s
+input.  I also want to use it&#8217;s keyboard layout per window, so I will try&nbsp;that.</p>
+</div>
+<div class="section" id="the-good-again">
+<h4>The good,&nbsp;again</h4>
+<p>Omarchy is amazing.  It has fulfill its promise to me.  It&#8217;s decent, elegant
+and properly organized.  I don&#8217;t share all <span class="caps">DHH</span>&#8217;s choices and that&#8217;s good.  I&#8217;m
+still indebted to&nbsp;him.</p>
+</div>
+</div>
+</div>
+<div class="section" id="niceties-and-future-projects">
+<h2>Niceties and future&nbsp;projects</h2>
+<p>I want to create my own Plymouth script to have my own&nbsp;loader.</p>
+<div class="figure">
+<img alt="" src="/images/2025/mva-logo.png" />
+<p class="caption">Potential Plymouth Logo and progress bar&nbsp;combined.</p>
+</div>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
+<table class="docutils footnote" frame="void" id="hyperland" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>I still sometimes misspell it as Hyperland.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="windows" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td><p class="first">I have many, many things to tweak to make my windows and
+workspace work comfortable for me.  I used to have 4 static workspaces in
+Gnome, and I can live the default 5 of&nbsp;Omarchy.</p>
+<p class="last">I&#8217;m considering/reading the options about special workspaces, persistent
+workspaces, etc.  I don&#8217;t really care about <em>active</em>.  All workspaces
+should be accesible and I should be able to put windows in&nbsp;them.</p>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="bad" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-2">[3]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/The_Good,_the_Bad_and_the_Ugly">The good, the bad and the ugly</a>.  That&#8217;s a movie. D&#8217;you know?</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="evolution" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-3">[4]</a></td><td><p class="first">I know languages evolve.  Even the <tt class="docutils literal">ñ</tt> was a product of
+<a class="reference external" href="https://en.wikipedia.org/wiki/%C3%91#History">necessity</a> to spare some space while write Old Spanish&nbsp;words.</p>
+<p>It&#8217;s no longer surprising to be wished a &#8220;feliz ano nuevo&#8221; instead of a
+«¡Feliz año nuevo!»; if you look for their meaning you&#8217;re up for dad&nbsp;joke.</p>
+<p>Maybe <span class="caps">AI</span> dictation will bring the <tt class="docutils literal">ñ</tt> back to life for a few more decades
+or&nbsp;centuries.</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
