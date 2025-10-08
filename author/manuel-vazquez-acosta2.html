@@ -72,6 +72,17 @@
     <main class="tw:p-4 tw:md:p-8">
     <article class="preview">
       <header>
+        <h3><a href="/2025/07/06/reviving-this-blog.html">Reviving my&nbsp;blog</a></h3>
+        <p class="date">2025-07-06</p>
+      </header>
+      <section>
+        <p class="first last">This is an account of the process I have followed to revive the
+blog&#8217;s looks, the tools I&#8217;m using for it, and the process of styling&nbsp;it.</p>
+
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2019/11/18/performance-of-python-list-comprehensions.html">Why is creating a list comprehension&nbsp;faster?</a></h3>
         <p class="date">2019-11-18</p>
       </header>
@@ -110,21 +121,6 @@ of this post is incorrect: The failing <tt class="docutils literal">fail</tt> is
 </div>
 <p>I&#8217;m following the Real World Haskell book.  In the chapter about Monads, they
 create simple example using the list monad compute all …</p>
-      </section>
-    </article>
-    <article class="preview">
-      <header>
-        <h3><a href="/2018/01/22/foldl-in-terms-of-foldr.html">Dissecting <tt class="docutils literal">foldl</tt> in terms of <tt class="docutils literal">foldr</tt></a></h3>
-        <p class="date">2018-01-22</p>
-      </header>
-      <section>
-        <p>The book &#8216;Real World Haskell&#8217; provides an implementation of <tt class="docutils literal">foldl</tt> in terms
-of <tt class="docutils literal">foldr</tt>:</p>
-<div class="pygment-highlight"><pre><span></span><span class="pygment-nf">myFoldl</span><span class="pygment-ow">::</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">b</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-n">a</span><span class="pygment-p">]</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span>
-<span class="pygment-nf">myFoldl</span><span class="pygment-w"> </span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">z</span><span class="pygment-w"> </span><span class="pygment-n">xs</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">foldr</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-w"> </span><span class="pygment-n">xs</span><span class="pygment-w"> </span><span class="pygment-n">z</span>
-<span class="pygment-w">   </span><span class="pygment-kr">where</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-p">)</span>
-</pre></div>
-<p>They ask the reader (me) to try to understand the implementation …</p>
       </section>
     </article>
 

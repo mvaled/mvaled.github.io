@@ -72,6 +72,21 @@
     <main class="tw:p-4 tw:md:p-8">
     <article class="preview">
       <header>
+        <h3><a href="/2018/01/22/foldl-in-terms-of-foldr.html">Dissecting <tt class="docutils literal">foldl</tt> in terms of <tt class="docutils literal">foldr</tt></a></h3>
+        <p class="date">2018-01-22</p>
+      </header>
+      <section>
+        <p>The book &#8216;Real World Haskell&#8217; provides an implementation of <tt class="docutils literal">foldl</tt> in terms
+of <tt class="docutils literal">foldr</tt>:</p>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-nf">myFoldl</span><span class="pygment-ow">::</span><span class="pygment-w"> </span><span class="pygment-p">(</span><span class="pygment-n">b</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span><span class="pygment-p">)</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-p">[</span><span class="pygment-n">a</span><span class="pygment-p">]</span><span class="pygment-w"> </span><span class="pygment-ow">-&gt;</span><span class="pygment-w"> </span><span class="pygment-n">b</span>
+<span class="pygment-nf">myFoldl</span><span class="pygment-w"> </span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">z</span><span class="pygment-w"> </span><span class="pygment-n">xs</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">foldr</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">id</span><span class="pygment-w"> </span><span class="pygment-n">xs</span><span class="pygment-w"> </span><span class="pygment-n">z</span>
+<span class="pygment-w">   </span><span class="pygment-kr">where</span><span class="pygment-w"> </span><span class="pygment-n">step</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-ow">=</span><span class="pygment-w"> </span><span class="pygment-n">g</span><span class="pygment-p">(</span><span class="pygment-n">f</span><span class="pygment-w"> </span><span class="pygment-n">a</span><span class="pygment-w"> </span><span class="pygment-n">x</span><span class="pygment-p">)</span>
+</pre></div>
+<p>They ask the reader (me) to try to understand the implementation …</p>
+      </section>
+    </article>
+    <article class="preview">
+      <header>
         <h3><a href="/2016/09/19/uncurated-notes-about-cycle-js.html">Non-curated notes about&nbsp;Cycle.js</a></h3>
         <p class="date">2016-09-19</p>
       </header>
@@ -105,16 +120,6 @@ included files.  But those files are …</p>
         <p class="first last">This post is about 2015&#8217;s crosstab communication in browsers, and
 how to use it Odoo to avoid it becoming unresponsive if the users
 open many&nbsp;tabs.</p>
-
-      </section>
-    </article>
-    <article class="preview">
-      <header>
-        <h3><a href="/2015/08/04/repost-the-productivity-of-tomorrow-trumps-that-of-today.html">The productivity of tomorrow trumps that of&nbsp;today</a></h3>
-        <p class="date">2015-08-04</p>
-      </header>
-      <section>
-        <p class="first last">A rant about unclear code, using plain numbers instead of meaningful&nbsp;constants.</p>
 
       </section>
     </article>

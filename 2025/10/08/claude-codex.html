@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; The Marble Age of Wax Coding
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style-202507261946.css">
+    <script src="/theme/js/mva.js"></script>
+    <script>
+      onColorSchemeChange();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+  </head>
+  <body hx-boost="true">
+    <header class="logo tw:flex tw:flex-row tw:gap-2 tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+        <h1 class="tw:m-0">
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div id="color-scheme-selector" class="tw:ml-4 tw:flex tw:flex-row tw:gap-1 tw:flex-no-wrap tw:rounded-full tw:items-center">
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="auto"
+          onclick="setUserColorScheme('auto');"
+          aria-label="Auto mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M20 15.31 23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20zM12 18V6c3.31 0 6 2.69 6 6s-2.69 6-6 6"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="light"
+          onclick="setUserColorScheme('light');"
+          aria-label="Light mode">
+          <svg
+            fill="currentColor"
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24" aria-label="fontSize large">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="dark"
+          onclick="setUserColorScheme('dark');"
+          aria-label="Dark mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main class="tw:p-4 tw:md:p-8">
+<article>
+    <header>
+        <h2>The Marble Age of Wax&nbsp;Coding</h2>
+        <p class="meta">2025-10-08 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>Yesterday, while I was in the middle of a major refactor, I found myself
+asking Claude Code to complete a small function.  It took nearly a minute
+<a class="footnote-reference" href="#meta-clauding" id="footnote-reference-1">[1]</a> to produce this&nbsp;result:</p>
+<div class="pygment-highlight"><pre><span></span><span class="pygment-k">let</span> <span class="pygment-ow">_</span><span class="pygment-n">toKaikoModules</span><span class="pygment-ow">:</span> <span class="pygment-n">t</span> <span class="pygment-ow">=&gt;</span> <span class="pygment-kt">array</span><span class="pygment-ow">&lt;</span><span class="pygment-nn">KaikoModules</span><span class="pygment-p">.</span><span class="pygment-n">t</span><span class="pygment-ow">&gt;</span> <span class="pygment-ow">=</span> <span class="pygment-n">modules</span> <span class="pygment-ow">=&gt;</span> <span class="pygment-ow">{</span>
+  <span class="pygment-ow">[</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">structural</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">hull_and_equipment</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">safety</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">safety</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">checklist</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">checklist</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">sire</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">sire2_0</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">risqEnabled</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">risq</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">shoreReportsEnabled</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">shore_reports</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">companyForms</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">company_forms</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+    <span class="pygment-n">modules</span><span class="pygment-ow">.</span><span class="pygment-n">pscEnabled</span> <span class="pygment-ow">?</span> <span class="pygment-nc">Some</span><span class="pygment-ow">(#</span><span class="pygment-n">pre_psc</span><span class="pygment-ow">)</span> <span class="pygment-ow">:</span> <span class="pygment-nc">None</span><span class="pygment-ow">,</span>
+  <span class="pygment-ow">]-&gt;</span><span class="pygment-nn">Array</span><span class="pygment-p">.</span><span class="pygment-n">filterMap</span><span class="pygment-ow">(</span><span class="pygment-n">x</span> <span class="pygment-ow">=&gt;</span> <span class="pygment-n">x</span><span class="pygment-ow">)</span>
+<span class="pygment-ow">}</span>
+</pre></div>
+<p>Did I actually save time in this task by using Claude Code?  Likely,&nbsp;yes.</p>
+<p>It&#8217;s in this kind of small function, in which the repetitive pattern of its
+implementation is more <em>tedious</em> than challenging, where <span class="caps">AI</span> has a clear edge.
+At the same time, this kind of function also exposes one big trick <span class="caps">AI</span> tools
+play with our psyche; they <em>feed</em> the (unscientific) extrapolation that we&#8217;re
+saving time, always <a class="footnote-reference" href="#meta-codexing" id="footnote-reference-2">[2]</a>.  Other tools like keyboard macros, or
+multi-cursors, which also aim at making repetition less tedious, are
+themselves still somewhat tedious and require some degree of effort.  The
+required skill to make an <span class="caps">AI</span> tool perform this kind of task, you have mastered
+since 1st grade:&nbsp;writing.</p>
+<p>When I&#8217;m using <span class="caps">AI</span> tools (mostly Claude Code) <a class="footnote-reference" href="#frustration-excluded" id="footnote-reference-3">[3]</a>, it
+<em>feels like</em> I&#8217;m saving time; but in reality, what I&#8217;m sensing is not
+time-saving.  Humans are bad at judging elapsed time, especially when our
+attention is focused on something else, and even when we would like to be keeping
+time <a class="footnote-reference" href="#attention" id="footnote-reference-4">[4]</a>.</p>
+<p>I suppose that what I sense is some kind of relief of being able to delegate
+the <em>boring</em> parts of my task to a tool that doesn&#8217;t get bored.  I know how to
+write that function, I just don&#8217;t want to perform the act of typing it.  It
+<em>feels</em> faster because I&#8217;m not engaged doing repetitive stuff, but I&#8217;m
+fluently shaping the code in many ways while not writing it.  I cannot be
+sure that I&#8217;m saving time, always.  In fact, a <em>tiny</em> study <a class="footnote-reference" href="#ai-slow" id="footnote-reference-5">[6]</a> in the
+arXiv found that while participants estimated about 20% time-saving, they were
+actually 19% slower when completing tasks with <span class="caps">AI</span>&nbsp;assistance.</p>
+<p>There are, indeed, moments where I <em>feel</em> exactly the opposite.  Some sessions
+were definitely a time-hog; and when I realized it, I had already spent hours
+on a task that I could have completed faster &#8212; and I know that only by
+comparison with similar tasks. These are the sessions where the tool resists
+my prompts about the desired approach for a solution, and it <em>&#8216;insists&#8217;</em> on a
+path that can only lead to disappointment <a class="footnote-reference" href="#codex-stubborn" id="footnote-reference-6">[5]</a>.</p>
+<div class="section" id="the-marble-age-is-over">
+<h2>The marble age is&nbsp;over</h2>
+<blockquote class="epigraph">
+<p>The marble age is over. Melt the wax, or be left&nbsp;behind.</p>
+<p class="attribution">&mdash;Erik Meijer, <a class="reference external" href="https://x.com/headinthebox/status/1950031783581667686">https://x.com/headinthebox/status/1950031783581667686</a></p>
+</blockquote>
+<p>If I trust (which I do) my own commits, I&#8217;m still learning how to use <span class="caps">AI</span>
+coding agents&nbsp;effectively:</p>
+<div class="figure">
+<img alt="Chart analyzing AI-assisted commits vs others." src="/images/2025/ai-commits-analysis.png" style="width: 90%;" />
+<p class="caption"><span class="caps">AI</span>-assisted commits vs&nbsp;others.</p>
+</div>
+<p>The number of commits alone doesn&#8217;t tell the whole story.  My manual commits
+are usually more scoped, and smaller than those where <span class="caps">AI</span> is involved. <a class="reference external" href="/2025/07/25/adding-code-is-easy.html">More
+code is not a synonym of better code</a>; not now, nor it was before.  But
+many of those commits do add justified amounts of code.  I don&#8217;t commit
+<strong>everything</strong> that the <span class="caps">AI</span> produces.  In some cases, I reject all the code
+produced but still credit the <span class="caps">AI</span> tool, because it revealed problems in my initial
+thinking or gave some insight I was missing; this is specially important for
+topics I&#8217;m not deeply familiar&nbsp;with.</p>
+<p>Nowadays I turn to <span class="caps">AI</span> coding almost&nbsp;daily.</p>
+<p>When I need a new bash script, or when I want to update an existing one, <span class="caps">AI</span>
+coding agents are now my first choice.  I&#8217;m terrible at remembering all the
+nuances of bash syntax; and also bash scripting requires knowledge of a vast
+universe of other small tools (<tt class="docutils literal">ss</tt>, <tt class="docutils literal">iwctl</tt>, &#8230;), many of which I barely
+know.  When I needed a python script to measure and plot the WiFi signal
+strength in several locations at home, I did it with <span class="caps">AI</span>.  When I needed to
+improve my <tt class="docutils literal">rsync</tt> based backup script, I improved it with <span class="caps">AI</span>; and <strong>tested it
+in a sandbox to avoid ruining my backups</strong>. And so&nbsp;on.</p>
+<p>In my day to day job, I&#8217;m more cautious.  No <span class="caps">AI</span> code is committed without
+careful review, except for scripts that don&#8217;t mess with data and executed to
+perform analysis or so; and even so, if the analysis result is used for
+decision making, I do scrutinize the&nbsp;script.</p>
+<p>In conclusion, while I agree with Meijer&#8217;s <a class="reference external" href="https://x.com/headinthebox/status/1950031783581667686">claims</a> in general, I do believe
+some <em>errors</em> are not that cheap.  <em>Committed errors</em>, whether in your code or
+in some data-based analysis, can have long-lasting and dramatic&nbsp;effects.</p>
+<p>Important things deserve <em>our</em> time <a class="footnote-reference" href="#ai-credit" id="footnote-reference-7">[7]</a>.</p>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
+<table class="docutils footnote" frame="void" id="meta-clauding" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td><p class="first">I even used Claude Code itself to search for the prompt
+inside <tt class="docutils literal"><span class="pre">~/.claude</span></tt> and find how long it&nbsp;took:</p>
+<div class="compound">
+<p class="compound-first">Previous task completion&nbsp;time:</p>
+<ul class="compound-middle simple">
+<li>User request:&nbsp;2025-10-07T14:25:30.306Z</li>
+<li>Task completed:&nbsp;2025-10-07T14:26:22.546Z</li>
+<li>Total duration: ~52&nbsp;seconds</li>
+</ul>
+<p class="compound-middle">The&nbsp;breakdown:</p>
+<ul class="compound-last simple">
+<li>Read file: ~5&nbsp;seconds</li>
+<li>Analysis/thinking: ~21&nbsp;seconds</li>
+<li>Edit implementation: ~26&nbsp;seconds</li>
+</ul>
+</div>
+<p class="last">I reckon a big chunk of the &#8216;Edit implementation&#8217; can be attributed to my
+own review and approval.  But I will still count this time as part of
+completing this minute task with <span class="caps">AI</span>.</p>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="meta-codexing" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-2">[2]</a></td><td>I did a small experiment with Codex, and feed it the exact
+same prompt.  It took 1.5 minutes to propose a bulkier version of the
+function, that used <tt class="docutils literal"><span class="pre">list{...}</span></tt> to later apply <tt class="docutils literal">List.filter</tt>,
+<tt class="docutils literal">List.map</tt> and finally <tt class="docutils literal">Array.fromList</tt>; and it didn&#8217;t even compile.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="frustration-excluded" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-3">[3]</a></td><td>&#8230; and when the task at hand doesn&#8217;t lead to
+frustration.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="attention" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-4">[4]</a></td><td>Brown, <span class="caps">S.W.</span> <em>Time perception and attention: The effects of
+prospective versus retrospective paradigms and task demands on perceived
+duration.</em> Perception <span class="amp">&amp;</span> Psychophysics 38, 115–124
+(1985). <a class="reference external" href="https://doi.org/10.3758/BF03198848">https://doi.org/10.3758/<span class="caps">BF03198848</span></a>,
+<a class="reference external" href="https://link.springer.com/article/10.3758/BF03198848">https://link.springer.com/article/10.3758/<span class="caps">BF03198848</span></a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="codex-stubborn" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-6">[5]</a></td><td><p class="first">Codex is really <em>stubborn</em>.  It insists on trying to run
+commands I explicitly rejected and instructed it to do&nbsp;otherwise.</p>
+<p class="last">Codex is also slow, and confusing.  It makes changes to a file and
+immediately runs the test of <em>another, unrelated file</em>.  It is the
+antithesis of the time-saving&nbsp;sensation.</p>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="ai-slow" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-5">[6]</a></td><td>Becker, Joel; Rush, Nate; Barnes, Elizabeth; and Rein,
+David. <em>Measuring the Impact of Early-2025 <span class="caps">AI</span> on Experienced Open-Source
+Developer Productivity</em> (2025). <a class="reference external" href="https://arxiv.org/abs/2507.09089">https://arxiv.org/abs/2507.09089</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="ai-credit" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-7">[7]</a></td><td>This post was proof-read using Claude.</td></tr>
+</tbody>
+</table>
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
