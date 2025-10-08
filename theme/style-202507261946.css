@@ -353,7 +353,6 @@ table.footnote {
 
 a.footnote-reference {
     font-family: var(--font-family-footnote-ref);
-    font-variant-position: super;
     padding: 0 0.1rem;
     color: var(--color-text);
     position: relative;

@@ -69,6 +69,14 @@ function makeInlinedCodeNonbreak() {
     });
 }
 
+function wrapFootnoteReferences() {
+    document.querySelectorAll('a.footnote-reference').forEach(function (el) {
+        if (!el.querySelector('sup')) {
+            el.innerHTML = '<sup>' + el.innerHTML + '</sup>';
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = _ => onColorSchemeChange();
@@ -77,8 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.documentElement.addEventListener("htmx:afterSwap", () => {
         replaceSectionHeader();
         makeInlinedCodeNonbreak();
+        wrapFootnoteReferences();
     })
 
     replaceSectionHeader();
     makeInlinedCodeNonbreak();
+    wrapFootnoteReferences();
 });
