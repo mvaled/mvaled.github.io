@@ -155,6 +155,7 @@ a:hover {
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
+    text-decoration-skip-ink: all;
 }
 
 article {
