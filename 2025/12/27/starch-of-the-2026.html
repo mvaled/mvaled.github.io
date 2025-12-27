@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; Starch of the new year
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style-202507261946.css">
+    <script src="/theme/js/mva.js"></script>
+    <script>
+      onColorSchemeChange();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+  </head>
+  <body hx-boost="true">
+    <header class="logo tw:flex tw:flex-row tw:gap-2 tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+        <h1 class="tw:m-0">
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div id="color-scheme-selector" class="tw:ml-4 tw:flex tw:flex-row tw:gap-1 tw:flex-no-wrap tw:rounded-full tw:items-center">
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="auto"
+          onclick="setUserColorScheme('auto');"
+          aria-label="Auto mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M20 15.31 23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20zM12 18V6c3.31 0 6 2.69 6 6s-2.69 6-6 6"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="light"
+          onclick="setUserColorScheme('light');"
+          aria-label="Light mode">
+          <svg
+            fill="currentColor"
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24" aria-label="fontSize large">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="dark"
+          onclick="setUserColorScheme('dark');"
+          aria-label="Dark mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main class="tw:p-4 tw:md:p-8">
+<article>
+    <header>
+        <h2>Starch of the new&nbsp;year</h2>
+        <p class="meta">2025-12-27 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <div class="section" id="intro">
+<h2>Intro</h2>
+<p>In the latest weeks of the year, I have made up my mind about two major projects that I want to&nbsp;undertake.</p>
+<p>After a few months of Omarchy, I have decided to create my own <a class="reference external" href="https://archlinux.org/">Arch</a> <em>starting kit</em>.  Omarchy was
+<a class="reference external" href="/2025/08/15/omarchy.html">always a means to an end</a>: to try Hyprland.  But it did more than that
+and rekindled my curiosity to explore the vast universe of Linux desktop.  At the same time, I feel
+like Omarchy is heading a way I won&#8217;t enjoy; so it&#8217;s time for me to <em>starch</em>&nbsp;anew.</p>
+<p>I have also decided to revamp my <a class="reference external" href="https://github.com/mvaled/emacs.lite.d">Emacs</a> init.  This is
+easier to explain so instead of a summary, let&#8217;s dive in&nbsp;directly.</p>
+</div>
+<div class="section" id="new-emacs-init">
+<h2>New Emacs&nbsp;init</h2>
+<p>I started using Emacs in 2008.  I found <a class="reference external" href="https://docutils.sourceforge.io/rst.html">ReST</a> to be the best text format I could use for all my
+academic writings <a class="footnote-reference" href="#caveat-emptor" id="footnote-reference-1">[1]</a>, and Emacs had (and still has) the best support for editing
+ReST.  It was really easy to add lists, headers, and most of the ReST features I regularly used.
+With <tt class="docutils literal">emacsclient</tt> I managed to insert citations directly from external&nbsp;tools.</p>
+<p>In 2010 I did the switch completely and started using Emacs as my programming environment.  I was
+primarily using Ruby and Rails.  I started with basic Ruby major mode and step by step I started to
+use more of Emacs features to make my way around the code base.  I started using <tt class="docutils literal">dired</tt>,
+<tt class="docutils literal">rgrep</tt> and lots of others.  I learnt to use <span class="caps">TAGS</span>, but never managed to integrate them with&nbsp;Ruby.</p>
+<p>In 2011 I left my academic job and (re)started to program in Python.  I started collaborating with a
+<a class="reference external" href="https://github.com/med-merchise">previous teacher</a> of mine, who was also using Emacs.  Together
+(mostly him rather than me) we built an Emacs setup (<tt class="docutils literal">xorns</tt>) which is the one I have been using
+since.  This setup has accumulated a lot of stuff over the years; it is already 8000+ lines of&nbsp;elisp.</p>
+<p>Recently, I started to wonder how much of it do I still need.  Emacs has changed a lot in the past
+releases, and <tt class="docutils literal">xorns</tt> has taken advantage of most of&nbsp;them.</p>
+<p>That is why I created my <a class="reference external" href="https://github.com/mvaled/emacs.lite.d"><tt class="docutils literal">.emacs.lite.d</tt></a> and started working on it.  So far, I have already reached
+344 lines of elisp.  I guess it will keep growing as I use this new&nbsp;configuration.</p>
+<p>However, the guiding principle is that I want to keep my <tt class="docutils literal">.emacs.lite.d</tt> as small as possible.
+Most should come from Emacs itself or a 3rd party.  What I don&#8217;t find in a 3rd party and cannot
+possibly contribute, I will add.  Otherwise, I&#8217;ll stick to the basics so long as they don&#8217;t hinder
+my&nbsp;productivity.</p>
+<p>The biggest change so far is moving from <tt class="docutils literal"><span class="pre">lsp-mode</span></tt> to <tt class="docutils literal">eglot</tt>.  There&#8217;s nothing wrong with
+<tt class="docutils literal"><span class="pre">lsp-mode</span></tt>, in fact I miss some of its features.  But since <tt class="docutils literal">eglot</tt> was included in Emacs I
+wanted to give it a try.  This is&nbsp;it.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">I&#8217;m of course writing this post in ReST using this new Emacs&nbsp;setup.</p>
+</div>
+</div>
+<div class="section" id="from-omarchy-to-starch">
+<h2>From Omarchy to&nbsp;Starch</h2>
+<p>It&#8217;s a <em>starch</em> not a&nbsp;distro.</p>
+<p>Building your own Linux desktop is a time-consuming effort.  Building and maintaining a Linux
+distribution is beyond what I can afford now.  Therefore, leaving Omarchy was not an easy decision.
+Nevertheless, in the latest updates Omarchy has made some choices that have worsened my personal
+satisfaction of&nbsp;it.</p>
+<p>The following list is not meant to be complete, or even demonstrative of the issues.  These are
+simply the latest&nbsp;annoyances:</p>
+<ul>
+<li><p class="first">They removed the screen capture without audio.  That is the only kind of screen record that I do.
+I don&#8217;t stream; I don&#8217;t record and edit videos for educational purposes or other.  I don&#8217;t even
+have a mic besides the integrated one in my laptop.  I only need to record my screen to either
+show something is broken, or&nbsp;fixed.</p>
+<p>After I record my screen I also had to use <tt class="docutils literal">ffmpeg</tt> to remove the audio&nbsp;stream.</p>
+</li>
+<li><p class="first">They removed the Suspend menu option <a class="reference external" href="https://github.com/basecamp/omarchy/commit/fc04525f032656ceb81f10045ae702e00356e8c5">because it didn&#8217;t work reliably</a>.</p>
+<p>It worked for me, and at least three other users felt the need to report&nbsp;it.</p>
+<p>My solution this time was to copy <tt class="docutils literal"><span class="pre">omarchy-menu</span></tt> in my <tt class="docutils literal"><span class="pre">~/.local/bin/</span></tt>; modify to add this
+back, and also fix the screen capture&nbsp;issue.</p>
+</li>
+<li><p class="first">I use Emacs; not nvim.  When installing Emacs in Omarchy, they cleverly make it a user unit in
+<tt class="docutils literal">systemd</tt>.  But then <tt class="docutils literal"><span class="pre">omarchy-launch-editor</span></tt> doesn&#8217;t connect to the already running Emacs
+instance.  I <a class="reference external" href="https://github.com/basecamp/omarchy/pull/3481">submitted the fix a month ago</a>.
+Since they haven&#8217;t merged it yet I have now my own <tt class="docutils literal"><span class="pre">~/.local/bin/omarchy-launch-editor</span></tt>.</p>
+</li>
+<li><p class="first">&#8230;</p>
+</li>
+</ul>
+<p>It feels like I&#8217;m slowly cloning every Omarchy script into my home <a class="footnote-reference" href="#more-than-that" id="footnote-reference-2">[2]</a>.  If that is
+the case, I will have to manually patch those scripts after updating Omarchy; and the update itself
+can become risky if my changes to some scripts are incompatible with&nbsp;theirs.</p>
+<p>I&#8217;d rather not wait till my system becomes inoperative and start developing my own set of scripts
+without the illusion of a Linux&nbsp;distro.</p>
+<div class="section" id="starch">
+<h3>Starch</h3>
+<p>Unlike with my Emacs project, I&#8217;m still using Omarchy.  I understand that it will take me a few
+iterations to produce a decent start kit to replace Omarchy.  Of course, I&#8217;m standing on the
+shoulders of Omarchy, and I will keep many&nbsp;things:</p>
+<ul class="simple">
+<li>Themes, Fonts,&nbsp;Styling</li>
+<li><span class="caps">TUI</span>&nbsp;selection</li>
+<li>the basic Hyprland&nbsp;configuration</li>
+</ul>
+<p>I will be able to remove many things I don&#8217;t use, and which very likely I won&#8217;t use: Windows <span class="caps">VM</span>,
+Obsidian, Dropbox,&nbsp;etc&#8230;</p>
+<p>I will be able to avoid using <span class="caps">LUKS</span> and btrfs in an old laptop which I use mostly to watch videos
+using Jellyfin.  With Omarchy, I have had to regularly remove the btrfs snapshots because the disk
+reached 100% usage, mostly on <tt class="docutils literal"><span class="pre">&#64;home/.snapshots</span></tt>.</p>
+<p>The plan <a class="footnote-reference" href="#hopefully" id="footnote-reference-3">[3]</a>:</p>
+<ul class="simple">
+<li>I have forked Omarchy and Omarchy-<span class="caps">ISO</span> and created a mono-repo out of&nbsp;them.</li>
+<li>I&#8217;m now curating the list of scripts, software,&nbsp;etc.</li>
+<li>New year&#8217;s&nbsp;pause</li>
+<li>Have a ready to install <span class="caps">ISO</span> and test it thoroughly in my old&nbsp;laptop.</li>
+<li>Keep&nbsp;working&#8230;</li>
+</ul>
+<p>I did find the name and fittingly imperfect logo <a class="footnote-reference" href="#vibed-logo" id="footnote-reference-4">[4]</a>:</p>
+<div class="figure">
+<img alt="Starch logo in dark and light themes" src="/images/2025/starch.png" style="width: 90%;" />
+</div>
+</div>
+</div>
+<div class="section" id="footnotes">
+<h2>Footnotes</h2>
+<table class="docutils footnote" frame="void" id="caveat-emptor" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>ReST didn&#8217;t have all the features I needed, but with a simple script I could
+transform it to LaTeX + BibTeX.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="more-than-that" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-2">[2]</a></td><td>I have copied or replaced more scripts than the two mentioned.  They are still
+just a few compared to the 142 scripts shipped with Omarchy; but they represent a trend.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="hopefully" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-3">[3]</a></td><td>This is rather a list of wishes than a real plan.  But it is enough for this side
+project.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="vibed-logo" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#footnote-reference-4">[4]</a></td><td>This logo was mostly <span class="caps">AI</span> generated.  I can credit myself for the shape of the A.
+Despite my repeated instructions to <em>hint</em> the shape of the Arch logo ChatGPT 5.2 could not
+manage to produce something decent.  So I took the best one it gave and dusted off <a class="reference external" href="https://www.gimp.org"><span class="caps">GIMP</span></a> to shape
+the A.  Then I asked ChatGPT to produce a <span class="caps">SVG</span>, and it did the best it could; the edges of the
+letters had dents and imperfections; but <em>I liked</em> this for my rough and imperfect project.  So I
+only improved the shape of the A to have a smoother (yet off center) arch, and overall less
+defects than the other letters.</td></tr>
+</tbody>
+</table>
+</div>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+

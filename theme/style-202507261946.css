@@ -273,6 +273,7 @@ main article {
 
     .figure img {
         border-radius: 0.5rem;
+        max-width: 99%;
     }
     .figure, .figure p {
         text-align: center;
