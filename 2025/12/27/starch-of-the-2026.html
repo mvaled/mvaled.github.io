@@ -97,7 +97,7 @@ primarily using Ruby and Rails.  I started with basic Ruby major mode and step b
 use more of Emacs features to make my way around the code base.  I started using <tt class="docutils literal">dired</tt>,
 <tt class="docutils literal">rgrep</tt> and lots of others.  I learnt to use <span class="caps">TAGS</span>, but never managed to integrate them with&nbsp;Ruby.</p>
 <p>In 2011 I left my academic job and (re)started to program in Python.  I started collaborating with a
-<a class="reference external" href="https://github.com/med-merchise">previous teacher</a> of mine, who was also using Emacs.  Together
+<a class="reference external" href="https://github.com/med-merchise">former teacher</a> of mine, who was also using Emacs.  Together
 (mostly him rather than me) we built an Emacs setup (<tt class="docutils literal">xorns</tt>) which is the one I have been using
 since.  This setup has accumulated a lot of stuff over the years; it is already 8000+ lines of&nbsp;elisp.</p>
 <p>Recently, I started to wonder how much of it do I still need.  Emacs has changed a lot in the past
@@ -177,6 +177,18 @@ reached 100% usage, mostly on <tt class="docutils literal"><span class="pre">&#6
 <div class="figure">
 <img alt="Starch logo in dark and light themes" src="/images/2025/starch.png" style="width: 90%;" />
 </div>
+</div>
+<div class="section" id="why-not-nixos-already">
+<h3>Why not NixOS&nbsp;already?</h3>
+<p><span class="caps">TL</span>;<span class="caps">DR</span>: I&#8217;m not ready&nbsp;yet.</p>
+<p>I have been thinking about moving completely to NixOS.  I have read the Nix language and understand
+its basic syntax.  The only thing that stops me is that it feels like I could end up isolating my
+working setup from that of my&nbsp;coworkers.</p>
+<p>I&#8217;ve seen many <tt class="docutils literal">.nix</tt> in other&#8217;s github accounts to manage the different versions of Python, etc;
+while my team uses <tt class="docutils literal">uv</tt>.  Of course, I know I could still use <tt class="docutils literal">uv</tt>, <tt class="docutils literal">mise</tt> and other managers
+used in company.  But at the same time I&#8217;m part of keeping our shared <tt class="docutils literal">Makefile</tt> that should work
+in all our devs machines.  Add NixOS to the mix my increase a bit my workload.  So before I made the
+jump I want to first be sure about the features I want to have in the&nbsp;desktop.</p>
 </div>
 </div>
 <div class="section" id="footnotes">
