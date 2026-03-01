@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><manuel> &mdash; Long Live the Model, or YALP (yet another LLM post)
+</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="stylesheet" href="/theme/style-202512280656.css">
+      <link rel="icon" href="/theme/logo-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
+      <link rel="icon" href="/theme/logo-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+    <script src="/theme/js/mva.js"></script>
+    <script>
+      onColorSchemeChange();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+  </head>
+  <body hx-boost="true">
+    <header class="logo tw:flex tw:flex-row tw:gap-2 tw:items-center tw:mx-[auto] tw:max-w-[1100px] tw:py-2 tw:px-4 tw:md:px-8 tw:m-0 tw:md:mb-2">
+        <h1 class="tw:m-0">
+          <a href="/">&lang;m∀&rang;</a>
+        </h1>
+      <div id="color-scheme-selector" class="tw:ml-4 tw:flex tw:flex-row tw:gap-1 tw:flex-no-wrap tw:rounded-full tw:items-center">
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="auto"
+          onclick="setUserColorScheme('auto');"
+          aria-label="Auto mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M20 15.31 23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20zM12 18V6c3.31 0 6 2.69 6 6s-2.69 6-6 6"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="light"
+          onclick="setUserColorScheme('light');"
+          aria-label="Light mode">
+          <svg
+            fill="currentColor"
+            focusable="false" aria-hidden="true" viewBox="0 0 24 24" aria-label="fontSize large">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path>
+          </svg>
+        </button>
+        <button
+          class="tw:rounded-full tw:flex tw:items-center"
+          type="button"
+          name="dark"
+          onclick="setUserColorScheme('dark');"
+          aria-label="Dark mode">
+          <svg
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            aria-label="fontSize large">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="tw:grow"></div>
+        <nav>
+          <ul class="tw:flex tw:flex-row tw:gap-4 tw:max-w-[90%] tw:list-none">
+                <li><a href="/pages/about.html" >About</a></li>
+          </ul>
+        </nav>
+    </header>
+    <main class="tw:p-4 tw:md:p-8">
+<article>
+    <header>
+        <h2>Long Live the Model, or <span class="caps">YALP</span> (yet another <span class="caps">LLM</span>&nbsp;post)</h2>
+        <p class="meta">2026-03-01 &bull; Manuel Vázquez Acosta</p>
+    </header>
+    <p>Natural languages are large and complicated tools, and we use them the best we can.  We also abuse
+them when they lack the right concepts, or we are unaware of&nbsp;them.</p>
+<p>That is why while talking about LLMs and coding agents we are often drawn to make them &#8220;think&#8221;,
+&#8220;decide&#8221;, or &#8220;make assumptions&#8221;.  We know how these LLMs work in their core: they are all about
+predicting the next output from its current context.  Yet they have become such a useful tool that
+we might forget <em>what they really are</em>.</p>
+<p>We anthropomorphize LLMs because it seems to provide the best communicational abstraction for their
+inner workings.  But this poses some risks of misunderstanding; especially when the very concept of
+intelligence is&nbsp;elusive.</p>
+<p>Are these tools&nbsp;intelligent?</p>
+<p>I have seen a lot of back and forth on social media.  There seems to be some camp (school?) of
+thought that claim the <span class="caps">LLM</span> is always right in its output and the user is the main culprit for its
+non-compliance or <em>deviations</em>.  This is true in the same sense that most bugs in your code are not
+the fault of the tool (programming language, <span class="caps">IDE</span>, compiler, etc.).  However nobody claims that IDEs,
+compilers or programming languages are <em>intelligent</em>.</p>
+<p>Either LLMs are <em>intelligent</em> with the capacity of error, or they are just tools and yours are the&nbsp;mistakes.</p>
+<p>This conclusion is, nevertheless, also unsatisfactory.  None of the non-<span class="caps">LLM</span> programming tools
+<em>produce</em> code from a natural language specification.  They are in some sense more primitive,
+foundational. LLMs don&#8217;t replace compilers or programming languages.  We still rely on them even to
+validate the LLMs&#8217; outputs.  Humans have also relied on them to validate their own output.  Humans
+have relied on visual tools, diagrams, and many other great abstractions to handle their own faulty&nbsp;thoughts.</p>
+<p>LLMs are therefore a step &#8212; qualitatively speaking &#8212; between those two extremes of human-like
+intelligence and purely mechanical/formal tools.  I will keep approaching them with a tool-like
+mindset.  I will keep trying to <em>own</em> the design I want to produce.  I will keep using other
+mechanical or formal tools to verify the code I produce with&nbsp;LLMs.</p>
+
+</article>
+    </main>
+    <footer>
+      <p>&copy; 2016-2025 Manuel Vázquez Acosta</p>
+      <p>Content licensed under the Creative Commons
+        attribution-noncommercial-sharealike License.</p>
+    </footer>
+  </body>
+</html>
+
